@@ -15,6 +15,16 @@ P.S.
 С уважением,
 Михаил Даньшин
 
-@[qwe](https://www.youtube.com/watch?v=tnSnVlbKtMk)
+<div class="block-embed block-embed-service-youtube">
+  <iframe type="text/html"
+          width="640"
+          height="390"
+          src="https://www.youtube.com/watch?v=tnSnVlbKtMk"
+          frameborder="0"
+          webkitallowfullscreen mozallowfullscreen allowfullscreen>
+  </iframe>
+</div>
+
+@[qwe]()
 
 @[youtube](dQw4w9WgXcQ)
