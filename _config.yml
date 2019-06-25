@@ -16,7 +16,8 @@
 title: Mikhail Danshin's blog
 email: mdanshin@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
-  This is my new blog. Old blog - http://www.danshin.ms/.
+  This is my new blog. 
+  Old blog - http://www.danshin.ms/.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: danshin_ms
