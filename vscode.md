@@ -24,3 +24,9 @@ P.S.
           webkitallowfullscreen mozallowfullscreen allowfullscreen>
   </iframe>
 </div>
+
+@[qwe]()
+
+@[youtube](dQw4w9WgXcQ)
+
+<iframe width="420" height="315" src="//www.youtube.com/watch?v=tnSnVlbKtMk" frameborder="0" allowfullscreen></iframe>
