@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "SSH - коротко о главном"
-date:   2019-06-25 18:38:27 +0300
+date:   2019-05-06 18:38:27 +0300
 categories: administrating
 tags: [ssh]
 permalink: /ssh-short-description/
