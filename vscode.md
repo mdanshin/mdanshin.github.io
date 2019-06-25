@@ -12,24 +12,4 @@ C#, HTML, JavaScript, Json, Docker, XML, yaml, markdown и даже для Cisco
 P.S.
 К слову сказать, Microsoft купила GitHub, Вы знали об этом? И теперь там можно делать неограниченное количество закрытых проектов, чтобы их никто не видел. Раньше это можно было делать только в платной версии. А теперь он походу вообще бесплатный стал. Правда они туда Marketplace вкорячили, но это мелочи.
 
-С уважением,
-Михаил Даньшин
-
-<div class="block-embed block-embed-service-youtube">
-  <iframe type="text/html"
-          width="640"
-          height="390"
-          src="//www.youtube.com/watch?v=tnSnVlbKtMk"
-          frameborder="0"
-          webkitallowfullscreen mozallowfullscreen allowfullscreen>
-  </iframe>
-</div>
-
-@[qwe]()
-
-@[youtube](dQw4w9WgXcQ)
-
-<iframe width="420" height="315" src="//www.youtube.com/embed/QH2-TGUlwu4" frameborder="0" allowfullscreen></iframe>
-<iframe width="420" height="315" src="//www.youtube.com/watch?v=tnSnVlbKtMk" frameborder="0" allowfullscreen></iframe>
-
 <iframe width="560" height="315" src="https://www.youtube.com/embed/tnSnVlbKtMk" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
