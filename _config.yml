@@ -17,8 +17,8 @@ title: Mikhail Danshin's blog
 email: mdanshin@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"
   This is my blog.
-baseurl: "https://mdanshin.github.io" # the subpath of your site, e.g. /blog
-url: "https://mdanshin.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: mdanshin
 github_username:  mdanshin
 
