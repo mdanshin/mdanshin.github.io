@@ -19,7 +19,7 @@ P.S.
   <iframe type="text/html"
           width="640"
           height="390"
-          src="https://www.youtube.com/watch?v=tnSnVlbKtMk"
+          src="//www.youtube.com/watch?v=tnSnVlbKtMk"
           frameborder="0"
           webkitallowfullscreen mozallowfullscreen allowfullscreen>
   </iframe>
