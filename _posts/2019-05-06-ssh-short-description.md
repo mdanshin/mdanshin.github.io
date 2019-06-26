@@ -7,7 +7,7 @@ tags: [ssh]
 permalink: /ssh-short-description/
 ---
 
-<img style="margin-button:10px" src="/assets/img/ssh-short-description_0.png" alt="image" width="774" high="207" />
+<img style="margin-button:0px" src="/assets/img/ssh-short-description_0.png" alt="image" width="737" />
 Для лучшего понимания материалов этой статьи убедитесь, что вы хорошо представляете, как работает криптосистема с открытым ключом (`Public-key cryptography`). Так же необходим опыт использования SSH-клиента типа `putty` или `kitty`.
 
 Для подключения к Linux мы используем Secure Shell или, как его называют, SSH. SSH - это криптографический сетевой протокол для защищённой передачи данных через не защищённые сети.  
