@@ -62,19 +62,15 @@ permalink: /vpn-short-description/
 
 Давайте взглянем какие из этих протоколов поддерживает Windows 10 и iOS. Создавая и настраивая VPN соединение в Windows мы можем выбрать между PPTP, L2TP, SSTP и IKEv2 протоколами. Apple некоторое время назад отказались от поддержки PPTP и сейчас в iOS поддерживается IKEv2, L2TP и IPsec.
 
-
 |[![vpn-short-description/vpn-short-description_5.png](/assets/img/vpn-short-description/vpn-short-description_5.png)]({{site.url}}/assets/img/vpn-short-description/vpn-short-description_5.png)|[![vpn-short-description/vpn-short-description_6.png](/assets/img/vpn-short-description/vpn-short-description_6.png)]({{site.url}}/assets/img/vpn-short-description/vpn-short-description_6.png)|
-
-
-
-
 
 В Windows Server, запустив оснастку Routing and Remote Access, в свойствах элемента Ports мы можем увидеть, какие протоколы задействованы на нашем VPN-сервере в данный момент.
 
-
+[![vpn-short-description/vpn-short-description_7.png](/assets/img/vpn-short-description/vpn-short-description_7.png)]({{site.url}}/assets/img/vpn-short-description/vpn-short-description_7.png)
 
 Теперь попробуем определиться, какой из этих протоколов выбрать. Как я уже говорил каждый из них имеет свои особенности. В интернете можно найти много статей на эту тему, не буду их повторять. Приведу лишь небольшую табличку, в качестве памятки. Из неё видно, что наиболее универсальным является протокол IKEv2. Он быстрый, защищенный, поддерживается Windows и iOS. Но не поддерживается производителям Android и Linux.
 
+[![vpn-short-description/vpn-short-description_8.png](/assets/img/vpn-short-description/vpn-short-description_8.png)]({{site.url}}/assets/img/vpn-short-description/vpn-short-description_8.png)
 
 Обратите внимание на протокол OpenVPN. Он не присутствует нативно в Windows и iOS, но для этих ОС существует клиент, который позволяет настраивать и устанавливать VPN соединение с использованием данного протокола.
 
