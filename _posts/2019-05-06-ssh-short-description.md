@@ -7,7 +7,7 @@ tags: [ssh]
 permalink: /ssh-short-description/
 ---
 
-<img style="margin-button:0px" src="/assets/img/ssh-short-description_0.png" alt="image" width="737" />
+<img style="margin-button:0px" src="/assets/img/ssh-short-description/ssh-short-description_0.png" alt="image" width="737" />
 Для лучшего понимания материалов этой статьи убедитесь, что вы хорошо представляете, как работает криптосистема с открытым ключом (`Public-key cryptography`). Так же необходим опыт использования SSH-клиента типа `putty` или `kitty`.
 
 Для подключения к Linux мы используем Secure Shell или, как его называют, SSH. SSH - это криптографический сетевой протокол для защищённой передачи данных через не защищённые сети.  
@@ -28,13 +28,13 @@ permalink: /ssh-short-description/
 
 CentOS, даже в самой минимальной версии, устанавливает SSH по умолчанию. Сразу после установки мы имеем запущенный демон sshd, готовый принимать наши клиентские подключения на порту 22. Для подключения из Windows мы чаще всего используем putty/kitty. Хотя я недавно обнаружил, что Windows 10 имеет openssh-клиента в установке по умолчанию <https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview>.
 
-![ssh-short-description_1.png](/assets/img/ssh-short-description_1.png)
+![ssh-short-description/ssh-short-description_1.png](/assets/img/ssh-short-description/ssh-short-description_1.png)
 
 Я ещё не до конца разобрался с работой ssh-клиента под Windows. Где он хранит свои настройки, как их менят, подстраивая работу клиента под себя, поэтому для примера буду использовать [kitty](http://www.9bis.net/kitty/). `Kitty` - это форк putty. На мой взгляд там всё тоже самое, что в putty, но с дополнительными возможностями. Но вы можете использовать и putty. В рассматриваемом контексте их работа будет очень схожа.
 
 Открываем `kitty/putty` и устанавливаем соединение с сервером. При первом подключении к серверу мы увидим `Security Allert` как показано на скриншоте. Я поясню важность этого предупреждения и почему не стоит автоматически наживать yes и продолжать работу.
 
-![ssh-short-description_1.png](/assets/img/ssh-short-description_2.png)
+![ssh-short-description/ssh-short-description_1.png](/assets/img/ssh-short-description/ssh-short-description_2.png)
 
 Предупреждение гласит, что server's host key не закеширован в реестре (registry). Имеется ввиду, на стороне клиента. И у Вас нет гарантий в том, что вы подключаетесь именно к тому компьютеру, к которому вы думаете. Давайте разберёмся, что такое "server's host key" и как нам убедится в том, что мы подключаемся именно к тому самому серверу, к которому хотим. Как упоминалось выше, для шифрации трафика, SSH использует пару ключей (открытый/закрытый). При первом подключении клиент запрашивает у сервера открытый ключ, при помощи которого будет шифроваться трафик. А расшифровываться он будет закрытым ключом сервера.
 
@@ -75,7 +75,7 @@ d2:d6:d3:7c:cb:eb:c9:ab:6a:4f:22:78:c1:23:ac:86.
 **Q: Как это сделать?**  
 *A: Взять открытый ключ и вычислить MD5 функцию. Например, на сервере, к оторому мы подключаемся,  выполнить команду "ssh-keygen -E md5 -lf /etc/ssh/ssh_host_ed25519_key.pub". На выходе мы получим MD5-хеш публичного ключа.*
 
-![ssh-short-description_1.png](/assets/img/ssh-short-description_3.png)
+![ssh-short-description/ssh-short-description_1.png](/assets/img/ssh-short-description/ssh-short-description_3.png)
 
 Можно попросить администратора сервера сделать это за нас. Или предоставить нам открытый ключ сервера и вычислить MD5 сервера самостоятельно, например, используя Powershell.
 
@@ -92,7 +92,7 @@ $serverPublicKey = [System.Convert]::FromBase64String("AAAAC3NzaC1lZDI1NTE5AAAAI
 $md5 = new-object -TypeName System.Security.Cryptography.MD5CryptoServiceProvider
 $hash = [System.BitConverter]::ToString($md5.ComputeHash($serverPublicKey ))
 ```
-![ssh-short-description_1.png](/assets/img/ssh-short-description_4.png)
+![ssh-short-description/ssh-short-description_1.png](/assets/img/ssh-short-description/ssh-short-description_4.png)
 
 В результате, посмотрев значение переменной $hash, мы увидим строку D2-D6-D3-7C-CB-EB-C9-AB-6A-4F-22-78-C1-23-AC-86. Что полностью совпадает с тем хешем, который мы видим в предупреждении.
 
@@ -100,7 +100,7 @@ $hash = [System.BitConverter]::ToString($md5.ComputeHash($serverPublicKey ))
 
 Проверив таким образом ключ сервера, и убедившись в том, что мы подключаемся именно туда, куда нужно, мы можем смело нажимать Yes, в диалоговом окне Security Alert, которое нам выдаёт putty/kitty при подключении. Сделав это, наш ssh-клиент закеширует fingerprint. В следующий раз, при подключении к тому же серверу, SSH клиент сравнит полученный от сервера fingerprint с теми, что находятся у него в кеше. И если найдёт совпадение, то подключение пройдёт без предупреждения. До тех пор, пока ключ на сервере не поменяется. Не очистится локалный кеш доверенных ключей или… нас не перенаправят на другой сервер. Вот ради последнего всё это и нужно. Если злоумышленники, каким-то образом, перенаправят нас на другой сервер или подменят его, то мы опять получим предупреждение, но несколько иного вида.
 
-![ssh-short-description_1.png](/assets/img/ssh-short-description_5.png)
+![ssh-short-description/ssh-short-description_1.png](/assets/img/ssh-short-description/ssh-short-description_5.png)
 
 И тогда нам придётся разобраться в ситуации и решить - устанавливать соединение с сервером или нет. Без этого механизма мы были бы в неведении. И могли бы передать на сервер злоумышленников конфиденциальную информацию или получить с него зловредные данные.
 
