@@ -25,7 +25,7 @@ minima:
     # youtube: jekyll
     # youtube_channel: UC8CXR0-3I70i1tfPg1PAE1g
     # youtube_channel_name: CloudCannon
-    # telegram: jekyll
+    telegram: mdanshin
     # googleplus: +jekyll
     # microdotblog: jekyll
 
@@ -42,7 +42,7 @@ minima:
 # - about.md
 
 # Build settings
-theme: jekyll-theme-minimal
+theme: minima
 
 plugins:
  - jekyll-feed
