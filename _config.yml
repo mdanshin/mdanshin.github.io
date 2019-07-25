@@ -2,7 +2,7 @@
 name: 'IT Blog danshin.ms'
 description: 'Blog for IT and ITPro about Windows, Linux, Exchange, etc.'
 logo: 'assets/images/logo.png'
-favicon: 'assets/images/favicon.ico'
+favicon: 'assets/images/favicon.png'
 baseurl: ''
 disqus: 'mdanshin'
 email: 'mdanshin@gmail.com'
