@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Базовые сведения о безопасности в Windows "
-categories: [ administrating ]
+categories: [ Администрирование ]
 tags: [microsoft, security]
 image: assets\images\base_windows_security\0.jpg
 author: Mikhail

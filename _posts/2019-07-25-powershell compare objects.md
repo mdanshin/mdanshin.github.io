@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Удобная функция сравнения объектов в Powershell"
-categories: [ powershell ]
+categories: [ Программирование ]
 tags: [powershell, programming]
 image: assets/images/compare-objects/0.png
 author: Mikhail

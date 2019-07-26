@@ -16,8 +16,9 @@ description: "IT Blog danshin.ms"
 <!-- Begin post excerpts, let's highlight the first 4 posts on top -->
 <div class="row remove-site-content-margin">
     
+        {% for post in site.posts %} 
+        {% unless post.tags contains "aaa" %}
     <!-- latest post -->
-    {% unless site.posts[0].tags contains "sticky" %}
     {% assign latest_post = site.posts[0] %}
     <div class="col-md-6">
     <div class="card border-0 mb-4 box-shadow">   
@@ -33,7 +34,7 @@ description: "IT Blog danshin.ms"
     </p>
     <div>
         <small class="d-block text-muted">
-            Категория <span class="catlist">
+            Категория1 <span class="catlist">
                 {% for category in latest_post.categories %}
                 <a class="text-capitalize text-muted smoothscroll" href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category }}</a><span class="sep">, </span>
                 {% endfor %}
@@ -46,14 +47,22 @@ description: "IT Blog danshin.ms"
     </div>
     </div>
     </div>
-    {% endunless %}     
+    
+    {% endunless %}
+    {% endfor %}
 
     <div class="col-md-6">
         
         <!-- second latest post -->
-        {% unless site.posts[1].tags contains "sticky" %}
-        {%- assign second_post = site.posts[1] -%}        
+        
+        
+        {% if post.tags contains "aaa" %}
+
+        {%- assign second_post = site.posts[1] -%}                
+        
         <div class="mb-3 d-flex align-items-center">                
+                
+
                 {% if second_post.image %}
                 <div class="col-md-4">
                 <a href="{{site.baseurl}}{{second_post.url}}">
@@ -66,7 +75,7 @@ description: "IT Blog danshin.ms"
                     <a class="text-dark" href="{{site.baseurl}}{{second_post.url}}">{{ second_post.title }}</a>
                     </h2>
                     <small class="d-block text-muted">
-                        Категория <span class="catlist">
+                        Категория2 <span class="catlist">
                         {% for category in second_post.categories %}
                         <a class="text-capitalize text-muted smoothscroll" href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category }}</a><span class="sep">, </span>
                         {% endfor %}
@@ -76,12 +85,21 @@ description: "IT Blog danshin.ms"
                         {{ second_post.date | date: '%b %d, %Y' }}
                     </small>
                 </div>
+                
             </div>
-            {% endunless %}     
+            
+            {% endif %}
+        
+        
         <!-- third latest post -->
-        {% unless site.posts[2].tags contains "sticky" %}
+
+        
+        {% if post.tags contains "aaa" %}
         {%- assign third_post = site.posts[2] -%}        
+        
         <div class="mb-3 d-flex align-items-center">                
+                
+
                 {% if third_post.image %}
                 <div class="col-md-4">
                 <a href="{{site.baseurl}}{{third_post.url}}">
@@ -104,12 +122,21 @@ description: "IT Blog danshin.ms"
                         {{ third_post.date | date: '%b %d, %Y' }}
                     </small>
                 </div>
+                
             </div>
-            {% endunless %}     
+            {% endif %}
+            
+            
+
         <!-- fourth latest post -->
-        {% unless site.posts[3].tags contains "sticky" %}
+        
+        {% if post.tags contains "aaa" %}
+
         {%- assign fourth_post = site.posts[3] -%}        
+        
         <div class="mb-3 d-flex align-items-center">                
+                
+
                 {% if fourth_post.image %}
                 <div class="col-md-4">
                 <a href="{{site.baseurl}}{{fourth_post.url}}">
@@ -132,8 +159,12 @@ description: "IT Blog danshin.ms"
                         {{ fourth_post.date | date: '%b %d, %Y' }}
                     </small>
                 </div>
+
+                
             </div>
-            {% endunless %}     
+            
+            {% endif %}
+            
     </div>
     
 </div>
