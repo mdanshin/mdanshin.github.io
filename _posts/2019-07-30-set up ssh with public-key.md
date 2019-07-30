@@ -89,8 +89,8 @@ chown $USER:$USER ~/.ssh -R
 
 Теперь нам необходимо правильно настроить SSH на сервере. Для этого нужно отредактировать `/etc/ssh/sshd_config` следующим образом.
 
-RSAAuthentication yes
-PasswordAuthentication no
+* RSAAuthentication yes
+* PasswordAuthentication no
 
 Для вступления изменений в силу перезапустите sshd:
 
