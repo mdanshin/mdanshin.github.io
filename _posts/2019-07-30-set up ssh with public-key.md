@@ -35,6 +35,10 @@ cat username_rsa.pub >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 chown $USER:$USER ~/.ssh -R
 
+`/etc/ssh/sshd_config`
+RSAAuthentication yes
+PasswordAuthentication no
+
 sudo service sshd restart
 ```
 
