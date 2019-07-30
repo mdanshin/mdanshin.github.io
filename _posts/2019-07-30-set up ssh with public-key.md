@@ -20,6 +20,24 @@ author: Mikhail
 
 После того как сгенерили и разместили ключи нужно на удалённом сервере отредактировать `sshd_config` - отключить авторизацию по паролю, чтобы использовать только сертификат, а также, не обязательно, но желательно, отключить PAM и разрешение входа по SSH под root-ом.
 
+# Полный перечень команд
+
+```bash
+ssh username@servername
+
+mkdir ~/.ssh
+chmod 700 ~/.ssh
+
+scp c:\path_to_file\.ssh\id_rsa.pub username@servername:~/.ssh/username_rsa.pub
+
+cd ~/.ssh
+cat username_rsa.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chown $USER:$USER ~/.ssh -R
+
+sudo service sshd restart
+```
+
 # Теперь по порядку.
 
 >Для работы нам понадобиться установленный OpenSSH. К сведению пользователей Windows - [OpenSSH был добавлен в Windows](https://docs.microsoft.com/en-us/windows-server/administration/openssh/openssh_overview) осенью 2018 года и включен в Windows 10 и Windows Server 2019.
@@ -85,21 +103,3 @@ sudo service sshd restart
 Теперь можно перелегиниться на сервер. В этот раз вместо пароля будет использоваться публичный ключ.
 
 ![assets/images/set-up-ssh-with-public-key/2.jpg](/assets/images/set_up_ssh_with_public_key/2.jpg)
-
-# Полный перечень команд
-
-```bash
-ssh username@servername
-
-mkdir ~/.ssh
-chmod 700 ~/.ssh
-
-scp c:\path_to_file\.ssh\id_rsa.pub username@servername:~/.ssh/username_rsa.pub
-
-cd ~/.ssh
-cat username_rsa.pub >> ~/.ssh/authorized_keys
-chmod 600 ~/.ssh/authorized_keys
-chown $USER:$USER ~/.ssh -R
-
-sudo service sshd restart
-```
