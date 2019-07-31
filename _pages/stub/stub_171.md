@@ -6,4 +6,4 @@ permalink: /2010/02/rss.html
 
 Вы всё ещё можете прочитать статью по этой ссылке [https://mdanshin.blogspot.com/2010/02/rss.html](https://mdanshin.blogspot.com/2010/02/rss.html).
 
-Но лучше зайдите на главную страницу [https://danshin.ms](https://danshin.ms) и воспользуйтесь поиском.
+### Но лучше зайдите на главную страницу [https://danshin.ms](https://danshin.ms) и воспользуйтесь поиском.
