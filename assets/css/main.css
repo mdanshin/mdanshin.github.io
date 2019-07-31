@@ -8601,3 +8601,12 @@ html {
     color: #008080; }
   .highlight .il {
     color: #099; }
+
+    /* for image caption */
+    img+em {
+      font-style: italic;
+      display: inherit;
+      text-align: left;
+      font-size: 70%;
+      margin-top:-2rem!important
+  }
