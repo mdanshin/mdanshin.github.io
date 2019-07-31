@@ -1,10 +1,10 @@
 ---
-title: "Contact"
+title: "Обратная связь"
 permalink: "/contact.html"
 ---
 
 <form action="https://formspree.io/{{site.email}}" method="POST">    
-<p class="mb-4">Please send your message to {{site.name}}. We will reply as soon as possible!</p>
+<p class="mb-4">Вы можете связаться со мной используя эту форму обратной связи или написать письмо на {{site.email}}. Я отвечу Вам как только смогу.</p>
 <div class="form-group row">
 <div class="col-md-6">
 <input class="form-control" type="text" name="name" placeholder="Name*" required>
