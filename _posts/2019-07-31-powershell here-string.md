@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Как создать много файлов с разным, динамическим содержанием"
+title:  "Как создать много файлов с разным, динамическим содержанием в Powershell"
 categories: [ Программирование ]
 tags: [ powershell ]
 image: assets/images/powershell-here-string/0.jpg
