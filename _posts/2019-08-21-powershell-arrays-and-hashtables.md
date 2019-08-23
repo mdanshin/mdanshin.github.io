@@ -154,10 +154,14 @@ $hash.FirstName
 ```powershell
 foreach ($item in $array) {$item}
 
-foreach($item in $hash.keys)
+foreach($key in $hash.keys)
 {
-    $item # Вывести каждый ключ
-    $hash.$item # Вывести значение каждого ключа
+    $key # Вывести каждый ключ
+
+    # Вывести значение каждого ключа
+    $hash.$key 
+    #или
+    $hash[$key]
 }
 ```
 
