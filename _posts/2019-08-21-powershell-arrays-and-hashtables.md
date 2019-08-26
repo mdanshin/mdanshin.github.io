@@ -2,7 +2,7 @@
 layout: post
 title:  "Базовые сведения о массивах и хеш-таблицах в Powershell"
 categories: [ Программирование ]
-tags: [ powershell ]
+tags: [ powershell, featured ]
 image: assets/images/powershell-arrays-and-hashtables/0.jpg
 author: Mikhail
 ---
