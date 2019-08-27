@@ -27,3 +27,67 @@ author: Mikhail
 ![duplicate-detection/2.png](/assets/images/duplicate-detection/2.png)
 
 Это значение содержалось во всех письмах от данного отправителя. Поэтому все письма, доставленные в этот час, считались дубликатами и удалялись. С одной стороны кейс решён, причина понятна, проблема на стороне отправителя. С другой стороны непонятно, откуда в поле MessageId такое странное значение - $null. Я предположил, что возможно мы имеем дело либо с некорректно работающей системой отправителя, либо это какой-то элемент безопасности, который удаляет часть данных, перед отправкой. Если кто-то знает, что это такое, то прошу написать в комментариях к этому посту.
+
+Настроить поведение Duplicate Message Detection можно изменив значение в реестре. Ниже привожу выжимку из документации.
+
+```
+To edit the "DeliveredTo Expiration in Hours" registry value
+
+    Start Registry Editor.
+
+    Expand the following subkey:
+
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MSExchangeIS\<Server_Name>\Private-<GUID>
+
+    Right-click Private-<GUID>, point to New, and then click DWORD Value.
+
+    Type DeliveredTo Expiration in Hours, and then press ENTER to name the new value.
+
+    Right-click DeliveredTo Expiration in Hours, and then click Modify.
+
+    In the Value data box, type the time, in hours, that you want to keep received message information, and then click OK.
+
+    Expand the following subkey:
+
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MSExchangeIS\<Server_Name>\Public-<GUID>
+
+    Right-click Public-<GUID>, point to New, and then click DWORD Value.
+
+    Type DeliveredTo Expiration in Hours, and then press ENTER to name the new value.
+
+    Right-click DeliveredTo Expiration in Hours, and then click Modify.
+
+    In the Value data box, type the time, in hours, to keep information on received messages before it is deleted, and then click OK.
+
+    Exit Registry Editor.
+
+To edit the "DeliveredTo Cleanup Interval in Seconds" registry value
+
+    Start Registry editor.
+
+    Expand the following subkey:
+
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MSExchangeIS\<Server Name>\Private-<GUID>
+
+    Right-click Private-<GUID>, point to New, and then click DWORD Value.
+
+    Type DeliveredTo Cleanup Interval in Seconds, and then press ENTER to name the new value.
+
+    Right-click DeliveredTo Cleanup Interval in Seconds, and then click Modify.
+
+    In the Value data box, type the interval, in seconds, between each execution of DeliveredTo cleanup, and then click OK.
+
+    Expand the following subkey:
+
+    HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\MSExchangeIS\<Server Name>\Public<GUID>
+
+    Right-click Public-<GUID>, point to New, and then click DWORD Value.
+
+    Type DeliveredTo Cleanup Interval in Seconds, and then press ENTER to name the new value.
+
+    Right-click DeliveredTo Cleanup Interval in Seconds, and then click Modify.
+
+    In the Value data box, type the interval, in seconds, that you want to occur between each execution of DeliveredTo cleanup, and then click OK.
+
+    Close Registry Editor.
+```
