@@ -20,11 +20,15 @@ author: Mikhail
 
 На просторах Интернет удалось найти [старый пост](https://techcommunity.microsoft.com/t5/Exchange-Team-Blog/How-does-duplicate-message-detection-work/ba-p/610180), датированный аж 2004 годом, в блоге Exchange Team (блог разработчиков Exchange Server). В этом посте рассказывается про некий механизм, под названием `Duplicate Detection`. 
 
-Так же в [документации по Exchange Server 2007](https://docs.microsoft.com/en-us/previous-versions/office/exchange-server-2007/dd577073(v=exchg.80)) упоминается механизм `Duplicate Message Detection`. Остальные посты, попадавшиеся в Интернет, в разной степени цитируют эти два первоисточника. Из этой скудной, устаревшей информации стало понятно, что `Duplicate Detection` отслеживает сообщения и по полю [InternetMessageId](https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/internetmessageid) вычисляет дубликаты. В случае, если ему, в течении часа (по умолчанию), встречаются письма с одинаковым ID, повторное письмо удаляется.
+Так же в [документации по Exchange Server 2007](https://docs.microsoft.com/en-us/previous-versions/office/exchange-server-2007/dd577073(v=exchg.80)) упоминается механизм `Duplicate Message Detection`. Остальные посты, попадавшиеся в Интернет, в разной степени цитируют эти два первоисточника. 
+
+Из этой скудной, устаревшей информации стало понятно, что `Duplicate Detection` отслеживает сообщения и по полю [InternetMessageId](https://docs.microsoft.com/en-us/exchange/client-developer/web-service-reference/internetmessageid) вычисляет дубликаты. В случае, если ему, в течении часа (по умолчанию), встречаются письма с одинаковым ID, повторное письмо удаляется.
 
 Согласно всё той же [документации](https://docs.microsoft.com/en-us/exchange/mail-flow/transport-logs/search-message-tracking-logs?view=exchserver-2019#use-the-exchange-management-shell-to-search-the-message-tracking-logs-for-message-entries-on-multiple-servers) в Message Tracking Log поле `InternetMessageId` называется `MessageId`.
 
-В нашем случае, поле MessageId содержало значение `$null`.
+Этот очень полезный механизм призван оградить получателей сообщений от дублей, в случае если он входит одновременно в несколько вложенных групп или письмо отправляется на группу и ему напрямую.
+
+Но в нашем кейсе мы получили обратный эффект. Дело в том, что в письме, которое не было доставлено получателю, поле MessageId содержало значение `$null`.
 
 ![duplicate-message-detection/2.png](/assets/images/duplicate-message-detection/2.png)
 
