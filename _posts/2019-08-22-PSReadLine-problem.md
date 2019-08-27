@@ -10,7 +10,7 @@ author: Mikhail
 
 После недолгого поиска решения проблемы, стало понятно, что всё дело в модуле PSReadLine, который в основном нужен для синтаксической раскраски, но ещё много чего делает. 
 
-Подробную информацию о модуле можно найти на сайте проекта, на Github, по адресу [https://github.com/PowerShell/PSReadLine](https://github.com/PowerShell/PSReadLine). Ошибка, о которой я говорю, описана там же, в issue 798 [https://github.com/PowerShell/PSReadLine/issues/798](https://github.com/PowerShell/PSReadLine/issues/798).
+Подробную информацию о модуле можно найти на сайте проекта, на Github, по адресу [https://github.com/PowerShell/PSReadLine](https://github.com/PowerShell/PSReadLine). Ошибка, о которой я говорю, описана там же, в [issue 798](https://github.com/PowerShell/PSReadLine/issues/798).
 
 Дело в том, что какое-то время, в поставку Windows входила версия 2.0.0, которая появилась 6.12.2017 в статусе BETA. Она и содержала эту ошибку. 7.11.2018 разработчик с ником `MVKozlov` сообщил о проблеме и уже 26.11.2018 ошибка была устранена. К тому времени проект успел получить статус beta3. А уже в мае 2019 года проект получил статус beta4 и не содержал данной ошибки.
 
