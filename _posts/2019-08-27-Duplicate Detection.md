@@ -1,8 +1,8 @@
 ---
 layout: post
-title:  "Duplicate Detection"
-categories: [ Программирование ]
-tags: [ powershell ]
+title:  "Duplicate Detection. Решаем проблему недоставки сообщений."
+categories: [ Администрирование ]
+tags: [ Exchange ]
 image: assets/images/duplicate-detection/0.jpg
 author: Mikhail
 ---
