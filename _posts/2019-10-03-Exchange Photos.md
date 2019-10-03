@@ -13,7 +13,7 @@ author: Mikhail
 Есть множество способов заполнить данные поля. Например, вот так:
 
 ```powershell
-$photo = [byte[]](Get-Content "C:\Users\mdanshinadm\mdanshin_AD.jpg" -Encoding byte)
+$photo = [byte[]](Get-Content "C:\Users\mdanshin\mdanshin_AD.jpg" -Encoding byte)
 Set-ADUser mdanshin -Replace @{thumbnailPhoto=$photo}
 ```
 
