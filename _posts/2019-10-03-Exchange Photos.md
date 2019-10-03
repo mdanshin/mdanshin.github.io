@@ -34,7 +34,7 @@ $photo = Get-UserPhoto -id mdanshin | select PictureData
 $photo.PictureData | Set-Content "mdanshin.jpg" -Encoding byte 
 ```
 
-Ещё один способ увидеть фотографию – обратиться по адресу https://EWS_URL/ews/Exchange.asmx/s/GetUserPhoto?email=<USER EMAIL>&size=HR96x96. Например так:
+Ещё один способ увидеть фотографию – обратиться по адресу https://EWS_URL/ews/Exchange.asmx/s/GetUserPhoto?email=USER_EMAIL&size=HR96x96. Например так:
 
 https://owa.domain.ru/ews/Exchange.asmx/s/GetUserPhoto?email=mdanshin@ibs.ru&size=HR648x648
 
