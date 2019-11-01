@@ -85,3 +85,4 @@ mkisofs -J -T -o /root/CentOS-8-x86_64-1905-dvd1.iso -b isolinux/isolinux.bin \
 >Задайте для параметра `-V` имя тома, полученное на предыдущем шаге.
 
 Загрузочный образ готов. Можете использовать его для автоматической установки CentOS.
+Материалы для этой статьи взяты с [официального сайта CentOS](https://docs.centos.org/en-US/centos/install-guide/Simple_Installation/#sect-simple-install-kickstart).
