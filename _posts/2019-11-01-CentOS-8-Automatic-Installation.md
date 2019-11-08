@@ -63,6 +63,10 @@ CentOS-8-BaseOS-x86_64
 
 ### Добавьте новый пункт в меню загрузки
 
+Добавьте новый пункт меню в загрузочный файл `/root/CentOS-install/isolinux/isolinux.cfg`, в котором используется файл Kickstart. 
+
+Например:
+
 ```bash
 #
 label kickstart
