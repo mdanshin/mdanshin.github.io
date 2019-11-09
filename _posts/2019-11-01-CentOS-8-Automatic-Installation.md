@@ -50,7 +50,7 @@ cp /root/anaconda-ks.cfg /root/CentOS-install/
 
 ```bash
 isoinfo -d -i CentOS-8-x86_64-1905-dvd1.iso | grep "Volume id" | \
-sed -e 's/Volume id: //' -e 's/ /\\x20/g'
+sed -e 's/Volume id: //'
 ```
 
 В результате выполнения этой команды вы увидите имя тома. В вашем случае это имя может отличаться. Оно зависит от того, какой именно ISO-образ вы используете.
