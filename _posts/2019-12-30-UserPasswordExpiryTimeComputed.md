@@ -6,7 +6,7 @@ tags: [ Windows, Powershell, ActiveDirectory ]
 image: assets/images/UserPasswordExpiryTimeComputed/0.jpg
 author: Mikhail
 ---
-***Как узнать, когда истечёт пароль учётной записи в Active Directory? Очень просто....***
+***Как узнать, дату и время истечения пароля учётной записи пользователя в Active Directory? Очень просто....***
 
 Для запуска данного скрипта достаточно прав обычного пользователя в Active Directory. Метод построен на получении значения свойства атрибута `msDS-UserPasswordExpiryTimeComputed`, который [описан в спецификации](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-ada2/bca90ab4-9317-42c0-aeec-127ddf2b2778) по протоколам Windows.
 
