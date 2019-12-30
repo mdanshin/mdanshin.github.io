@@ -17,8 +17,6 @@ Get-ADUser "username" –Properties "DisplayName", "msDS-UserPasswordExpiryTimeC
 
 ![UserPasswordExpiryTimeComputed/1.png](/assets/images/UserPasswordExpiryTimeComputed/1.png)
 
->Обратите внимание на то, что данный атрибут не является системным (systemOnly: FALSE).
-
-Поэтому не забудьте снять галку System-Only, если соберётесь смотреть его значение через ADUC.
+Обратите внимание на то, что данный атрибут не является системным (systemOnly: FALSE). Поэтому не забудьте снять галку System-Only, если соберётесь смотреть его значение через ADUC.
 
 ![UserPasswordExpiryTimeComputed/2.png](/assets/images/UserPasswordExpiryTimeComputed/2.png)
