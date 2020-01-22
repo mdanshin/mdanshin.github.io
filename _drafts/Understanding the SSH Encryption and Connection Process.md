@@ -7,6 +7,10 @@ image: assets/images/LVM-quick-start/0.jpg
 author: Mikhail
 ---
 
+https://translate.google.com/translate?sl=en&tl=ru&u=https%3A%2F%2Fwww.digitalocean.com%2Fcommunity%2Ftutorials%2Funderstanding-the-ssh-encryption-and-connection-process
+
+https://www.digitalocean.com/community/tutorials/understanding-the-ssh-encryption-and-connection-process
+
 Вступление
 SSH, или защищенная оболочка, является безопасным протоколом и наиболее распространенным способом безопасного администрирования удаленных серверов. Используя ряд технологий шифрования, SSH предоставляет механизм для установления криптографически защищенного соединения между двумя сторонами, аутентификации каждой стороны к другой и передачи команд и вывода вперед и назад.
 
