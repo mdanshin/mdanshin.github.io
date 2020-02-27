@@ -91,7 +91,7 @@ yum -y install epel-release
 yum -y update
 yum clean all
 
-yum -y install squid
+yum -y install squid httpd-tools
 
 systemctl start squid
 
@@ -99,26 +99,59 @@ systemctl enable squid
 
 systemctl status squid
 
-Создаём нового пользователя
+Создаём нового пользователя для squid
 
 ```bash
 htdigest -c /etc/squid/user_squid proxy mdanshin
 ```
+![Deploy-squid-in-azure/23.png](/assets/images/Deploy-squid-in-azure/23.png)
+
 Делаем копию конфига
 
 ```bash
 cp /etc/squid/squid.conf /etc/squid/squid.conf.bak
 ```
-В конфиге правим вот это
+Открываем конфиг
 
 ```bash
 vi /etc/squid/squid.conf
 ```
 
+В конфиге удаляем всё и вставляем вот это
+
 ```
+acl localhost src all
+
+acl SSL_ports port 443
+acl Safe_ports port 80          # http
+acl Safe_ports port 21          # ftp
+acl Safe_ports port 443         # https
+acl Safe_ports port 70          # gopher
+acl Safe_ports port 210         # wais
+acl Safe_ports port 1025-65535  # unregistered ports
+acl Safe_ports port 280         # http-mgmt
+acl Safe_ports port 488         # gss-http
+acl Safe_ports port 591         # filemaker
+acl Safe_ports port 777         # multiling http
+
 auth_param digest program /usr/lib64/squid/digest_file_auth -c /etc/squid/user_squid
 auth_param digest children 5
 auth_param digest realm proxy
 acl users proxy_auth REQUIRED
 http_access allow users
+acl CONNECT method CONNECT
+
+http_access allow localhost manager
+http_access allow manager
+
+http_access deny all
+
+http_port 80
+
+coredump_dir /var/spool/squid
+
+refresh_pattern ^ftp:           1440    20%     10080
+refresh_pattern ^gopher:        1440    0%      1440
+refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
+refresh_pattern .               0       20%     4320
 ```
