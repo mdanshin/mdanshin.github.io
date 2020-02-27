@@ -6,7 +6,7 @@ tags: [ Linux, CentOS, Squid, Azure ]
 image: assets/images/Deploy-squid-in-azure/0.png
 author: Mikhail
 ---
-***В этой статье Вы узнаете о том, как развернуть и настроить свой proxy сервер на основе популярного продукта Squid, в облачном сервисе Microsoft Azure. Мы с нуля развернём виртуальную машину под управлением CentOS, установим все необходимые программы и настроим и запустим наш Proxy Server под управлением Squid. Если у вас уже есть VM в Azure, то можете переходить в раздел Обновление и установка Squid.***
+***В этой статье Вы узнаете о том, как развернуть и настроить свой proxy сервер на основе популярного продукта Squid, в облачном сервисе Microsoft Azure. Мы с нуля развернём виртуальную машину под управлением CentOS, установим все необходимые программы и настроим и запустим наш Proxy Server под управлением Squid. Если у вас уже есть VM в Azure, то можете переходить в раздел `Обновление и установка Squid`.***
 
 ### Создание VM
 Заходим на стартовую страницу портала Azure и создаём новый ресурс нажав на `Create a resource`.
@@ -16,6 +16,8 @@ author: Mikhail
 В строке поиска вводим `centos` и выбираем `Centos-based 7.5`. 
 
 ![Deploy-squid-in-azure/5.png](/assets/images/Deploy-squid-in-azure/5.png)
+
+Нажимаем `Create`
 
 ![Deploy-squid-in-azure/6.png](/assets/images/Deploy-squid-in-azure/6.png)
 
@@ -29,25 +31,29 @@ author: Mikhail
 
 Введите любое название вашей VM. Я назвал её `proxy`.
 
-Один из важнейших моментов - выбор региона. Я выбрал `(US) North Central US`, чтобы иметь возможность выходить в Интернет с американский IP адресов. Но вы можете выбрать другой регион, например Европу.
+Один из важнейших моментов - выбор региона. Я выбрал `(US) North Central US`, чтобы иметь возможность выходить в Интернет с американских IP адресов. Но вы можете выбрать другой регион, например Европу.
 
 Ещё один важный момент - это выбрать размер VM. Для этого нажмите `Change size`. В открывшейся форме уберите все фильтры и отсортируйте записи по цене. Для себя я выбрал размер `B1s`.
 
 ![Deploy-squid-in-azure/8_1.png](/assets/images/Deploy-squid-in-azure/8_1.png)
 
-Закончите заполнение формы. Выберете тип аутентификации по паролю. Введите логин и пароль. И нажмите `Next: Disk >` для перехода на следующую форму.
+В разделе `Inbound port rule`, выберите выпадающий список `Select inbound ports` и отметьте порт 80
 
-![Deploy-squid-in-azure/9.png](/assets/images/Deploy-squid-in-azure/9.png)
+![Deploy-squid-in-azure/8_2.png](/assets/images/Deploy-squid-in-azure/8_2.png)
+
+Закончите заполнение формы. Выберете тип аутентификации по паролю. Введите логин и пароль. И нажмите `Next: Disk >` для перехода на следующую форму.
 
 Здесь я выбрал `Standard HDD`, чтобы сэкономить деньги. Переходим на следующую форму, к сетевым настройкам. 
 
-![Deploy-squid-in-azure/10.png](/assets/images/Deploy-squid-in-azure/10.png)
+![Deploy-squid-in-azure/9.png](/assets/images/Deploy-squid-in-azure/9.png)
 
 Проверяем, оставляем всё по умолчанию и переходим дальше.
 
-![Deploy-squid-in-azure/11.png](/assets/images/Deploy-squid-in-azure/11.png)
+![Deploy-squid-in-azure/10.png](/assets/images/Deploy-squid-in-azure/10.png)
 
 Здесь единственное, что нужно сделать - это создать `Diagnostics storage account`.
+
+![Deploy-squid-in-azure/11.png](/assets/images/Deploy-squid-in-azure/11.png)
 
 ![Deploy-squid-in-azure/11_1.png](/assets/images/Deploy-squid-in-azure/11_1.png)
 
@@ -85,6 +91,7 @@ author: Mikhail
 
 Переходим в режим sudo выполнив команду `sudo -i` и последовательно выполняем нижеприведённые команды:
 
+```
 yum -y update
 
 yum -y install epel-release
@@ -98,13 +105,15 @@ systemctl start squid
 systemctl enable squid
 
 systemctl status squid
+```
 
 Создаём нового пользователя для squid
 
 ```bash
 htdigest -c /etc/squid/user_squid proxy mdanshin
 ```
-![Deploy-squid-in-azure/23.png](/assets/images/Deploy-squid-in-azure/23.png)
+
+![Deploy-squid-in-azure/24.png](/assets/images/Deploy-squid-in-azure/24.png)
 
 Делаем копию конфига
 
@@ -155,3 +164,11 @@ refresh_pattern ^gopher:        1440    0%      1440
 refresh_pattern -i (/cgi-bin/|\?) 0     0%      0
 refresh_pattern .               0       20%     4320
 ```
+
+Перезапускаем
+
+```
+systemctl restart squid
+```
+
+В заключении я бы рекомендовал полностью перезапустить VM командой `reboot`. Во-первых это позволит загрузиться с нового ядра, которое было установлено во время обновления пакетов. А во-вторых убедиться в том, что squid автоматически запускается при старте системы.
