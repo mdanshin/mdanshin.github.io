@@ -3,10 +3,10 @@ layout: post
 title:  "Развёртывание и настройка Squid proxy в Azure"
 categories: [ Администрирование ]
 tags: [ Linux, CentOS, Squid, Azure ]
-image: assets/images/Deploy-squid-in-azure/0.jpg
+image: assets/images/Deploy-squid-in-azure/0.png
 author: Mikhail
 ---
-***В этой статье Вы узнаете о том, как развернуть и настроить свой proxy сервер на основе популярного продукта Squid, в облачном сервисе Microsoft Azure.***
+***В этой статье Вы узнаете о том, как развернуть и настроить свой proxy сервер на основе популярного продукта Squid, в облачном сервисе Microsoft Azure. Мы с нуля развернём виртуальную машину под управлением CentOS, установим все необходимые программы и настроим и запустим наш Proxy Server под управлением Squid. Если у вас уже есть VM в Azure, то можете переходить в раздел Обновление и установка Squid.***
 
 ### Создание VM
 Заходим на стартовую страницу портала Azure и создаём новый ресурс нажав на `Create a resource`.
