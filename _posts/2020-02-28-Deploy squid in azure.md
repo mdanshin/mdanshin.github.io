@@ -174,3 +174,5 @@ systemctl restart squid
 ```
 
 В заключении я бы рекомендовал полностью перезапустить VM командой `reboot`. Во-первых, это позволит загрузиться с нового ядра, которое было установлено во время обновления пакетов. А во-вторых, убедиться в том, что squid автоматически запускается при старте системы. Не помешает также отключить 22 порт, чтобы он не торачал наружу. Для этого используйте портал Azure, чтобы случайно не перекрыть самому себе доступ к VM.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4UMTrx9gtA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
