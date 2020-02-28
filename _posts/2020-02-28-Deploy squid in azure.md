@@ -55,9 +55,11 @@ author: Mikhail
 
 ![Deploy-squid-in-azure/10.png](/assets/images/Deploy-squid-in-azure/10.png)
 
-Здесь единственное, что нужно сделать - это создать `Diagnostics storage account`.
+Если у Вас уже есть `Diagnostics storage account`, то он будет подставлен автоматически.
 
 ![Deploy-squid-in-azure/11.png](/assets/images/Deploy-squid-in-azure/11.png)
+
+ Если нет, то его нужно создать.
 
 ![Deploy-squid-in-azure/11_1.png](/assets/images/Deploy-squid-in-azure/11_1.png)
 
