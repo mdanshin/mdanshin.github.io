@@ -2,7 +2,7 @@
 layout: post
 title:  "Фоторафии в Exchnage. Откуда Outlook берёт фото пользователей?"
 categories: [ Администрирование ]
-tags: [ Exchange ]
+tags: [ Exchange, featured ]
 image: assets/images/Exchange-Photos/0.jpg
 author: Mikhail
 ---

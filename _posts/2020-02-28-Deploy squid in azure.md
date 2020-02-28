@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Развёртывание и настройка Squid proxy в Azure"
+title:  "Развёртывание и настройка Squid Proxy в Azure"
 categories: [ Администрирование ]
 tags: [ Linux, CentOS, Squid, Azure ]
 image: assets/images/Deploy-squid-in-azure/0.png
