@@ -35,6 +35,8 @@ author: Mikhail
 
 Ещё один важный момент - это выбрать размер VM. Для этого нажмите `Change size`. В открывшейся форме уберите все фильтры и отсортируйте записи по цене. Для себя я выбрал размер `B1s`.
 
+![Deploy-squid-in-azure/8.png](/assets/images/Deploy-squid-in-azure/8.png)
+
 ![Deploy-squid-in-azure/8_1.png](/assets/images/Deploy-squid-in-azure/8_1.png)
 
 В разделе `Inbound port rule`, выберите выпадающий список `Select inbound ports` и отметьте порт 80
