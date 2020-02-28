@@ -8,6 +8,8 @@ author: Mikhail
 ---
 ***В этой статье Вы узнаете о том, как развернуть и настроить свой proxy сервер на основе популярного продукта Squid, в облачном сервисе Microsoft Azure. Мы с нуля развернём виртуальную машину под управлением CentOS, установим все необходимые программы и настроим, и запустим наш Proxy Server под управлением Squid. А также настроим аутентификацию. Если у вас уже есть VM в Azure, то можете переходить в раздел [Обновление и установка Squid](#Обновление-и-установка-Squid).***
 
+<iframe width="560" height="315" src="https://www.youtube.com/embed/b4UMTrx9gtA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
 ### Создание VM
 Заходим на стартовую страницу [портала Azure](https://portal.azure.com/) и создаём новый ресурс нажав на `Create a resource`.
 
@@ -174,5 +176,3 @@ systemctl restart squid
 ```
 
 В заключении я бы рекомендовал полностью перезапустить VM командой `reboot`. Во-первых, это позволит загрузиться с нового ядра, которое было установлено во время обновления пакетов. А во-вторых, убедиться в том, что squid автоматически запускается при старте системы. Не помешает также отключить 22 порт, чтобы он не торачал наружу. Для этого используйте портал Azure, чтобы случайно не перекрыть самому себе доступ к VM.
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/b4UMTrx9gtA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
