@@ -91,7 +91,7 @@ author: Mikhail
 
 В Powershell введите следующую команду: `ssh username@ip-address`. Ответьте `yes` на вопрос о продолжении подключения, введите пароль. Вы успешно подключились к своей VM в Azure.
 
-![Deploy-squid-in-azure/21.gif](/assets/images/Deploy-squid-in-azure/21.gif)
+![Deploy-squid-in-azure/21.png](/assets/images/Deploy-squid-in-azure/21.png)
 
 ### Обновление и установка Squid
 
