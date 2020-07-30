@@ -26,7 +26,7 @@ grep -rnw '/path/to/somewhere/' -e 'pattern'
 
 ### Windows
 ```powershell
-findstr /S /N /X "mdanshin" '/path/to/somewhere/*'
+findstr /S /N /X "pattern" '/path/to/somewhere/*'
 ```
 
     /S рекурсивный поиск,
