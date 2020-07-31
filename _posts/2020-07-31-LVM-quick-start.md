@@ -2,7 +2,7 @@
 layout: post
 title:  "LVM - коротко о главном"
 categories: [ Администрирование ]
-tags: [ Linux ]
+tags: [ Linux, LVM, CentOS ]
 image: assets/images/LVM-quick-start/0.jpg
 author: Mikhail
 ---
