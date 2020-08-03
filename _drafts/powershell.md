@@ -54,7 +54,7 @@ foreach ($folder in $folders)
  pic3
  ![powershell/3.png](/assets/images/powershell/3.png)
 
-Последовательность и цифры здесь не случайны. Но этом позже.
+Последовательность и цифры здесь не случайны. Но об этом позже.
 
  
 pic4
