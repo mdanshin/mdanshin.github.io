@@ -3,7 +3,7 @@ layout: post
 title:  "Windows Terminal - создание и настройка профиля"
 categories: [ Администрирование ]
 tags: [ Windows Terminal ]
-image: assets/images/Windows-Terminal-Profile/0.jpg
+image: assets/images/Windows-Terminal-Profile/0.png
 author: Mikhail
 ---
 ***В этом видео я покажу, как в программе Windows Terminal создать и настроить свой собственный профиль.***
