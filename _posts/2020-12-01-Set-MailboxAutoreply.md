@@ -14,4 +14,10 @@ author: Mikhail
 Set-MailboxAutoReplyConfiguration -Identity mdanshin -AutoReplyState Enabled -InternalMessage "Автоответ для внутренних получателей" -ExternalMessage "Автоответ для внешних получателей"
 ```
 
+где:
+- Identity - это имя почтового ящика
+- AutoReplyState - включить (Enabled), выключить (Disabled) или задать время действия (Scheduled)
+- InternalMessage - Автоответ для внутренних получателей
+- ExternalMessage - Автоответ для внешних получателей
+
 Если в примере выше, вместо `-AutoReplyState Enabled` написать `-AutoReplyState Scheduled -StartTime "7/10/2020 08:00:00" -EndTime "7/15/2020 17:00:00"`, то можно задать время действия автоответа.
