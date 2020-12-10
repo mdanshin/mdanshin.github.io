@@ -85,7 +85,7 @@ $count = $ip.Count
 $current = 0
 ```
 
-И выведем прогресс через Write-Progress. И вот, что у нас получилось:
+Затем выведем прогресс через Write-Progress. И вот, что у нас получилось:
 
 ```powershell
 $ip = Get-Content C:\Users\mdanshin\Desktop\ip.txt
