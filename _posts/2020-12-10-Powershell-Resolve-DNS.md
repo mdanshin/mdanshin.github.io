@@ -94,7 +94,8 @@ $count = $ip.Count
 $current = 0
 
 foreach ($address in $ip) {
-  Write-Progress "Left to process $current addresses of $count" -PercentComplete ( ( $current / $count ) * 100 )
+  Write-Progress "Left to process $current addresses of $count" `
+    -PercentComplete ( ( $current / $count ) * 100 )
 
   [system.net.dns]::resolve($address)
    
@@ -105,13 +106,14 @@ foreach ($address in $ip) {
 И в заключении, чтобы иметь возможность форматировать получаемую таблицу, давайте результат работы цикла поместим в переменную и выведем его через Format-Table.
 
 ```powershell
-$ip = Get-Content ip.txt
+$ip = Get-Content C:\Users\mdanshin\Desktop\ip.txt
 
 $count = $ip.Count
 $current = 0
 
 $table = foreach ($address in $ip) {
-  Write-Progress "Left to process $current addresses of $count" -PercentComplete ( ( $current / $count ) * 100 )
+  Write-Progress "Left to process $current addresses of $count" `
+    -PercentComplete ( ( $current / $count ) * 100 )
 
   [system.net.dns]::resolve($address)
    
