@@ -58,7 +58,7 @@ cooking.danshin.ms
 $ip = Get-Content ip.txt
 ```
 
-Затем пишем цикл `foreach`:
+2. Затем пишем цикл `foreach`:
 
 ```
 foreach ($address in $ip) {
