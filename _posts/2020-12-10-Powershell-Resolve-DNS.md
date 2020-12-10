@@ -52,13 +52,13 @@ cooking.danshin.ms
 
 Далее делам так:
 
-1. Помещаем содержимое файла в переменную powershell
+Помещаем содержимое файла в переменную powershell
 
 ```powershell
 $ip = Get-Content ip.txt
 ```
 
-2. Затем пишем цикл `foreach`:
+Затем пишем цикл `foreach`:
 
 ```
 foreach ($address in $ip) {
