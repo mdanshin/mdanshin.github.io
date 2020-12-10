@@ -23,7 +23,10 @@ Address:  8.8.8.8
 
 Non-authoritative answer:
 Name:    danshin.ms
-Addresses:  185.199.111.153
+Addresses:  185.199.108.153
+          188.199.109.153
+          185.199.110.153
+          185.199.111.153
 ```
 
 В Powershell это можно сделать так:
