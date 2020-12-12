@@ -91,7 +91,7 @@ $current = 0
 Затем выведем прогресс через Write-Progress. И вот, что у нас получилось:
 
 ```powershell
-$ip = Get-Content C:\Users\mdanshin\Desktop\ip.txt
+$ip = Get-Content ip.txt
 
 $count = $ip.Count
 $current = 0
@@ -109,7 +109,7 @@ foreach ($address in $ip) {
 И в заключении, чтобы иметь возможность форматировать получаемую таблицу, давайте результат работы цикла поместим в переменную и выведем его через Format-Table.
 
 ```powershell
-$ip = Get-Content C:\Users\mdanshin\Desktop\ip.txt
+$ip = Get-Content ip.txt
 
 $count = $ip.Count
 $current = 0
