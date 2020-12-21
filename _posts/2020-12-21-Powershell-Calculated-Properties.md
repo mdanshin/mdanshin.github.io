@@ -150,3 +150,6 @@ Select Name,
 	Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) } } |
 Export-Csv report.csv -NoTypeInformation -UseCulture
 ```
+
+# Заключение
+Вычисляемые свойства Powershell удобно использовать когда все необходимые данные не удаётся получить одним командлетом и приходится их получать разными командлетами и возможно даже из разных мест - Active Directory, Exchange VMware и т.д.. 
