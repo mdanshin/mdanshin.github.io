@@ -14,7 +14,7 @@ author: Mikhail
 Допустим мы хотим получить таблицу, где будет указано на какой датасторе располагается ВМ.
 
 |Name|Datastore|
-|:---|--------:|
+|:---|:--------|
 |mdanshin_VM_01|DATASTORE-101|
 |mdanshin_VM_02|DATASTORE-101|
 |mdanshin_VM_03|DATASTORE-102|
