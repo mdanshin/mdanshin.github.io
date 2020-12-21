@@ -114,7 +114,7 @@ Get-VM |
 Select Name,
 @{
   Name = "Datastore"
-	Expression = { Get-Datastore -Id $_.DatastoreIdList } 
+  Expression = { Get-Datastore -Id $_.DatastoreIdList } 
 }
 ```
 
@@ -135,7 +135,7 @@ Get-VM |
 Select Name,
 @{
   Name = "Datastore"
-	Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) }
+  Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) }
 }
 ```
 
@@ -148,8 +148,8 @@ Get-ResourcePool -Name TEST |
 Get-VM | 
 Select Name,
 @{
-	Name = "Datastore"
-	Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) } } |
+    Name = "Datastore"
+    Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) } } |
 Export-Csv report.csv -NoTypeInformation -UseCulture
 ```
 
