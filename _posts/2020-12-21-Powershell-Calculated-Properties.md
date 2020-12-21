@@ -69,14 +69,14 @@ Uid                     : /VIServer=mdanshin@vcenter:443/VirtualMachine=VirtualM
 Get-ChildItem -File | 
 select name, 
 @{
-	Name = "Type"; 
-	expression = {
-		switch ($_.extension) {
-      		'.txt'	{'Text File'}
-			'.log'	{'Log File'}
-			default	{'Unknown'}
-		} 
-	}
+    Name = "Type"; 
+    expression = {
+        switch ($_.extension) {
+            '.txt'	{'Text File'}
+            '.log'	{'Log File'}
+            default	{'Unknown'}
+        } 
+    }
 }
 ```
 
@@ -92,14 +92,14 @@ Get-ChildItem -File | select Name, Type
 
 ```powershell
 @{
-	Name = "Type" 
-	Expression = {
-		switch ($_.extension) {
-      '.txt'	{'Text File'}
-			'.log'	{'Log File'}
-			default	{'Unknown'}
-		} 
-	}
+    Name = "Type" 
+    Expression = {
+        switch ($_.extension) {
+            '.txt'	{'Text File'}
+            '.log'	{'Log File'}
+            default	{'Unknown'}
+        }
+    }
 }
 ```
 
