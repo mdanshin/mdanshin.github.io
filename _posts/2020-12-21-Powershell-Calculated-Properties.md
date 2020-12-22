@@ -2,7 +2,7 @@
 layout: post
 title:  "Использование вычисляемых свойств Powershell"
 categories: [ Администрирование ]
-tags: [ Powershell DNS ]
+tags: [ Powershell ]
 image: assets/images/Powershell-Calculated-Properties/0.jpg
 author: Mikhail
 ---
