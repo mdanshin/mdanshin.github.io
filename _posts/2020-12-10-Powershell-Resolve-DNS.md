@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Удобный способ разрешения имён через Powershell по списку адресов"
+title:  "Удобный способ разрешения имён через Powershell по списку IP адресов"
 categories: [ Администрирование ]
 tags: [ Powershell DNS ]
 image: assets/images/Powershell-Resolve-DNS/0.jpg
