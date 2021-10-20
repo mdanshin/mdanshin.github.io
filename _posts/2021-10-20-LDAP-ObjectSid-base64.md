@@ -27,7 +27,7 @@ author: Mikhail
 ```bash
 #!/bin/bash
 
-# Базовое значение objectSid закодированное Base-64
+# Базовое значение objectSid, полученное из LDAP, закодированное Base-64
 
 OBJECT_ID="AQUAAAAAAAUVAAAA6We7mNa317+CBR5sKAYAAA=="
 
