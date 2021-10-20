@@ -110,7 +110,7 @@ echo ${SID}
 
 ```javascript
     sidToString(base64) {
-      #Конвертируем строку base64 в Buffer, а потом его преобразуем в HEX
+      //Конвертируем строку base64 в Buffer, а потом его преобразуем в HEX
         const buffer = Buffer.from(base64, 'base64')
         const array = buffer.toString('hex') //010500000000000515000000e967bb98d6b7d7bf82051e6c28060000
         const G = array.toString().match(/.{1,2}/g)
