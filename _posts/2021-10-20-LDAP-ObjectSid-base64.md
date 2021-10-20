@@ -2,7 +2,7 @@
 layout: post
 title:  "Преобразование LDAP objectSid из base64 в SSDL"
 categories: [ Программирование ]
-tags: [ LDAP, objectSid, base64 ]
+tags: [ LDAP, SID, objectSid, base64, bash, javascript ]
 image: assets/images/LDAP-objectSid-base64/0.png
 author: Mikhail
 ---
