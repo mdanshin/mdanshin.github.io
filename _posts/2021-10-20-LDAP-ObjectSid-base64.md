@@ -3,7 +3,7 @@ layout: post
 title:  "Преобразование LDAP objectSid из base64"
 categories: [ Программирование ]
 tags: [ LDAP, objectSid, base64 ]
-image: assets/images/LDAP-objectSid-base64/0.jpg
+image: assets/images/LDAP-objectSid-base64/0.png
 author: Mikhail
 ---
 
