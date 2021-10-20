@@ -26,8 +26,8 @@ OBJECT_ID="AQUAAAAAAAUVAAAA6We7mNa317+CBR5sKAYAAA=="
 # echo -n (не печатать завершающий символ новой строки)
 # base64 -d (decode) -i (при декодировании игнорировать небуквенные символы)
 # hexdump -v (заставляет отображать все входные данные) -e (задаёт формат строки)
-# в нашем случае мы заставляем выводить hexdump символ группами по 2, разделяя их пробелом
-# в резултате получаем "01 05 00 00 00 00 00 05 15 00 00 00 E9 67 BB 98 D6 B7 D7 BF 82 05 1E 6C 28 06 00 00" и помещаем в переменную-массив под названием G
+# в нашем случае мы заставляем hexdump выводить символ группами по 2, разделяя их пробелом и заносим каждую группу в массив. В результате получаем массив, содержащий в каждом элементе по 2 символа.
+# "01 05 00 00 00 00 00 05 15 00 00 00 E9 67 BB 98 D6 B7 D7 BF 82 05 1E 6C 28 06 00 00"
 
 G=($(echo -n $OBJECT_ID | base64 -d -i | hexdump -v -e '1/1 " %02X"'))
 
@@ -102,6 +102,32 @@ echo ${SID}
 #На выходе получаем S-1-5-21-2562418665-3218585558-1813906818-1576
 ```
 
-В ближайшее время я обновлю эту или дам ссылку на другую статью, где я приведу реализацию для JavaScript. Но зная и понимая алгоритм не составит труда выполнить эти действия на любом языке программирования.
+Теперь, зная и понимая алгоритм не составит труда выполнить эти действия на любом языке программирования. Ниже пример того же самого на JavaScript для Node.js.
 
-Stay tuned...
+```javascript
+    sidToString(base64) {
+        const buffer = Buffer.from(base64, 'base64')
+        const array = buffer.toString('hex')
+        const G = array.toString().match(/.{1,2}/g)
+
+        const BESA2=`${G[8]}${G[9]}${G[10]}${G[11]}`
+        const BESA3=`${G[12]}${G[13]}${G[14]}${G[15]}`
+        const BESA4=`${G[16]}${G[17]}${G[18]}${G[19]}`
+        const BESA5=`${G[20]}${G[21]}${G[22]}${G[23]}`
+        const BERID=`${G[24]}${G[25]}${G[26]}${G[27]}`
+        const LESA1=`${G[2]}${G[3]}${G[4]}${G[5]}${G[6]}${G[7]}`
+
+        const LESA2=`${BESA2.substr(6,2)}${BESA2.substr(4,2)}${BESA2.substr(2,2)}${BESA2.substr(0,2)}`
+        const LESA3=`${BESA3.substr(6,2)}${BESA3.substr(4,2)}${BESA3.substr(2,2)}${BESA3.substr(0,2)}`
+        const LESA4=`${BESA4.substr(6,2)}${BESA4.substr(4,2)}${BESA4.substr(2,2)}${BESA4.substr(0,2)}`
+        const LESA5=`${BESA5.substr(6,2)}${BESA5.substr(4,2)}${BESA5.substr(2,2)}${BESA5.substr(0,2)}`
+        const LERID=`${BERID.substr(6,2)}${BERID.substr(4,2)}${BERID.substr(2,2)}${BERID.substr(0,2)}`
+
+        const LE_SID_HEX=`${LESA1}-${LESA2}-${LESA3}-${LESA4}-${LESA5}-${LERID}`
+
+        const ADDR=LE_SID_HEX.split('-')
+
+        const SID = "S-1-" + ADDR.map(x => parseInt(x, 16)).join('-')
+        return SID
+    }
+```
