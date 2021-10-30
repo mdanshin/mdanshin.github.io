@@ -2,7 +2,7 @@
 layout: post
 title:  "Исправление проблемы ввода заглавных букв в Powershell"
 categories: [ Программирование ]
-tags: [ powershell ]
+tags: [ powershell, featured ]
 image: assets/images/PSReadLine-problem/0.jpg
 author: Mikhail
 ---
