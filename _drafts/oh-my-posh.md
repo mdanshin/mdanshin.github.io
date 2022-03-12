@@ -15,8 +15,8 @@ author: Mikhail
 * [Установка шрифта Nerd](#Установка-шрифта-Nerd)
 * [Установка и настройка Oh My Posh для PowerShell](#ps)
 * [Установка и настройка Oh My Posh для WSL](#wsl)
-
-Настройка VSCode и Windows Terminal для правильного отображения глифов
+* [Настройка Windows Terminal для правильного отображения глифов](#terminal)
+* [Настройка Windows VSCode для правильного отображения глифов](#vscode)
 
 Из официально документации я мало что понял. Пришлось разбираться самому. Поэтому сейчас я я попорядку опишу путь, который пришлось пройти мне, чтобы заставить всё работать как надо. 
 
@@ -110,11 +110,113 @@ Set-PoshPrompt -Theme jandedobbeleer
 
 > Если вы используете Windows 10 версии 2004 и выше (Build 19041 и выше) или Windows 11, и у вас ещё не установлен WSL, но вы хотите его установить, то запустите команду `wsl --install` в терминале powershell с повышенными привилегиями, а после установки WSL перезапустите Windows. Более подробные сведения об установке и настройке WSL смотрите в моей статье "Установка и настройка WSL"
 
-Для установки oh-my-posh в Linux (WSL) нам потребуется пакетный менеджер [homebrew](https://brew.sh/). Поэтому сначала установите его, выполнив следующую команду.
+Для установки oh-my-posh в Linux (WSL) нам потребуется пакетный менеджер [Homebrew](https://brew.sh/). Поэтому сначала установите его, выполнив следующую команду.
 
 ```bash
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ```
 
+После того, как `brew` установлен, нужно выполнить следующую команду, чтобы добавить `Homebrew` в `PATH` и в сценарий профиля оболочки `bash`.
 
+```bash
+test -d ~/.linuxbrew && eval "$(~/.linuxbrew/bin/brew shellenv)"
+test -d /home/linuxbrew/.linuxbrew && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+test -r ~/.bash_profile && echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.bash_profile
+echo "eval \"\$($(brew --prefix)/bin/brew shellenv)\"" >> ~/.profile
+```
 
+После установки и настройки `brew`, можно приступать к установке `oh-my-posh`. Выполните следубщие команды.
+
+```bash
+brew tap jandedobbeleer/oh-my-posh
+brew install oh-my-posh
+```
+
+```bash
+sudo apt install unzip
+```
+
+```bash
+mkdir -p $(brew --prefix)/oh-my-posh/themes
+wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/latest/download/themes.zip -O $(brew --prefix)/oh-my-posh/themes/themes.zip
+unzip $(brew --prefix)/oh-my-posh/themes/themes.zip -d $(brew --prefix)/oh-my-posh/themes
+chmod u+rw $(brew --prefix)/oh-my-posh/themes/*.json
+rm $(brew --prefix)/oh-my-posh/themes/themes.zip
+```
+
+```bash
+cp $(brew --prefix)/oh-my-posh/themes/jandedobbeleer.omp.json ~/jandedobbeleer.omp.json
+```
+
+```bash
+eval "$(oh-my-posh --init --shell bash --config ~/jandedobbeleer.omp.json)"
+```
+
+<a name="terminal" />
+
+# Настройка Windows Terminal для правильного отображения глифов
+После запуска Windows Terminal вам нужно будет тольк сменить шрифт, иначе командная строка будет отображаться без глифов.
+
+![assets/images/oh-my-posh/16.png](/assets/images/oh-my-posh/16.png)
+
+Чтобы это исправить, зайдите в настройки Windows Terminal, выберите профиль по умолчанию и на вкладке `Appearance` установите нужный шрифт. Затем нажите `Save` и откройте новое окно терминала.
+
+![assets/images/oh-my-posh/17.png](/assets/images/oh-my-posh/17.png)
+
+На этот раз командная строка будет отображать глифы, но есть одна проблема. При открытии WSL-терминала, первая командная строка отображается с дефектом. В ней присутствуют пропуски. Я не понял почему это происходит. Если нажать `Enter`, то следующая строка отобразиться нормально.
+
+![assets/images/oh-my-posh/17.png](/assets/images/oh-my-posh/17.png)
+
+Я не придумал ничего лучше, чем добавить команду очистки экрана в файл `.profile`, чтобы она выполнялась каждый раз, при запуске сессии.
+
+```bash
+echo "clear" >> ~/.profile 
+```
+
+Теперь, если переоткрыть терминал, то всё будет выглядеть как надо.
+
+![assets/images/oh-my-posh/19.png](/assets/images/oh-my-posh/19.png)
+
+И на этом часть по настройке Windows Terminal завершена. Посмотрите другю мою статью, где я описываю, как настроить более приятный вид Windows Terminal.
+
+<a name="code" />
+
+# Настройка VSCode для правильного отображения глифов
+
+Если вы откроете VS Code, и в нём откроете Terminal, то вы увидите, что лифы в нём тоже отображатся неправильно. Всё дело в настройках шрифтов.
+
+![assets/images/oh-my-posh/19.png](/assets/images/oh-my-posh/19.png)
+
+Зайдите в настройки, выберите `Terminal`, пролистайте до настройки `Integrated: Font Family` и введите название своего шрифта. В моём случае это `CaskaydiaCove NF`. Полное название настройки `terminal.integrated.fontFamily`.
+
+![assets/images/oh-my-posh/20.png](/assets/images/oh-my-posh/20.png)
+
+Если вы используете плагин `Remote - WSL` в VS Code, то возможно вам пригодится ещё один совет. Дело в том, что когда вы откроете новую сессию в WSL в VS Code, то заметите, что там ничего не поменялось. VS Code, при запуске bash в WSL, не читает данные из файла .profile, которые мы туда поместили.
+
+![assets/images/oh-my-posh/21.png](/assets/images/oh-my-posh/21.png)
+
+Чтобы это исправить, можно ввести команду
+
+```bash
+bash -l
+```
+
+Параметр -l (согласно справочной странице) заставляет «bash действовать так, как если бы он был вызван как оболочка входа в систему». Оболочки входа читают определенные файлы инициализации из вашего домашнего каталога, такие как `.profile`. Но чтобы не делать это каждый раз вручную, давайте изменим конфигурацию VS Code.
+
+К уже имеющмся настройкам, если они есть, добавьте следующие. Сохраните и перезапустите WSL-сессию. На этот раз у Вас всё должно отображаться правильно.
+
+```json
+"terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.profiles.linux": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "-l"
+            ]
+        }
+    }
+```
+
+![assets/images/oh-my-posh/21.png](/assets/images/oh-my-posh/21.png)
+
+Вот и всё, чем я хотел поделиться в этой статье. Оставльяйте свои комментарии и отзывы. Всем мира и добра!
