@@ -36,7 +36,7 @@ $photo.PictureData | Set-Content "mdanshin.jpg" -Encoding byte
 
 Ещё один способ увидеть фотографию – обратиться по адресу `https://EWS_URL/ews/Exchange.asmx/s/GetUserPhoto?email=USER_EMAIL&size=HR96x96`. Например так:
 
-https://owa.domain.ru/ews/Exchange.asmx/s/GetUserPhoto?email=mdanshin@ibs.ru&size=HR648x648
+https://owa.domain.ru/ews/Exchange.asmx/s/GetUserPhoto?email=mdanshin@domain.ru&size=HR648x648
 
 Оба эти способа отображают фотографию не из поля `thumbnailPhoto`, а именно ту, что хранится на сервере. В этом легко убедиться следующим образом. Сначала меняем фотографию через OWA, на новую, а потом меняем фотографию в поле `thumbnailPhoto` на другую, скажем на старую (см. пример выше).
 
