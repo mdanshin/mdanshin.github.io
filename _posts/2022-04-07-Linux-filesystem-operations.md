@@ -86,7 +86,7 @@ df -hT
 
 ![assets/images/linux-filesystem-operations/3.png](/assets/images/linux-filesystem-operations/3.png)
 
-<a name="#newdisk"></a>
+<a name="newdisk"></a>
 
 # Как новый жесткий диск сделать доступным в системе?
 
