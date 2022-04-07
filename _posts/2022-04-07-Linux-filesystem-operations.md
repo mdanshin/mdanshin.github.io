@@ -3,7 +3,7 @@ layout: post
 title:  "Операции с файловой системой в Linux"
 categories: [ Системное администрирование ]
 tags: [ Linux, CentOS, LVM, How To ]
-image: assets/images/linux-filesystem-operations/0.jpeg
+image: assets/images/linux-filesystem-operations/0.jpg
 author: Mikhail
 ---
 ***Статья из серии `How To...`. В этой я собрал способ выполнить самые частые операции с файловой системой в Linux, в частности в `CentOS`. Статья может использоваться как справочник и будет дополняться. Добавляйте в закладки.***
