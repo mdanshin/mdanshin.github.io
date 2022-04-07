@@ -49,7 +49,7 @@ cat /proc/partitions
 
 Пример этого вывода выглядит следующим образом:
 
-![assets/images/linux-filesystem-operations/1.png](/assets/images/linux-filesystem-operations/2.png)
+![assets/images/linux-filesystem-operations/2.png](/assets/images/linux-filesystem-operations/2.png)
 
 Больше информации о `Proc File System` (содержимом каталога /proc) можно узнать в [документации по RedHat](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/deployment_guide/s1-proc-topfiles).
 
@@ -64,6 +64,8 @@ sudo fdisk -l
 ```bash
 sudo parted -l
 ```
+
+![assets/images/linux-filesystem-operations/4.png](/assets/images/linux-filesystem-operations/4.png)
 
 
 <a name="#df"></a>
@@ -82,7 +84,7 @@ df -hT
 `-T` - вывести информацию о типе файловой системы
 ```
 
-[![asciicast](https://asciinema.org/a/wW9rhskww4ThaUXBEnLCFjetR.svg)](https://asciinema.org/a/wW9rhskww4ThaUXBEnLCFjetR)
+![assets/images/linux-filesystem-operations/3.png](/assets/images/linux-filesystem-operations/3.png)
 
 <a name="#newdisk"></a>
 
