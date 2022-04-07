@@ -29,10 +29,11 @@ author: Mikhail
 ```bash
 ls -l /dev/sd*
 ```
-
+```
 `ls` - вывести содержимое каталога
 `-l` - вывести списком
 `/dev/sd*` - вывести содержимое каталога /dev, начинающееся на `sd`
+```
 
 ![assets/images/linux-filesystem-operations/1.png](/assets/images/linux-filesystem-operations/1.png)
 
