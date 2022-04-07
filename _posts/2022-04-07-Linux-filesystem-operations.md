@@ -129,11 +129,11 @@ sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab '
 ```
 
 
-### Создание раздела, файловой системы и жёсткого диска утилитой fdisk
+### Создание раздела утилитой fdisk, файловой системы и монтирование
 
 [![asciicast](https://asciinema.org/a/ArHlBNmnWbizJ4ujhvs0gv5mw.svg)](https://asciinema.org/a/ArHlBNmnWbizJ4ujhvs0gv5mw)
 
 
-### Создание раздела, файловой системы и жёсткого диска утилитой parted
+### ### Создание раздела утилитой parted, файловой системы и монтирование
 
 [![asciicast](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z.svg)](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z)
