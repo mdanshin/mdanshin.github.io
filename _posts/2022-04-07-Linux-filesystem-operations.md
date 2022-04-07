@@ -20,7 +20,7 @@ author: Mikhail
 <!-- * [Как расширить пространство после увеличения размера жёсткого диска?] -->
 * [Как разбить файловую систему во время установки ОС?](https://danshin.ms/LVM-quick-start/)
 
-<a name="#lsdev"></a>
+<a name="lsdev"></a>
 
 # Сколько дисков в системе, как их увидеть?
 
@@ -37,7 +37,7 @@ ls -l /dev/sd*
 
 ![assets/images/linux-filesystem-operations/1.png](/assets/images/linux-filesystem-operations/1.png)
 
-<a name="#fdisk"></a>
+<a name="fdisk"></a>
 
 # Как "разбиты" диски, сколько партиций, их тип и размер?
 
@@ -68,7 +68,7 @@ sudo parted -l
 ![assets/images/linux-filesystem-operations/4.png](/assets/images/linux-filesystem-operations/4.png)
 
 
-<a name="#df"></a>
+<a name="df"></a>
 
 # Сколько свободного места на дисках?
 
@@ -90,7 +90,7 @@ df -hT
 
 # Как новый жесткий диск сделать доступным в системе?
 
-<a name="#fdisk"></a>
+<a name="fdisk"></a>
 
 ## Cоздать новый раздел?
 
@@ -108,7 +108,7 @@ p # выбрать тип, например primary
 w # записать изменения и выйти
 ```
 
-<a name="#mkfs"></a>
+<a name="mkfs"></a>
 
 ## Отформатировать раздел (создать файловую систему)?
 
@@ -118,7 +118,7 @@ Cоздать файловую систему xfs на созданном раз
 sudo mkfs -t xfs /dev/sdb1
 ```
 
-<a name="#mount"></a>
+<a name="mount"></a>
 
 ## Смонтировать раздел?
 
