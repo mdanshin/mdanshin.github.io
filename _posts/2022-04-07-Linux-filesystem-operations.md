@@ -47,7 +47,7 @@ ls -l /dev/sd*
 cat /proc/partitions
 ```
 
-Пример этого файла выглядит следующим образом:
+Пример этого вывода выглядит следующим образом:
 
 ![assets/images/linux-filesystem-operations/1.png](/assets/images/linux-filesystem-operations/2.png)
 
