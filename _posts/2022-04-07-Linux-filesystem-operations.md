@@ -134,6 +134,6 @@ sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab '
 [![asciicast](https://asciinema.org/a/ArHlBNmnWbizJ4ujhvs0gv5mw.svg)](https://asciinema.org/a/ArHlBNmnWbizJ4ujhvs0gv5mw)
 
 
-### ### Создание раздела утилитой parted, файловой системы и монтирование
+### Создание раздела утилитой parted, файловой системы и монтирование
 
 [![asciicast](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z.svg)](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z)
