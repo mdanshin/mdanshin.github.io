@@ -19,7 +19,7 @@ author: Mikhail
 * [Как смонтировать раздел?](#mount)
 <!-- * [Как расширить пространство после увеличения размера жёсткого диска?] -->
 * [Как разбить файловую систему во время установки ОС?](https://danshin.ms/LVM-quick-start/)
-
+<!-- 
 | Операция | команда |
 |---|---|
 |Сколько дисков в системе, как их увидеть?|ls -l /dev/sd*|
@@ -30,7 +30,7 @@ author: Mikhail
 |Как новый жесткий диск сделать доступным в системе?|
 |Cоздать новый раздел|sudo fdisk /dev/sdb|
 |Cоздать файловую систему|sudo mkfs -t xfs /dev/sdb1|
-|Cмонтировать раздел|sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab'|
+|Cмонтировать раздел|sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab'| -->
 
 <a name="lsdev"></a>
 
