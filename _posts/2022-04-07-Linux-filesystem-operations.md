@@ -122,11 +122,28 @@ sudo mkfs -t xfs /dev/sdb1
 
 ## Смонтировать раздел
 
-Добавить строку монтирования в файл /etc/fstab
+Добавить строку монтирования в файл /etc/fstab. Это можно сделать руками, воспользовавшись привычным редактором vi, vim, nano, e.t.c. Открываем фай с использованием команды sudo и добавляем новую строку в конце файла:
+
+```bash
+sudo vi /etc/fstab
+```
+
+*Пример файла /etc/fstab*
+```text
+/dev/mapper/cl-root     /                       xfs     defaults        0 0
+UUID=15a55219-a817-4a27-b3ac-14d96296e457 /boot                   xfs     defaults        0 0
+/dev/mapper/cl-home     /home                   xfs     defaults        0 0
+/dev/mapper/cl-swap     none                    swap    defaults        0 0
+/dev/sdb1               /mnt/dms                xfs     defaults        0 0
+```
+
+Либо можно выполнить следующую команду:
 
 ```bash
 sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab '
 ```
+
+>После изменения файлы /etc/fstab, настоятельно рекомендую проверить то, что описанные в нём разделы успешно монтируются. Для этого нужно выполнить команду `sudo mount -a`. Если вы не видите никакой ошибки, то смело можно перезагружаться.
 
 
 ### Создание раздела утилитой fdisk, файловой системы и монтирование
