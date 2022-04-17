@@ -160,10 +160,16 @@ UUID=15a55219-a817-4a27-b3ac-14d96296e457 /boot                   xfs     defaul
 sudo bash -c 'echo "/dev/sdb1 /mnt/dms xfs defaults 0 0" >> /etc/fstab '
 ```
 
-Монтировать раздел можно не только по имени. Но и по UUID. Чтобы увидеть UUID раздела, выполните команду `blkid`
+Монтировать раздел можно не только по имени. Но и по UUID. Чтобы увидеть UUID раздела можно воспользоваться одним из следующих способов.
 
 ```bash
 sudo blkid
+sudo blkid /dev/sd*
+
+sudo lsblk -f
+lsblk -o +uuid,name
+
+ls -la /dev/disk/by-uuid/
 ```
 
 У этого способа есть несколько преимуществ и недостатков.
