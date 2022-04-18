@@ -290,7 +290,7 @@ sudo swapon -va
 
 ### LVM - коротко о главном
 
-https://danshin.ms/LVM-quick-start/
+[https://danshin.ms/LVM-quick-start/](https://danshin.ms/LVM-quick-start/)
 
 ### Как разбить файловую систему во время установки ОС
 
