@@ -198,12 +198,12 @@ ls -la /dev/disk/by-uuid/
 
 В первых двух случаях, вам нужно:
 * [Увеличить размер партиции](#resizepartition)
-* [Увеличить размер Phisical Volume](#pvresize) и [Logical Volume](#lvextend), в случае с LVM
+* [Увеличить размер Physical Volume](#pvresize) и [Logical Volume](#lvextend), в случае с LVM
 * [Увеличить размер файловой системы](#xfs_growfs)
 
 В последнем случае, вам нужно: 
 * [Создать новую партицию](#fdisk)
-* [Создать LVM Phisical Volume](#pvcreate), [Увеличить размер Virtual Group](#vgextend) и [Logical Volume](#lvextend), в случае с LVM
+* [Создать LVM Physical Volume](#pvcreate), [Увеличить размер Virtual Group](#vgextend) и [Logical Volume](#lvextend), в случае с LVM
 * [Увеличить размер файловой системы](#xfs_growfs)
 
 <a name="resizepartition"></a>
@@ -221,7 +221,7 @@ sudo parted /dev/sda ---pretend-input-tty resizepart 2 100%
 
 <a name="pvresize"></a>
 
-### Увеличить размер Phisical Volume
+### Увеличить размер Physical Volume
 
 ```bash
 sudo pvresize /dev/sda2
@@ -255,7 +255,7 @@ sudo xfs_growfs /dev/centos/root
 
 <a name="pvcreate"></a>
 
-### Создать LVM Phisical Volume
+### Создать LVM Physical Volume
 
 ```bash
 sudo pvcreate /dev/sdb1
