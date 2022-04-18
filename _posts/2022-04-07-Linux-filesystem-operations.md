@@ -197,14 +197,16 @@ ls -la /dev/disk/by-uuid/
 > Перед тем как выполнять какие либо манипуляции с разделами и дисками и файловой системой, настоятельно рекомендую сделать резервную копию данных.
 
 В первых двух случаях, вам нужно:
-* Увеличить размер партиции
-* Увеличить размер Phisical Volume и Logical Volume, в случае с LVM
-* Увеличить размер файловой системы
+* [Увеличить размер партиции](#resizepartition)
+* [Увеличить размер Phisical Volume](#pvresize) и [Logical Volume](#lvextend), в случае с LVM
+* [Увеличить размер файловой системы](#xfs_growfs)
 
 В последнем случае, вам нужно: 
-* Создать новую партицию
-* Создать LVM Phisical Volume, Увеличить размер Virtual Group и Logical Volume, в случае с LVM
-* Увеличить размер файловой системы
+* [Создать новую партицию](#fdisk)
+* [Создать LVM Phisical Volume](#pvcreate), [Увеличить размер Virtual Group](#vgextend) и [Logical Volume](#lvextend), в случае с LVM
+* [Увеличить размер файловой системы](#xfs_growfs)
+
+<a name="resizepartition"></a>
 
 ### Увеличить размер партиции
 Для увеличения размера партиции программой `fdisk`, нужно удалить партицию и создать новую, большего размера. `НЕ ПЕРЕЖИВАЙТЕ, ДАННЫЕ НЕ ПОСТРАДАЮТ.`
@@ -217,23 +219,41 @@ ls -la /dev/disk/by-uuid/
 sudo parted /dev/sda ---pretend-input-tty resizepart 2 100%
 ```
 
+<a name="pvresize"></a>
+
 ### Увеличить размер Phisical Volume
 
 ```bash
 sudo pvresize /dev/sda2
 ```
 
+<a name="lvextend"></a>
+
 ### Увеличить размер Logical Volume
 
 ```bash
-sudo sudo lvextend -L55GB /dev/centos/root
+sudo pvresize /dev/sda2
 ```
+
+<a name="vgextend"></a>
+
+### Увеличить размер Virtual Group
+
+```bash
+sudo vgextend centos /dev/sdb1
+```
+
+*где /dev/sdb1 - это название нового раздела, который мы включаем в группу.
+
+<a name="xfs_growfs"></a>
 
 ### Увеличить размер файловой системы
 
 ```bash
 sudo xfs_growfs /dev/centos/root
 ```
+
+<a name="pvcreate"></a>
 
 ### Создать LVM Phisical Volume
 
