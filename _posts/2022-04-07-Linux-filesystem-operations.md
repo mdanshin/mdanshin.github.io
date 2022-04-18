@@ -288,6 +288,10 @@ sudo swapon -va
 
 [![asciicast](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z.svg)](https://asciinema.org/a/QKFwTEIqNSxVlWVIbC8KzWM5Z)
 
+### LVM - коротко о главном
+
+https://danshin.ms/LVM-quick-start/
+
 ### Как разбить файловую систему во время установки ОС
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/5TVakMra3qQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
