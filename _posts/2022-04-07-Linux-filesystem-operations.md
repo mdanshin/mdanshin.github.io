@@ -21,6 +21,15 @@ author: Mikhail
 
 * [Как разбить файловую систему во время установки ОС?](https://danshin.ms/LVM-quick-start/)
 
+Так же вы узначете:
+
+* [Как увеличить размер партиции](#resizepartition)
+* [Как создать LVM Physical Volume](#pvcreate)
+* [Как увеличить размер Physical Volume](#pvresize)
+* [Как увеличить размер Virtual Group](#vgextend)
+* [Как увеличить размер Logical Volume](#lvextend)
+* [Как увеличить размер файловой системы](#xfs_growfs)
+
 <a name="lsdev"></a>
 
 # Сколько дисков в системе, как их увидеть?
