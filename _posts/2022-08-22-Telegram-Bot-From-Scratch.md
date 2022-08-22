@@ -3,7 +3,7 @@ layout: post
 title:  "Базовые сведения о Telegram Bot API"
 categories: [ Программирование ]
 tags: [ JavaScript, Python ]
-image: assets/images/Telegram-Bot-From-Scratch/0.jpg
+image: assets/images/Telegram-Bot-From-Scratch/0.png
 author: Mikhail
 ---
 ***В этой статье я расскажу базовые сведения, которые помогут вам понять, как создать Telegram бота и взаимодействовать с ним без использования сторонних библиотек.***
