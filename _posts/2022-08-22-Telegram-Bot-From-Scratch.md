@@ -80,7 +80,9 @@ https://api.telegram.org/bot0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8/getMe
 
 Все сообщения попадают на сервера Telegram и хранятся там не более 24 часов. Чтобы получить список сообщений, нужно вызвать метод `getUpdates`, так же, как мы это делали с методом `getMe`.
 
+```
 https://api.telegram.org/bot0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8/getUpdates
+```
 
 Метод вернёт объект, похожий на этот:
 
