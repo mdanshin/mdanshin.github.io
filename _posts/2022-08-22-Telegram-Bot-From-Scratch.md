@@ -276,6 +276,9 @@ https://api.telegram.org/bot0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8?offse
 Ниже пример кода на JavaScript. Эту функцию легко адаптировать под любые другие методы из [Telegram Bot API](https://core.telegram.org/bots/api#available-methods) и даже написать свой фреймворк.
 
 ```javascript
+const https = require("https");
+const apiToken = "0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8"
+
 function getUpdates(offset) {
     const options = {
         hostname: `api.telegram.org`,
@@ -318,12 +321,3 @@ function getUpdates(offset) {
 ## C#
 
 [.NET Client for Telegram Bot API](https://github.com/TelegramBots/Telegram.Bot)
-
-<style>
-td, th {
-   border: none!important;
-}
-</style>
-
-| <img src="../assets/images/Telegram_logo.svg.webp" alt="telegram" width="30" align="left"/> | Заходите в группу в телеграм: [https://t.me/danshin_ms](https://t.me/danshin_ms) |
-| - | - |
