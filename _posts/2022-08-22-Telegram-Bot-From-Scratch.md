@@ -318,3 +318,8 @@ function getUpdates(offset) {
 ## C#
 
 [.NET Client for Telegram Bot API](https://github.com/TelegramBots/Telegram.Bot)
+
+
+<img src="assets/images/Telegram_logo.svg.webp" alt="drawing" style="width:200px;"/>
+
+Заходите в группу в телеграм: https://t.me/danshin_ms
