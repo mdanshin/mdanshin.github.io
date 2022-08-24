@@ -321,4 +321,4 @@ function getUpdates(offset) {
 
 
 <img src="../assets/images/Telegram_logo.svg.webp" alt="telegram" width="20" align="left"/>
-Заходите в группу в телеграм: https://t.me/danshin_ms
+Заходите в группу в телеграм: [t.me/danshin_ms](https://t.me/danshin_ms)
