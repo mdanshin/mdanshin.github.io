@@ -273,7 +273,7 @@ https://api.telegram.org/bot0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8/getUp
 https://api.telegram.org/bot0123456789:AAFYNwvkDdfgHJ3jhgrs3cUH4oSOEAVSZp8?offset=31405474
 ```
 
-Ниже пример кода на JavaScript. Эту функцию легко адаптировать под любые другие методы из [Telegram Bot API](https://core.telegram.org/bots/api#available-methods) и даже написать свой фреймворк.
+Ниже пример кода на JavaScript + Node.js. Эту функцию легко адаптировать под любые другие методы из [Telegram Bot API](https://core.telegram.org/bots/api#available-methods) и даже написать свой фреймворк.
 
 ```javascript
 const https = require("https");
@@ -287,7 +287,7 @@ function getUpdates(offset) {
         headers: { 'content-type': 'application/json' },
     }
 
-    const data = JSON.stringify({
+    const bodyContent = JSON.stringify({
         "offset": `${offset}`
     })
 
@@ -299,7 +299,7 @@ function getUpdates(offset) {
         });
     });
 
-    req.write(data);
+    req.write(bodyContent);
     req.end();
 }
 
