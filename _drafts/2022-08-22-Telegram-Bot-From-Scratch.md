@@ -2,7 +2,7 @@
 layout: post
 title:  "Базовые сведения о Telegram Bot API"
 categories: [ Программирование ]
-tags: [ Telegram, Bot, JavaScript ]
+tags: [ Telegram, Bot, JavaScript, featured ]
 image: assets/images/Telegram-Bot-From-Scratch/0.png
 author: Mikhail
 ---
@@ -330,3 +330,5 @@ getUpdates("123");
 ## C#
 
 [.NET Client for Telegram Bot API](https://github.com/TelegramBots/Telegram.Bot)
+
+> Читайте статью [Взаимодействие с Telegram Bot API через Postman](https://danshin.ms/postman/). В ней вы узнаете о том, как взаимодействовать с Telegram Bot API при помощи мощного инструмента разработчиков Postman.

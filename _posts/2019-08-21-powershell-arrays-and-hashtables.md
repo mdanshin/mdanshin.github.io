@@ -2,7 +2,7 @@
 layout: post
 title:  "Базовые сведения о массивах и хеш-таблицах в Powershell"
 categories: [ Программирование ]
-tags: [ powershell, featured ]
+tags: [ powershell ]
 image: assets/images/powershell-arrays-and-hashtables/0.jpg
 author: Mikhail
 ---
@@ -10,7 +10,7 @@ author: Mikhail
 
 Иногда нам может потребоваться создать собственные объекты. И для большей эффективности мы должны выбрать тот тип объекта, который подходит под наши конкретные задачи и умело с ним обращаться.
 
-В этой статье я хочу упорядочить собственные знания, которые сам получил только недавно. Она не претендует на полноту. Полное знакомство с темой – это материал на целую книгу. Особенно учитывая то, что в Powershell 5.0 появились классы (classes). 
+В этой статье я хочу упорядочить собственные знания, которые сам получил только недавно. Она не претендует на полноту. Полное знакомство с темой – это материал на целую книгу. Особенно учитывая то, что в Powershell 5.0 появились классы (classes).
 
 Я предполагаю, что вы знакомы с основами объектно-ориентированного программирования. А если знаете, что такое «переменная» (variable), «объект» (object), «поле» (field), «свойство» (property), «метод» (method) и что такое наследование и экземпляр объекта, то Вы возможно сами прекрасно знаете всё, о чем тут написано. Поэтому буду рад обратной связи и любым дополнениям.
 
@@ -52,10 +52,10 @@ foreach ($item in $info) { write-host "The user name is " $item }
 
 ![powershell-arrays-and-hashtables/5.png](/assets/images/powershell-arrays-and-hashtables/5.png)
 
-```powershell 
+```powershell
 $a = @((0..2),(0..2),(0..2))
 ```
-Заполнить элементы массива мы могли бы следующим образом. 
+Заполнить элементы массива мы могли бы следующим образом.
 
 ![powershell-arrays-and-hashtables/6.png](/assets/images/powershell-arrays-and-hashtables/6.png)
 
@@ -106,20 +106,20 @@ $user = @{ FirstName = “Mikhail”; LastName = "Danshin"; UserName = "mdanshin
 ```powershell
 $users = @{
     user1 = @{
-        FirstName = “Mikhail”; 
-        LastName = "Danshin"; 
+        FirstName = “Mikhail”;
+        LastName = "Danshin";
         UserName = "mdanshin"
     }
 
     user2 = @{
-        FirstName = “Ivan”; 
-        LastName = "Ivanov"; 
+        FirstName = “Ivan”;
+        LastName = "Ivanov";
         UserName = "iivanov"
     }
 
     user3 = @{
-        FirstName = “Sergey”; 
-        LastName = "Petrov"; 
+        FirstName = “Sergey”;
+        LastName = "Petrov";
         UserName = "spetrov"
     }
 }
@@ -159,7 +159,7 @@ foreach($key in $hash.keys)
     $key # Вывести каждый ключ
 
     # Вывести значение каждого ключа
-    $hash.$key 
+    $hash.$key
     #или
     $hash[$key]
 }
@@ -191,7 +191,7 @@ $hash.Add('UserName', 'mdanshin')
 
 Но можно создать новый массив, с тем же именем, в который вы включите только те элементы, которые нужно оставить.
 ```powershell
-$array = @($array[0], $array[2])  
+$array = @($array[0], $array[2])
 ```
 В свою очередь объект типа `hashtable` имеет метод `Remove()`
 ```powershell

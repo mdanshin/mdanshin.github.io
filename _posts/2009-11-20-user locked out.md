@@ -2,7 +2,7 @@
 layout: post
 title:  "Решаем проблему внезапной блокировки учетной записи "
 categories: [ Администрирование ]
-tags: [ Active Directory, featured ]
+tags: [ Active Directory ]
 image: assets/images/user-locked-out/0.png
 author: Mikhail
 permalink: /2009/11/blog-post_20.html
