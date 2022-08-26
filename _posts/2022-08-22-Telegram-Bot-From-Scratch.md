@@ -331,4 +331,4 @@ getUpdates("123");
 
 [.NET Client for Telegram Bot API](https://github.com/TelegramBots/Telegram.Bot)
 
-> Читайте статью [Взаимодействие с Telegram Bot API через Postman](https://danshin.ms/postman/). В ней вы узнаете о том, как взаимодействовать с Telegram Bot API при помощи мощного инструмента разработчиков Postman.
+Читайте статью [Взаимодействие с Telegram Bot API через Postman](https://danshin.ms/postman/). В ней вы узнаете о том, как взаимодействовать с Telegram Bot API при помощи мощного инструмента разработчиков Postman.
