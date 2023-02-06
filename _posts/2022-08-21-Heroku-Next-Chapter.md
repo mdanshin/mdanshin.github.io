@@ -2,7 +2,7 @@
 layout: post
 title:  "Heroku закрывет бесплатные тарифные планы"
 categories: [ News ]
-tags: [sticky]
+tags: [other]
 image: assets/images/heroku.jpg
 author: Mikhail
 ---
