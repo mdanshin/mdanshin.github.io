@@ -49,6 +49,8 @@ Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
 Полный текст скрипта:
 
 ```powershell
+Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+
 # Получаем всех получателей с неограниченным размером результата
 Get-Recipient -ResultSize unlimited |
 
@@ -73,3 +75,13 @@ Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
 В итоге получим желаемую таблицу в CSV
 
 ![assets/images/get-all-email-enabled-objects/1.jpg](/assets/images/get-all-email-enabled-objects/1.jpg)
+
+P.S.
+
+Если у вас Exchange версии 2013 или 2016, добавьте в начало скрипта следующую строку.
+
+```powershell
+Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+```
+
+Это позволит выполнять скрипт в обычной сессии Powershell, а не только в Exchange Management Shell.
