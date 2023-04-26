@@ -9,7 +9,7 @@ author: Mikhail
 
 ***Возникла необходимость получить список всех email-enabled объектов из Exchange. При этом вывести не только PrimarySmtpAddress, но и дополнительные SMTP адреса.***
 
-Для получения всех объектов поспользуемся командлетом `Get-Recipient` и не забываем указать -ResultSize unlimited, для получения всех результатов. 
+Для получения всех объектов воспользуемся командлетом `Get-Recipient` и не забываем указать -ResultSize unlimited, для получения всех результатов. 
 
 ```powershell
 Get-Recipient -ResultSize unlimited |
