@@ -12,10 +12,10 @@ author: Mikhail
 Для получения всех объектов воспользуемся командлетом `Get-Recipient` и не забываем указать -ResultSize unlimited, для получения всех результатов. 
 
 ```powershell
-Get-Recipient -ResultSize unlimited |
+Get-Recipient -ResultSize unlimited
 ```
 
-Затем, при помощие коммандлета `Select-Object` отберём только те поля, которые нас интересуют. При этом основной SMTP адрес поместим в поле `PrimarySmtpAddress`, а дополнительные в поле `EmailAddresses` и разделим их запятой.
+Затем, при помощи коммандлета `Select-Object` отберём только те поля, которые нас интересуют. При этом основной SMTP адрес поместим в поле `PrimarySmtpAddress`, а дополнительные в поле `EmailAddresses` и разделим их запятой.
 
 > Поле `EmailAddresses` мы формируем при помощи вычисляемого свойства. Подробнее об этом можно почитать в моей статье [Использование вычисляемых свойств Powershell](https://danshin.ms/Powershell-Calculated-Properties/).
 
