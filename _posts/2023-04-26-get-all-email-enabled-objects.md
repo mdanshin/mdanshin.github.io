@@ -77,7 +77,6 @@ Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
 ![assets/images/get-all-email-enabled-objects/1.jpg](/assets/images/get-all-email-enabled-objects/1.jpg)
 
 P.S.
-
 Если у вас Exchange версии 2013 или 2016, добавьте в начало скрипта следующую строку.
 
 ```powershell
