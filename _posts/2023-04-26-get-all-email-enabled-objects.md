@@ -49,8 +49,6 @@ Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
 Полный текст скрипта:
 
 ```powershell
-Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
-
 # Получаем всех получателей с неограниченным размером результата
 Get-Recipient -ResultSize unlimited |
 
