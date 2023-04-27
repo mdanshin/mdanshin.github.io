@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Получение всех email-enabled объектов из Exchange"
+title:  "Получение всех email-enabled объектов из Exchange со всеми адресам"
 categories: [ Администрирование ]
 tags: [ Powershell ]
 image: assets/images/get-all-email-enabled-objects/0.jpg
