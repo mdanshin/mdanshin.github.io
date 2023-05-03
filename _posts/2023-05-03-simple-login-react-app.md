@@ -368,7 +368,7 @@ export const PrivateRoute = () => {
       // Если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate.
       // Свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
       :
-      <Navigate to="/login" state={{ from: location }} replace />
+      <Navigate to="/login" state={% raw %}{{ from: location }}{% endraw %} replace />
   )
 };
 ```
