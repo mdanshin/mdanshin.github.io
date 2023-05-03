@@ -180,24 +180,15 @@ export default App;
 ```bash
 # Убедитесь, что находитесь в папке проекта.
 
-mkdir ./src/components/
-touch ./src/components/Navbar.tsx
-touch ./src/components/PrivateRoute.tsx
-
-mkdir ./src/context/
-touch ./src/context/AuthProvider.tsx
-
-mkdir ./src/hooks/
-touch ./src/hooks/useAuth.tsx
-
-mkdir ./src/pages/
-touch ./src/pages/Admin.tsx
-touch ./src/pages/Login.tsx
-touch ./src/pages/Logout.tsx
-touch ./src/pages/Main.tsx
-
-mkdir ./src/routes
-touch ./src/routesroutes.tsx
+touch -p ./src/components/Navbar.tsx
+touch -p ./src/components/PrivateRoute.tsx
+touch -p ./src/context/AuthProvider.tsx
+touch -p ./src/hooks/useAuth.tsx
+touch -p ./src/pages/Admin.tsx
+touch -p ./src/pages/Login.tsx
+touch -p ./src/pages/Logout.tsx
+touch -p ./src/pages/Main.tsx
+touch -p ./src/routes/routes.tsx
 
 ```
 
