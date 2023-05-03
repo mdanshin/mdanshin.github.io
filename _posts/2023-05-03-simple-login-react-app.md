@@ -464,7 +464,7 @@ export default Logout
 
 ```
 ├── src
-│   ├── [App.tsx](#App)
+│   ├── App.tsx
 │   ├── components
 │   │   ├── Navbar.tsx
 │   │   └── PrivateRoute.tsx
@@ -504,21 +504,5 @@ export default Logout
 Если же и RefreshToken не прошёл проверку, то пользователя просят заново пройти процесс аутентификации - ввести логин/пароль и заново получить пару AccessToken/RefreshToken.
 
 > Обратите внимание, что данная схема не предполагает хранение AccessToken-а. Он как одноразовый пароль - получили, ввели и забыли. Нужно сказать, что время жизни AccessToken-а нужно устанавливать всегда маленькое, несколько секунд. А вот время RefreshToken-а должно быть такое, чтобы, с одной стороны, не надоедать пользователю частым вводом логина/пароля, с другой, не хранить его долго потому, что он может быть украден или скомпрометирован. Например, RefreshToken можно хранить 30 дней.
-
-
-TEST
-
-<br>
-
-<details><summary>Want to ruin the surprise?</summary>
-
-This is how you add `code` in a dropdown:
-
-```javascript
-console.log("Hello, world!");
-```
-
-</details>
-<br>
 
 Буду рад обсудить с вами данную статью в своей Телеграм группе. Присоединяйтесь - [https://t.me/danshin_ms](https://t.me/danshin_ms).
