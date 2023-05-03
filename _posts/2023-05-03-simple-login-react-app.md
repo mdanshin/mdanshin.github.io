@@ -40,7 +40,7 @@ code .
 npm start
 ```
 
-Далее полный листинг кода приложения. Можете посмотреть его в [odesandbox.io](https://codesandbox.io/s/dms-auth-simple-heqccp) и поиграться.
+Далее полный листинг кода приложения. Можете посмотреть его в [сodesandbox.io](https://codesandbox.io/s/dms-auth-simple-heqccp) и поиграться.
 
 ```tsx
 // Импортируем необходимые модули из библиотеки react
@@ -499,27 +499,17 @@ export default Logout
 │       └── routes.tsx
 ```
 
-[App.tsx](#App)
-
-[Navbar.tsx](#Navbar)
-
-[PrivateRoute.tsx](#PrivateRoute)
-
-[AuthProvider.tsx](#AuthProvider)
-
-[useAuth.tsx](#useAuth)
-
-[index.tsx](#index)
-
-[Admin.tsx](#Admin)
-
-[Login.tsx](#Login)
-
-[Logout.tsx](#Logout)
-
-[Main.tsx](#Main)
-
-[routes.tsx](#routes)
+* [App.tsx](#App)
+* [Navbar.tsx](#Navbar)
+* [PrivateRoute.tsx](#PrivateRoute)
+* [AuthProvider.tsx](#AuthProvider)
+* [useAuth.tsx](#useAuth)
+* [index.tsx](#index)
+* [Admin.tsx](#Admin)
+* [Login.tsx](#Login)
+* [Logout.tsx](#Logout)
+* [Main.tsx](#Main)
+* [routes.tsx](#routes)
 
 Конечно, приведённый выше пример - это самый примитивный вариант. Здесь значение переменной `isAuthenticated` задаётся нажатием на кнопку и вызывом метода `setAuth(true)`. Но ничто не мешает вам применить более сложную логику. Например при нажатии на кнопку, вы можете вызывать API, передавать логин/пароль и получать ответ. И в зависимости от ответа устанавливать значение переменной в `true` или `false`
 
