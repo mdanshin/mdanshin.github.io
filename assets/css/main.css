@@ -90,10 +90,6 @@ body {
   background-color: RoyalBlue;
 }
 
-.copy-code-button {
-  display: block;
-}
-
 hr {
   box-sizing: content-box;
   height: 0;

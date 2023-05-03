@@ -23,7 +23,6 @@ author: Mikhail
 
 Для начала:
 
-{% include codeHeader.html %}
 ```bash
 #Создаем новое React приложение с TypeScript шаблоном в директории dms-auth-simple с помощью команды npx create-react-app
 npx create-react-app dms-auth-simple --template typescript
@@ -106,7 +105,7 @@ const PrivateRoute = () => {
 // Компонент Login отображает страницу авторизации и обрабатывает вход пользователя.
 const Login = () => {
   const { setAuth } = useContext(AuthContext); // используем контекст для получения значений isAuthenticated и setAuth
-  
+
   const navigate = useNavigate(); // используем хук useNavigate для навигации по маршрутам
   const location = useLocation(); // используем хук useLocation для получения текущего маршрута
   
