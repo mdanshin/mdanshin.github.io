@@ -40,13 +40,6 @@ code .
 npm start
 ```
 
-В коде приложения, в некоторых местах, мне пришлось экранировать двойные фигурные скобки, чтобы движок блога нормально отобразил эту строку. Уберите обратный слеш, после вставки в редактор кода, чтобы код заработал.
-
-```js
-<AuthContext.Provider value={{ isAuthenticated, setAuth }}>
-<Navigate to="/login" state={% raw %}{{ from: location }}{% endraw %} replace />
-```
-
 Далее полный листинг кода приложения.
 
 ```tsx
@@ -74,7 +67,7 @@ function App() {
     // оборачиваем компонент в Router, чтобы использовать роутинг
     <Router>
       {/* используем контекст для передачи значения isAuthenticated и функции setAuth вниз по иерархии компонентов */}
-      <AuthContext.Provider value={\{ isAuthenticated, setAuth \}}>
+      <AuthContext.Provider value={% raw %}{{ isAuthenticated, setAuth }}{% endraw %}>
         <Routes>
           {/* обычные маршруты */}
           <Route path="/" element={<Main />} />
@@ -104,7 +97,7 @@ const PrivateRoute = () => {
       // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
       // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
       :
-      <Navigate to="/login" state={\{ from: location \}} replace />
+      <Navigate to="/login" state={% raw %}{{ from: location }}{% endraw %} replace />
   );
 }
 
@@ -226,7 +219,7 @@ export const PrivateRoute = () => {
       // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
       // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
       :
-      <Navigate to="/login" state={\{from: location\}} replace />  
+      <Navigate to="/login" state={% raw %}{{from: location}}{% endraw %} replace />  
   )
 };
 ```
@@ -242,7 +235,7 @@ export const PrivateRoute = () => {
 Если `isAuthenticated` равно `true`, компонент `PrivateRoute` отображает <Outlet />, то есть вложенные маршруты. Если `isAuthenticated` равно `false`, компонент перенаправляет пользователя на страницу входа, используя компонент <Navigate />. 
 
 ```js
-      <Navigate to="/login" state={\{from: location\}} replace />
+      <Navigate to="/login" state={% raw %}{{from: location}}{% endraw %} replace />
 ```
 
 Обратите внимание на строчку выше. Данный код не имеет прямого отношения к авторизации и вы можете пока не обращать на него внимание.
@@ -308,7 +301,7 @@ export const AuthProvider = ({ children }: { children: JSX.Element }) => {
   
   // Возвращаем контекст провайдера, передавая значения isAuthenticated и setAuth в качестве значения контекста
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setAuth }}>
+    <AuthContext.Provider value={% raw %}{{ isAuthenticated, setAuth }}{% endraw %}>
       {children}
     </AuthContext.Provider>
   );
