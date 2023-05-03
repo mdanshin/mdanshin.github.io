@@ -130,7 +130,7 @@ const Main = () => {
   return (
     <>
       <div>Main</div>
-      <Link to='/admin'>Admin Page</Link>
+      <Link to='/admin'>Go to Admin Page</Link>
     </>
   );
 }
@@ -138,7 +138,10 @@ const Main = () => {
 // Компонент Admin отображает страницу для администратора.
 const Admin = () => {
   return (
-    <div>Admin</div>
+    <>
+      <div>Admin</div>
+      <Link to='/main'>Go to Main Page</Link>
+    </>
   );
 }
 
