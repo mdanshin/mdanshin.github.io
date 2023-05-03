@@ -96,7 +96,8 @@ const PrivateRoute = () => {
     isAuthenticated === true ?
       <Outlet />
       // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
-      // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
+      // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться
+      // обратно, используя кнопку "назад" в браузере.
       :
       <Navigate to="/login" state={% raw %}{{ from: location }}{% endraw %} replace />
   );
@@ -105,9 +106,12 @@ const PrivateRoute = () => {
 // Компонент Login отображает страницу авторизации и обрабатывает вход пользователя.
 const Login = () => {
   const { setAuth } = useContext(AuthContext); // используем контекст для получения значений isAuthenticated и setAuth
+  
   const navigate = useNavigate(); // используем хук useNavigate для навигации по маршрутам
   const location = useLocation(); // используем хук useLocation для получения текущего маршрута
-  const from = location.state?.from?.pathname || '/'; // получаем маршрут, на который нужно перенаправить пользователя после авторизации
+  
+  // получаем маршрут, на который нужно перенаправить пользователя после авторизации
+  const from = location.state?.from?.pathname || '/'; 
 
   return (
     <>
