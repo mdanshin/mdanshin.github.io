@@ -151,6 +151,62 @@ export default App;
 
 Теперь давайте обо всём с самого начала и подробнее, с декомпозицией кода.
 
+Вот как выглядит окончательная структура проекта
+
+```
+├── src
+│   ├── App.tsx
+│   ├── components
+│   │   ├── Navbar.tsx
+│   │   └── PrivateRoute.tsx
+│   ├── context
+│   │   └── AuthProvider.tsx
+│   ├── hooks
+│   │   └── useAuth.tsx
+│   ├── index.tsx
+│   ├── pages
+│   │   ├── Admin.tsx
+│   │   ├── Login.tsx
+│   │   ├── Logout.tsx
+│   │   ├── Main.tsx
+│   └── routes
+│       └── routes.tsx
+```
+
+```bash
+mkdir ./src/components
+touch Navbar.tsx
+touch PrivateRoute.tsx
+
+mkdir ./src/context
+touch AuthProvider.tsx
+
+mkdir ./src/hooks
+touch useAuth.tsx
+
+mkdir ./src/pages
+touch Admin.tsx
+touch Login.tsx
+touch Logout.tsx
+touch Main.tsx
+
+mkdir ./src/routes
+touch routes.tsx
+```
+
+* [App.tsx](#App)
+* [Navbar.tsx](#Navbar)
+* [PrivateRoute.tsx](#PrivateRoute)
+* [AuthProvider.tsx](#AuthProvider)
+* [useAuth.tsx](#useAuth)
+* [index.tsx](#index)
+* [Admin.tsx](#Admin)
+* [Login.tsx](#Login)
+* [Logout.tsx](#Logout)
+* [Main.tsx](#Main)
+* [Admin.tsx](#Admin)
+* [routes.tsx](#routes)
+
 Допустим у нас есть несколько маршрутов. В представленном ниже примере они себя ведут как обычно и тут пока нет никакой авторизации. При входе на сайт нас перенаправляют на компонент Main. Так же сейчас доступны все приведённые маршруты.
 
 {% include codeHeader.html %}
@@ -537,42 +593,6 @@ const Admin = () => {
 
 export default Admin
 ```
-
-Вот как выглядит окончательная структура проекта
-
-```
-├── src
-│   ├── App.tsx
-│   ├── components
-│   │   ├── Navbar.tsx
-│   │   └── PrivateRoute.tsx
-│   ├── context
-│   │   └── AuthProvider.tsx
-│   ├── hooks
-│   │   └── useAuth.tsx
-│   ├── index.tsx
-│   ├── pages
-│   │   ├── Admin.tsx
-│   │   ├── Login.tsx
-│   │   ├── Logout.tsx
-│   │   ├── Main.tsx
-│   ├── react-app-env.d.ts
-│   └── routes
-│       └── routes.tsx
-```
-
-* [App.tsx](#App)
-* [Navbar.tsx](#Navbar)
-* [PrivateRoute.tsx](#PrivateRoute)
-* [AuthProvider.tsx](#AuthProvider)
-* [useAuth.tsx](#useAuth)
-* [index.tsx](#index)
-* [Admin.tsx](#Admin)
-* [Login.tsx](#Login)
-* [Logout.tsx](#Logout)
-* [Main.tsx](#Main)
-* [Admin.tsx](#Admin)
-* [routes.tsx](#routes)
 
 Конечно, приведённый выше пример - это самый примитивный вариант. Здесь значение переменной `isAuthenticated` задаётся нажатием на кнопку и вызывом метода `setAuth(true)`. Но ничто не мешает вам применить более сложную логику. Например при нажатии на кнопку, вы можете вызывать API, передавать логин/пароль и получать ответ. И в зависимости от ответа устанавливать значение переменной в `true` или `false`
 
