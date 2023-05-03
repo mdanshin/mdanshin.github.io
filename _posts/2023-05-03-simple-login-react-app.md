@@ -451,24 +451,24 @@ export default Logout
 Вот как выглядит окончательная структура проекта
 
 ```
-.
-├── App.tsx
-├── components
-│   ├── Navbar.tsx
-│   └── PrivateRoute.tsx
-├── context
-│   └── AuthProvider.tsx
-├── hooks
-│   └── useAuth.tsx
-├── index.tsx
-├── pages
-│   ├── Admin.tsx
-│   ├── Login.tsx
-│   ├── Logout.tsx
-│   ├── Main.tsx
-├── react-app-env.d.ts
-└── routes
-    └── routes.tsx
+├── src
+│   ├── App.tsx
+│   ├── components
+│   │   ├── Navbar.tsx
+│   │   └── PrivateRoute.tsx
+│   ├── context
+│   │   └── AuthProvider.tsx
+│   ├── hooks
+│   │   └── useAuth.tsx
+│   ├── index.tsx
+│   ├── pages
+│   │   ├── Admin.tsx
+│   │   ├── Login.tsx
+│   │   ├── Logout.tsx
+│   │   ├── Main.tsx
+│   ├── react-app-env.d.ts
+│   └── routes
+│       └── routes.tsx
 ```
 
 Конечно, приведённый выше пример - это самый примитивный вариант. Здесь значение переменной `isAuthenticated` задаётся нажатием на кнопку и вызывом метода `setAuth(true)`. Но ничто не мешает вам применить более сложную логику. Например при нажатии на кнопку, вы можете вызывать API, передавать логин/пароль и получать ответ. И в зависимости от ответа устанавливать значение переменной в `true` или `false`
