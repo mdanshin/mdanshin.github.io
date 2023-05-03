@@ -34,7 +34,8 @@ var documents = [{% for page in site.pages %}{% if page.url contains '.xml' or p
 
 var idx = lunr(function () {
     // this.use(lunr.ru);
-    this.use(lunr.multi('en', 'ru'));
+    // this.use(lunr.multi('en', 'ru'));
+    this.use(lunr.multiLanguage('en', 'ru'))
     this.ref('id')
     this.field('title', { boost: 10 });
     this.field('body');
