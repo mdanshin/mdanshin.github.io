@@ -216,7 +216,6 @@ touch ./src/routes/routes.tsx
 
 Допустим у нас есть несколько маршрутов. В представленном ниже примере они себя ведут как обычно и тут пока нет никакой авторизации. При входе на сайт нас перенаправляют на компонент Main. Так же сейчас доступны все приведённые маршруты.
 
-{% include codeHeader.html %}
 ```tsx
 import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
