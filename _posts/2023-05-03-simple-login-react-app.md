@@ -2,7 +2,7 @@
 layout: post
 title:  "Авторизация в React - базовые сведения"
 categories: [ Программирование ]
-tags: [ JavaScript ]
+tags: [ JavaScript, React ]
 image: assets/images/simple-login-react-app/0.jpg
 author: Mikhail
 ---
