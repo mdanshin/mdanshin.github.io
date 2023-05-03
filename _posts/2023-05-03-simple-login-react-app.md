@@ -24,9 +24,6 @@ author: Mikhail
 Для начала:
 
 ```bash
-#Создаем новую директорию dms-auth-simple
-mkdir dms-auth-simple
-
 #Создаем новое React приложение с TypeScript шаблоном в директории dms-auth-simple с помощью команды npx create-react-app
 npx create-react-app dms-auth-simple --template typescript
 
