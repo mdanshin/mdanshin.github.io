@@ -103,7 +103,7 @@ const PrivateRoute = () => {
 
 // Компонент Login отображает страницу авторизации и обрабатывает вход пользователя.
 const Login = () => {
-  const { isAuthenticated, setAuth } = useContext(AuthContext); // используем контекст для получения значений isAuthenticated и setAuth
+  const { setAuth } = useContext(AuthContext); // используем контекст для получения значений isAuthenticated и setAuth
   const navigate = useNavigate(); // используем хук useNavigate для навигации по маршрутам
   const location = useLocation(); // используем хук useLocation для получения текущего маршрута
   const from = location.state?.from?.pathname || '/'; // получаем маршрут, на который нужно перенаправить пользователя после авторизации
