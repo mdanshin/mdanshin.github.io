@@ -201,6 +201,8 @@ export default useRoutes
 
 Хочу отметить, что маршруты я поместил в отдельный кастомный хук `useRoutes`. А затем подключил в компоненте `App`
 
+## App
+
 App.tsx
 ```tsx
 import Navbar from './components/Navbar';
@@ -221,6 +223,8 @@ export default App;
 ```
 
 Компонент Navbar предельно прост. Думаю, что тут ничего не нуждается в пояснениях.
+
+## Navbar
 
 Navbar.tsx
 ```tsx
@@ -374,6 +378,8 @@ export default AuthContext;
 
 И в конце, не забываем обернуть наше приложение в созданный контекст.
 
+## index
+
 index.tsx
 ```tsx
 import React from 'react';
@@ -397,6 +403,8 @@ root.render(
 ```
 
 Работа оставшейся части приложения сводится к тому, чтобы изменять значение переменной `isAuthenticated` в нужный момент. По умолчанию значение `isAuthenticated` равняется `false`. И мы не сможем попасть по нужному нам маршруту, т.к. в компоненте `PrivateRoute` имеется тернальный оператор, `isAuthenticated === true ? <Outlet /> : <Navigate to="/login" replace />` который перенаправит наш вызов на страницу `Login`, пока значение переменной будет `false`. Таким образом нам осталось только сделать страницу `Login`, вызвать там API нашего back-end-а или любым другим способом убедиться, что пользователь ввёл правильные имя и пароль и поменять значение `isAuthenticated` на `true` путём вызова метода setAuth.
+
+## Login
 
 Login.tsx
 ```tsx
@@ -424,6 +432,8 @@ export default Login
 ```
 
 Осталось только реализовать компонент Logout
+
+## Logout
 
 Logout.tsx
 ```tsx
