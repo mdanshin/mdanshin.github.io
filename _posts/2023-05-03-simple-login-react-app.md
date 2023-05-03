@@ -70,7 +70,7 @@ function App() {
     // оборачиваем компонент в Router, чтобы использовать роутинг
     <Router>
       {/* используем контекст для передачи значения isAuthenticated и функции setAuth вниз по иерархии компонентов */}
-      <AuthContext.Provider value={{ isAuthenticated, setAuth }}>
+      <AuthContext.Provider value={\{ isAuthenticated, setAuth \}}>
         <Routes>
           {/* обычные маршруты */}
           <Route path="/" element={<Main />} />
@@ -100,7 +100,7 @@ const PrivateRoute = () => {
       // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
       // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
       :
-      <Navigate to="/login" state={{ from: location }} replace />
+      <Navigate to="/login" state={\{ from: location \}} replace />
   );
 }
 
