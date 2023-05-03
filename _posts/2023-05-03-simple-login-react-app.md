@@ -506,15 +506,14 @@ export default Logout
 
 TEST
 
-    <details>
-      <summary>There's code inside this dropdown...</summary>
-      <br>
-      
-      This is how you add `code` in a dropdown:
-      ```javascript
-      console.log("Hello, world!");
-      ```
-    </details>
+<details>
+  <summary>There's code inside this dropdown...</summary>
+  <br>
+  
+  This is how you add `code` in a dropdown:
+  ```javascript
+  console.log("Hello, world!");
+  ```
+</details>
 
-    
 Буду рад обсудить с вами данную статью в своей Телеграм группе. Присоединяйтесь - [https://t.me/danshin_ms](https://t.me/danshin_ms).
