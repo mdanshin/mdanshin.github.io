@@ -1,9 +1,10 @@
-<script src="{{site.baseurl}}/assets/js/lunr.js"></script>
 <script src="{{site.baseurl}}/assets/js/lunr.stemmer.support.js"></script>
+<!-- <script src="{{site.baseurl}}/assets/js/lunr.js"></script> -->
+
 
 <!-- or any other language you want -->
 <script src="{{site.baseurl}}/assets/js/lunr.multi.js"></script> 
-<!-- <script src="{{site.baseurl}}/assets/js/lunr.ru.js"></script>  -->
+<script src="{{site.baseurl}}/assets/js/lunr.ru.js"></script> 
 
 <script>
 $(function() {
@@ -32,6 +33,7 @@ var documents = [{% for page in site.pages %}{% if page.url contains '.xml' or p
     }{% if forloop.last %}{% else %}, {% endif %}{% endfor %}];
 
 var idx = lunr(function () {
+    // this.use(lunr.ru);
     this.use(lunr.multi('en', 'ru'));
     this.ref('id')
     this.field('title', { boost: 10 });
