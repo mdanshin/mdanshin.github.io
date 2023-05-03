@@ -6,3 +6,4 @@ Gemfile.lock
 _config.dev.yml
 .idea
 .vscode
+.devcontainer

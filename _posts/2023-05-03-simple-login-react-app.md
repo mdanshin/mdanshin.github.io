@@ -23,6 +23,7 @@ author: Mikhail
 
 Для начала:
 
+{% include codeHeader.html %}
 ```bash
 #Создаем новое React приложение с TypeScript шаблоном в директории dms-auth-simple с помощью команды npx create-react-app
 npx create-react-app dms-auth-simple --template typescript
