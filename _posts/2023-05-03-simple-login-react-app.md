@@ -19,6 +19,103 @@ author: Mikhail
 
 > Вместо переменной может быть всё, что угодно. Например, JWT access и/или refresh token, SID пользователя, или что-то ещё. И хранить, и получать эти данные можно из разных мест - Local Storage в браузере, Active Directory, БД, Web сервис или API. Всё зависит от сложности нашего приложения и типа авторизации, который мы хотим реализовать.
 
+Для самых нетерпеливых, приведу полный текст приложения, которое реклизует описанную концепцию. Возможно, что этого будет достаточно для понимания. Далее, в этой статье, я покажу как декомпозировать этот код и опишу каждый компонент отдельно.
+
+```tsx
+// Импортируем необходимые модули из библиотеки react
+import { createContext, useContext, useState } from "react";
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+
+// Определяем тип контекста с двумя полями: isAuthenticated и setAuth
+type AuthContextType = {
+  isAuthenticated: boolean; // флаг, показывающий, аутентифицирован ли пользователь
+  setAuth: (auth: boolean) => void; // функция для изменения значения isAuthenticated
+};
+
+// Создаем контекст с типом AuthContextType и начальными значениями по умолчанию
+const AuthContext = createContext<AuthContextType>({
+  isAuthenticated: false,
+  setAuth: () => { },
+});
+
+// Компонент App является корневым компонентом приложения
+function App() {
+  const [isAuthenticated, setAuth] = useState<boolean>(false); // определяем состояние isAuthenticated
+
+  return (
+    // оборачиваем компонент в Router, чтобы использовать роутинг
+    <Router>
+      {/* используем контекст для передачи значения isAuthenticated и функции setAuth вниз по иерархии компонентов */}
+      <AuthContext.Provider value={{ isAuthenticated, setAuth }}>
+        <Routes>
+          {/* обычные маршруты */}
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<Login />} />
+
+          {/* защищённые маршруты */}
+          <Route element={<PrivateRoute />}>
+            <Route path='/admin' element={<Admin />} />
+            {/* другие защищённые маршруты */}
+          </Route>
+        </Routes>
+      </AuthContext.Provider>
+    </Router>
+
+  );
+}
+
+// Компонент PrivateRoute используется для защиты определенных маршрутов в приложении.
+const PrivateRoute = () => {
+  const { isAuthenticated } = useContext(AuthContext); // используем контекст для получения значения isAuthenticated
+  const location = useLocation(); // получаем текущий маршрут с помощью хука useLocation()
+
+  return (
+    // если пользователь авторизован, то рендерим дочерние элементы текущего маршрута, используя компонент Outlet
+    isAuthenticated === true ?
+      <Outlet />
+      // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
+      // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
+      :
+      <Navigate to="/login" state={{ from: location }} replace />
+  );
+}
+
+// Компонент Login отображает страницу авторизации и обрабатывает вход пользователя.
+const Login = () => {
+  const { isAuthenticated, setAuth } = useContext(AuthContext); // используем контекст для получения значений isAuthenticated и setAuth
+  const navigate = useNavigate(); // используем хук useNavigate для навигации по маршрутам
+  const location = useLocation(); // используем хук useLocation для получения текущего маршрута
+  const from = location.state?.from?.pathname || '/'; // получаем маршрут, на который нужно перенаправить пользователя после авторизации
+
+  return (
+    <>
+      <div>Login</div>
+      <button type={'button'} onClick={() => {
+        setAuth(true); // устанавливаем флаг isAuthenticated в true
+        navigate(from, { replace: true }); // перенаправляем пользователя на страницу, которую он запрашивал до авторизации
+      }}>Login</button>
+    </>
+  );
+}
+
+// Компонент Main отображает главную страницу приложения.
+const Main = () => {
+  return (
+    <div>Main</div>
+  );
+}
+
+// Компонент Admin отображает страницу для администратора.
+const Admin = () => {
+  return (
+    <div>Admin</div>
+  );
+}
+
+// Компонент App является корневым компонентом приложения и содержит маршруты и контекст для авторизации.
+export default App;
+```
+
 Допустим у нас есть несколько маршрутов. В представленном примере они себя ведут как обычно и тут пока нет никакой авторизации. При входе на сайт нас перенаправляют на компонент Main. Так же сейчас доступны все приведённые маршруты.
 
 ```tsx
