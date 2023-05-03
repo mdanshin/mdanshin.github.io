@@ -447,7 +447,7 @@ const Login = () => {
 export default Login
 ```
 
-Осталось только реализовать компонент Logout
+Осталось только реализовать компонент Logout, Main и Admin
 
 <a name="Logout"></a>
 
@@ -476,11 +476,9 @@ function Logout() {
 export default Logout
 ```
 
-<a name="Logout"></a>
+<a name="Main"></a>
 
 ## Main
-
-И Main
 
 ```tsx
 const Main = () => {
@@ -490,6 +488,20 @@ const Main = () => {
 }
 
 export default Main
+```
+
+<a name="Admin"></a>
+
+## Admin
+
+```tsx
+const Admin = () => {
+  return (
+    <h1>Admin</h1>
+  )
+}
+
+export default Admin
 ```
 
 Вот как выглядит окончательная структура проекта
