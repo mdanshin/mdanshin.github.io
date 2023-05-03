@@ -13,7 +13,7 @@ author: Mikhail
 
 Я использую Rect и React Router. В нашем приложении у нас будет главная форма, не требующая авторизацию, и одна страница, вход на которую возможен только после успешной авторизации.
 
-> Для лучшего понимания того, что изложено в этой статье, убедитесь, что вы хорошо знаете, что такое [hook](https://react.dev/learn/escape-hatches#reusing-logic-with-custom-hooks) и [Context](https://react.dev/reference/react#context-hooks), а так же как работает библиотека [React Router](https://reactrouter.com/en/main). Иначе вам будет сложно понять, как тут всё устроено.
+> Для лучшего понимания того, что изложено в этой статье, убедитесь, что вы хорошо знаете, что такое [custom Hook](https://react.dev/learn/escape-hatches#reusing-logic-with-custom-hooks) и [Context](https://react.dev/reference/react#context-hooks), а так же как работает библиотека [React Router](https://reactrouter.com/en/main). Иначе вам будет сложно понять, как тут всё устроено.
 
 Основная концепция заключается в том, что при переходе по ссылке, приложение проверяет состояние переменной `isAuthenticated` и в зависимости от этого пускает на страницу или перенаправляет на форму ввода пароля.
 
@@ -507,13 +507,12 @@ export default Logout
 TEST
 
 <details>
-  <summary>There's code inside this dropdown...</summary>
-  <br>
-  
-  This is how you add `code` in a dropdown:
-  ```javascript
-  console.log("Hello, world!");
-  ```
+<summary>Want to ruin the surprise?</summary>
+<br>
+This is how you add `code` in a dropdown:
+```javascript
+console.log("Hello, world!");
+```
 </details>
 
 Буду рад обсудить с вами данную статью в своей Телеграм группе. Присоединяйтесь - [https://t.me/danshin_ms](https://t.me/danshin_ms).
