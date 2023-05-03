@@ -483,6 +483,18 @@ export default Logout
 │       └── routes.tsx
 ```
 
+[App.tsx](#App)
+[Navbar.tsx](#Navbar)
+[PrivateRoute.tsx](#PrivateRoute)
+[AuthProvider.tsx](#AuthProvider)
+[useAuth.tsx](#useAuth)
+[index.tsx](#index)
+[Admin.tsx](#Admin)
+[Login.tsx](#Login)
+[Logout.tsx](#Logout)
+[Main.tsx](#Main)
+[routes.tsx](#routes)
+
 Конечно, приведённый выше пример - это самый примитивный вариант. Здесь значение переменной `isAuthenticated` задаётся нажатием на кнопку и вызывом метода `setAuth(true)`. Но ничто не мешает вам применить более сложную логику. Например при нажатии на кнопку, вы можете вызывать API, передавать логин/пароль и получать ответ. И в зависимости от ответа устанавливать значение переменной в `true` или `false`
 
 Сколько бы сложную реализацию аутентификации вы не делали, в основе будет лежать примерно такой принцип:
