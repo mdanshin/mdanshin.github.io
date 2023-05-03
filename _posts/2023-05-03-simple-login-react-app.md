@@ -21,6 +21,30 @@ author: Mikhail
 
 Для самых нетерпеливых, приведу полный текст приложения, которое реализует описанную концепцию. Возможно, что этого будет достаточно для понимания. Далее, в этой статье, я покажу как декомпозировать этот код и опишу каждый компонент отдельно.
 
+Для начала:
+
+```bash
+#Создаем новую директорию dms-auth-simple
+mkdir dms-auth-simple
+
+#Создаем новое React приложение с TypeScript шаблоном в директории dms-auth-simple с помощью команды npx create-react-app
+npx create-react-app dms-auth-simple --template typescript
+
+#Переходим в созданную директорию
+cd dms-auth-simple/
+
+#Устанавливаем библиотеку react-router-dom с помощью команды npm install
+npm install --save react-router-dom
+
+#Открываем приложение в редакторе кода Visual Studio Code
+code .
+
+#Запускаем приложение
+npm start
+```
+
+Далее полный листинг кода приложения.
+
 ```tsx
 // Импортируем необходимые модули из библиотеки react
 import { createContext, useContext, useState } from "react";
