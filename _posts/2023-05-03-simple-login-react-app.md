@@ -115,7 +115,7 @@ export const PrivateRoute = () => {
 Если `isAuthenticated` равно `true`, компонент `PrivateRoute` отображает <Outlet />, то есть вложенные маршруты. Если `isAuthenticated` равно `false`, компонент перенаправляет пользователя на страницу входа, используя компонент <Navigate />. 
 
 ```js
-      <Navigate to="/login" state={{from: location}} replace />  )
+      <Navigate to="/login" state={{from: location}} replace />
 ```
 
 Обратите внимание на строчку выше. Данный код не имеет прямого отношения к авторизации и вы можете пока не обращать на него внимание.
