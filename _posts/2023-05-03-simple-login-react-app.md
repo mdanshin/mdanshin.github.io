@@ -21,7 +21,6 @@ author: Mikhail
 
 Допустим у нас есть несколько маршрутов. В представленном примере они себя ведут как обычно и тут пока нет никакой авторизации. При входе на сайт нас перенаправляют на компонент Main. Так же сейчас доступны все приведённые маршруты.
 
-routes.tsx
 ```tsx
 import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
@@ -48,6 +47,9 @@ export default useRoutes
 
 Вот как будут выглядеть вложенные маршруты.
 
+## Routes
+
+routes.tsx
 ```tsx
 import { Route, Routes } from 'react-router-dom';
 import Main from '../pages/Main';
