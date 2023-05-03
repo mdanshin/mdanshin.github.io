@@ -229,9 +229,23 @@ root.render(
 
 Login.tsx
 ```tsx
+import useAuth from '../hooks/useAuth';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 const Login = () => {
-  return(
-    <button onClick={()=>{setAuth(true)}}>Login</button>
+  const { setAuth } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const from = location.state?.from?.pathname || '/'
+
+  return (
+    <>
+      <div>Login</div>
+      <button type={'button'} onClick={() => {
+        setAuth(true)
+        navigate(from, { replace: true });
+      }}>Login</button>
+    </>
   )
 }
 
