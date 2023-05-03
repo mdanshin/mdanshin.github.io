@@ -345,26 +345,29 @@ export default Navbar
 
 {% include codeHeader.html %}
 ```tsx
-// импортируем необходимые модули из библиотеки react-router-dom и пользовательский хук useAuth
-import { Navigate, Outlet } from "react-router-dom";
+// Импортируем необходимые модули из библиотеки react-router-dom и пользовательский хук useAuth
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
 
-// определяем функциональный компонент PrivateRoute
-export const PrivateRoute = () => {  
+// Определяем функциональный компонент PrivateRoute
+export const PrivateRoute = () => {
 
-  // используем пользовательский хук useAuth, чтобы проверить, авторизован ли пользователь
-  const {isAuthenticated} = useAuth()
+// Получаем значение isAuthenticated из пользовательского хука useAuth
+const {isAuthenticated} = useAuth()
 
-  // возвращаем условный оператор для рендеринга компонентов на основе состояния isAuthenticated
-  return (
-    // если пользователь авторизован, то рендерим дочерние элементы текущего маршрута, используя компонент Outlet
-    isAuthenticated === true ?
-      <Outlet />
-      // если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate
-      // свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
-      :
-      <Navigate to="/login" state={% raw %}{{from: location}}{% endraw %} replace />  
-  )
+// Получаем текущий маршрут из хука useLocation
+const location = useLocation()
+
+// Возвращаем условный оператор для рендеринга компонентов на основе состояния isAuthenticated
+return (
+// Если пользователь авторизован, то рендерим дочерние элементы текущего маршрута, используя компонент Outlet
+isAuthenticated === true ?
+<Outlet />
+// Если пользователь не авторизован, то перенаправляем его на маршрут /login с помощью компонента Navigate.
+// Свойство replace указывает, что текущий маршрут будет заменен на новый, чтобы пользователь не мог вернуться обратно, используя кнопку "назад" в браузере.
+:
+<Navigate to="/login" state={{from: location}} replace />
+)
 };
 ```
 
