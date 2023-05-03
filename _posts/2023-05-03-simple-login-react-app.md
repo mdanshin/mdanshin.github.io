@@ -173,7 +173,12 @@ export default App;
 │       └── routes.tsx
 ```
 
+Можно сразу создать все папки и файлы. Или создавать их по ходу чтения.
+
+{% include codeHeader.html %}
 ```bash
+# Убедитесь, что находитесь в папке проекта.
+
 mkdir ./src/components
 touch Navbar.tsx
 touch PrivateRoute.tsx
@@ -240,7 +245,7 @@ export default useRoutes
 
 ## Routes
 
-routes.tsx
+./src/routes/routes.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -275,7 +280,7 @@ export default useRoutes
 
 ## App
 
-App.tsx
+./src/App.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -302,7 +307,7 @@ export default App;
 
 ## Navbar
 
-Navbar.tsx
+./src/components/Navbar.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -334,7 +339,7 @@ export default Navbar
 
 Давайте рассмотрим компонент `PrivateRoute` подробнее. Ниже приведено подробное описание кода, а далее рассмотрен хук `useAuth`, который предоставляет информацию о статусе пользователя.
 
-PrivateRoute.tsx
+./src/components/PrivateRoute.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -393,7 +398,7 @@ export const PrivateRoute = () => {
 
 Хук `useAuth` тоже предельно простой. Его единственная задача сначала импортировать, а потом экспортировать контекст.
 
-useAuth.tsx
+./src/hooks/useAuth.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -421,7 +426,7 @@ export default useAuth
 
 Создаём контекст тоже самым примитивным образом.
 
-AuthProvider.tsx
+./src/context/AuthProvider.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -472,7 +477,7 @@ export default AuthContext;
 
 ## index
 
-index.tsx
+./src/index.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -502,7 +507,7 @@ root.render(
 
 ## Login
 
-Login.tsx
+./src/pages/Login.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -535,7 +540,7 @@ export default Login
 
 ## Logout
 
-Logout.tsx
+./src/pages/Logout.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -564,7 +569,7 @@ export default Logout
 
 ## Main
 
-Main.tsx
+./src/pages/Main.tsx
 
 {% include codeHeader.html %}
 ```tsx
@@ -581,7 +586,7 @@ export default Main
 
 ## Admin
 
-Main.tsx
+./src/pages/Admin.tsx
 
 {% include codeHeader.html %}
 ```tsx
