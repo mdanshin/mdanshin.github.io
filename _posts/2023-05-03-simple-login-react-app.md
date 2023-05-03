@@ -561,7 +561,7 @@ function Logout() {
   useEffect(() => {
     setAuth(false)
     navigate('/');
-  }, [])
+  }, [setAuth, navigate])
 
   return (
     <div>Logout</div>
