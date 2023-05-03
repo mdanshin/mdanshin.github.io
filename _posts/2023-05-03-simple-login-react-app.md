@@ -185,6 +185,7 @@ export default useRoutes
 ## Routes
 
 routes.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import { Route, Routes } from 'react-router-dom';
@@ -219,6 +220,7 @@ export default useRoutes
 ## App
 
 App.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import Navbar from './components/Navbar';
@@ -245,6 +247,7 @@ export default App;
 ## Navbar
 
 Navbar.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import { Link } from 'react-router-dom'
@@ -276,6 +279,7 @@ export default Navbar
 Давайте рассмотрим компонент `PrivateRoute` подробнее. Ниже приведено подробное описание кода, а далее рассмотрен хук `useAuth`, который предоставляет информацию о статусе пользователя.
 
 PrivateRoute.tsx
+
 {% include codeHeader.html %}
 ```tsx
 // импортируем необходимые модули из библиотеки react-router-dom и пользовательский хук useAuth
@@ -334,6 +338,7 @@ export const PrivateRoute = () => {
 Хук `useAuth` тоже предельно простой. Его единственная задача сначала импортировать, а потом экспортировать контекст.
 
 useAuth.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import { useContext } from "react"
@@ -361,6 +366,7 @@ export default useAuth
 Создаём контекст тоже самым примитивным образом.
 
 AuthProvider.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import { createContext, useState } from "react";
@@ -411,6 +417,7 @@ export default AuthContext;
 ## index
 
 index.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import React from 'react';
@@ -440,6 +447,7 @@ root.render(
 ## Login
 
 Login.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import useAuth from '../hooks/useAuth';
@@ -472,6 +480,7 @@ export default Login
 ## Logout
 
 Logout.tsx
+
 {% include codeHeader.html %}
 ```tsx
 import { useEffect } from "react";
@@ -499,8 +508,10 @@ export default Logout
 
 ## Main
 
-```tsx
+Main.tsx
+
 {% include codeHeader.html %}
+```tsx
 const Main = () => {
   return (
     <h1>Main</h1>
@@ -514,8 +525,10 @@ export default Main
 
 ## Admin
 
-```tsx
+Main.tsx
+
 {% include codeHeader.html %}
+```tsx
 const Admin = () => {
   return (
     <h1>Admin</h1>
