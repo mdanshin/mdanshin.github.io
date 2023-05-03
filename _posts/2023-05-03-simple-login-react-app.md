@@ -201,6 +201,8 @@ export default useRoutes
 
 Хочу отметить, что маршруты я поместил в отдельный кастомный хук `useRoutes`. А затем подключил в компоненте `App`
 
+<a name="App"></a>
+
 ## App
 
 App.tsx
@@ -462,7 +464,7 @@ export default Logout
 
 ```
 ├── src
-│   ├── App.tsx
+│   ├── * [App.tsx](#App)
 │   ├── components
 │   │   ├── Navbar.tsx
 │   │   └── PrivateRoute.tsx
@@ -508,11 +510,20 @@ TEST
 
 <details>
 <summary>Want to ruin the surprise?</summary>
+
 <br>
+
 This is how you add `code` in a dropdown:
+
+<br>
+
 ```javascript
 console.log("Hello, world!");
 ```
+
+<br>
+
 </details>
+<br>
 
 Буду рад обсудить с вами данную статью в своей Телеграм группе. Присоединяйтесь - [https://t.me/danshin_ms](https://t.me/danshin_ms).
