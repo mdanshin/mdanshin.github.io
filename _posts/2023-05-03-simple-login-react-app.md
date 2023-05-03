@@ -235,7 +235,7 @@ export const PrivateRoute = () => {
 
 Компонент также использует кастомный хук `useAuth`, который возвращает объект, содержащий информацию об аутентификации пользователя.
 
-Если `isAuthenticated` равно `true`, компонент `PrivateRoute` отображает <Outlet />, то есть вложенные маршруты. Если `isAuthenticated` равно `false`, компонент перенаправляет пользователя на страницу входа, используя компонент <Navigate />. 
+Если `isAuthenticated` равно `true`, компонент `PrivateRoute` отображает `<Outlet />`, то есть вложенные маршруты. Если `isAuthenticated` равно `false`, компонент перенаправляет пользователя на страницу входа, используя компонент <Navigate />. 
 
 ```js
       <Navigate to="/login" state={% raw %}{{from: location}}{% endraw %} replace />
