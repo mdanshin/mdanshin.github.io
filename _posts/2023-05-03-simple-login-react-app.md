@@ -43,6 +43,7 @@ npm start
 
 Далее полный листинг кода приложения. Можете посмотреть его в [сodesandbox.io](https://codesandbox.io/s/dms-auth-simple-heqccp) и поиграться.
 
+{% include codeHeader.html %}
 ```tsx
 // Импортируем необходимые модули из библиотеки react
 import { createContext, useContext, useState } from "react";
@@ -149,6 +150,7 @@ export default App;
 
 Допустим у нас есть несколько маршрутов. В представленном ниже примере они себя ведут как обычно и тут пока нет никакой авторизации. При входе на сайт нас перенаправляют на компонент Main. Так же сейчас доступны все приведённые маршруты.
 
+{% include codeHeader.html %}
 ```tsx
 import { Route, Routes } from 'react-router-dom';
 import Login from '../pages/Login';
@@ -180,6 +182,7 @@ export default useRoutes
 ## Routes
 
 routes.tsx
+{% include codeHeader.html %}
 ```tsx
 import { Route, Routes } from 'react-router-dom';
 import Main from '../pages/Main';
@@ -213,6 +216,7 @@ export default useRoutes
 ## App
 
 App.tsx
+{% include codeHeader.html %}
 ```tsx
 import Navbar from './components/Navbar';
 import useRoutes from './routes/routes';
@@ -238,6 +242,7 @@ export default App;
 ## Navbar
 
 Navbar.tsx
+{% include codeHeader.html %}
 ```tsx
 import { Link } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
@@ -268,6 +273,7 @@ export default Navbar
 Давайте рассмотрим компонент `PrivateRoute` подробнее. Ниже приведено подробное описание кода, а далее рассмотрен хук `useAuth`, который предоставляет информацию о статусе пользователя.
 
 PrivateRoute.tsx
+{% include codeHeader.html %}
 ```tsx
 // импортируем необходимые модули из библиотеки react-router-dom и пользовательский хук useAuth
 import { Navigate, Outlet } from "react-router-dom";
@@ -325,6 +331,7 @@ export const PrivateRoute = () => {
 Хук `useAuth` тоже предельно простой. Его единственная задача сначала импортировать, а потом экспортировать контекст.
 
 useAuth.tsx
+{% include codeHeader.html %}
 ```tsx
 import { useContext } from "react"
 import AuthContext from "../context/AuthProvider"
@@ -351,6 +358,7 @@ export default useAuth
 Создаём контекст тоже самым примитивным образом.
 
 AuthProvider.tsx
+{% include codeHeader.html %}
 ```tsx
 import { createContext, useState } from "react";
 
@@ -400,6 +408,7 @@ export default AuthContext;
 ## index
 
 index.tsx
+{% include codeHeader.html %}
 ```tsx
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -428,6 +437,7 @@ root.render(
 ## Login
 
 Login.tsx
+{% include codeHeader.html %}
 ```tsx
 import useAuth from '../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -459,6 +469,7 @@ export default Login
 ## Logout
 
 Logout.tsx
+{% include codeHeader.html %}
 ```tsx
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -486,6 +497,7 @@ export default Logout
 ## Main
 
 ```tsx
+{% include codeHeader.html %}
 const Main = () => {
   return (
     <h1>Main</h1>
@@ -500,6 +512,7 @@ export default Main
 ## Admin
 
 ```tsx
+{% include codeHeader.html %}
 const Admin = () => {
   return (
     <h1>Admin</h1>
