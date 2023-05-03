@@ -43,8 +43,8 @@ npm start
 В коде приложения, в некоторых местах, мне пришлось экранировать двойные фигурные скобки, чтобы движок блога нормально отобразил эту строку. Уберите обратный слеш, после вставки в редактор кода, чтобы код заработал.
 
 ```js
-<AuthContext.Provider value={ \{ isAuthenticated, setAuth \} }>
-<Navigate to="/login" state={ \{ from: location \}}/ replace />
+<AuthContext.Provider value={{ isAuthenticated, setAuth }}>
+<Navigate to="/login" state={% raw %}{{ from: location }}{% endraw %} replace />
 ```
 
 Далее полный листинг кода приложения.
