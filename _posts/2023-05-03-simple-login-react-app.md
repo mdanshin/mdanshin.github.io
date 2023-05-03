@@ -45,7 +45,7 @@ npm start
 ```tsx
 // Импортируем необходимые модули из библиотеки react
 import { createContext, useContext, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet, useLocation, useNavigate, NavLink } from 'react-router-dom';
 
 // Определяем тип контекста с двумя полями: isAuthenticated и setAuth
 type AuthContextType = {
@@ -122,7 +122,10 @@ const Login = () => {
 // Компонент Main отображает главную страницу приложения.
 const Main = () => {
   return (
-    <div>Main</div>
+    <>
+      <div>Main</div>
+      <NavLink to='/admin'>Admin Page</NavLink>
+    </>
   );
 }
 
