@@ -45,9 +45,6 @@ npm start
 ```js
 <AuthContext.Provider value={ '{' isAuthenticated, setAuth '}' }>
 <Navigate to="/login" state={ /\{ from: location /\}\}/ replace />
-<Navigate to="/login" state={{'{'}}{ from: location }{{'}'}} replace />
-<Navigate to="/login" state={'{'}{ from: location }{'}'} replace />
-
 ```
 
 Далее полный листинг кода приложения.
