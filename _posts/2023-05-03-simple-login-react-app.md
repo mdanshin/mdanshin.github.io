@@ -39,6 +39,7 @@ code .
 
 #Запускаем приложение
 npm start
+
 ```
 
 Далее полный листинг кода приложения. Можете посмотреть его в [сodesandbox.io](https://codesandbox.io/s/dms-auth-simple-heqccp) и поиграться.
@@ -197,6 +198,7 @@ touch Main.tsx
 
 mkdir ./src/routes
 touch routes.tsx
+
 ```
 
 * [App.tsx](#App)
