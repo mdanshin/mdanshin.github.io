@@ -476,6 +476,22 @@ function Logout() {
 export default Logout
 ```
 
+<a name="Logout"></a>
+
+## Main
+
+И Main
+
+```tsx
+const Main = () => {
+  return (
+    <h1>Main</h1>
+  )
+}
+
+export default Main
+```
+
 Вот как выглядит окончательная структура проекта
 
 ```
