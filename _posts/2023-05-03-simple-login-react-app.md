@@ -45,7 +45,7 @@ npm start
 ```tsx
 // Импортируем необходимые модули из библиотеки react
 import { createContext, useContext, useState } from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate, Outlet, useLocation, useNavigate, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate, Outlet, useLocation, useNavigate, Link } from 'react-router-dom';
 
 // Определяем тип контекста с двумя полями: isAuthenticated и setAuth
 type AuthContextType = {
@@ -124,7 +124,7 @@ const Main = () => {
   return (
     <>
       <div>Main</div>
-      <NavLink to='/admin'>Admin Page</NavLink>
+      <Link to='/admin'>Admin Page</Link>
     </>
   );
 }
@@ -180,20 +180,68 @@ import Login from '../pages/Login';
 import Admin from '../pages/Admin';
 import { PrivateRoute } from '../components/PrivateRoute';
 
-<Routes>
-      
-      {/* обычные маршруты */}
+export const useRoutes = () => {
+
+  return (
+    <Routes>
+      <Route index element={<Main />} />
       <Route path="/" element={<Main />} />
       <Route path="/login" element={<Login />} />
 
-      
-      {/* защищённые маршруты */}
       <Route element={<PrivateRoute />}>
-        <Route path='/admin' element={<Admin />} />        
-        {/* другие защищённые маршруты */}
+        <Route path='/admin' element={<Admin />} />
       </Route>
 
-</Routes>
+    </Routes>
+  )
+}
+
+export default useRoutes
+```
+
+Хочу отметить, что маршруты я поместил в отдельный кастомный хук `useRoutes`. А затем подключил в компоненте `App`
+
+App.tsx
+```tsx
+import Navbar from './components/Navbar';
+import useRoutes from './routes/routes';
+
+const App = () => {
+  const routes = useRoutes()
+
+  return (
+    <>
+      <Navbar />
+      {routes}
+    </>
+  )
+};
+
+export default App;
+```
+
+Компонент Navbar предельно прост. Думаю, что тут ничего не нуждается в пояснениях.
+
+Navbar.tsx
+```tsx
+import { Link } from 'react-router-dom'
+import useAuth from '../hooks/useAuth'
+
+function Navbar() {
+  const { isAuthenticated } = useAuth()
+  return (
+    <>
+      <h1>Welcome</h1>
+      <nav>
+        <Link to="/">Home</Link>
+        <Link to="/admin">Admin</Link>
+        {isAuthenticated ? <Link to="/logout">Logout</Link> : <Link to="/login">Login</Link>}
+      </nav>
+    </>
+  )
+}
+
+export default Navbar
 ```
 
 ## PrivateRoute
@@ -373,6 +421,54 @@ const Login = () => {
 }
 
 export default Login
+```
+
+Осталось только реализовать компонент Logout
+
+Logout.tsx
+```tsx
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
+
+function Logout() {
+  const { setAuth } = useAuth()
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    setAuth(false)
+    navigate('/');
+  }, [navigate, setAuth])
+
+  return (
+    <div>Logout</div>
+  )
+}
+
+export default Logout
+```
+
+Вот как выглядит окончательная структура проекта
+
+```
+.
+├── App.tsx
+├── components
+│   ├── Navbar.tsx
+│   └── PrivateRoute.tsx
+├── context
+│   └── AuthProvider.tsx
+├── hooks
+│   └── useAuth.tsx
+├── index.tsx
+├── pages
+│   ├── Admin.tsx
+│   ├── Login.tsx
+│   ├── Logout.tsx
+│   ├── Main.tsx
+├── react-app-env.d.ts
+└── routes
+    └── routes.tsx
 ```
 
 Конечно, приведённый выше пример - это самый примитивный вариант. Здесь значение переменной `isAuthenticated` задаётся нажатием на кнопку и вызывом метода `setAuth(true)`. Но ничто не мешает вам применить более сложную логику. Например при нажатии на кнопку, вы можете вызывать API, передавать логин/пароль и получать ответ. И в зависимости от ответа устанавливать значение переменной в `true` или `false`
