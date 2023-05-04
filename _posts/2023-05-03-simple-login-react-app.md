@@ -39,7 +39,6 @@ code .
 
 #Запускаем приложение
 npm start
-
 ```
 
 Далее полный листинг кода приложения. Можете посмотреть его в [сodesandbox.io](https://codesandbox.io/s/dms-auth-simple-heqccp) и поиграться.
@@ -180,7 +179,14 @@ export default App;
 
 {% include codeHeader.html %}
 ```bash
-# Убедитесь, что находитесь в папке проекта.
+#Создаем новое React приложение с TypeScript шаблоном в директории dms-auth-simple с помощью команды npx create-react-app
+npx create-react-app dms-auth-simple --template typescript
+
+#Переходим в созданную директорию
+cd dms-auth-simple/
+
+#Устанавливаем библиотеку react-router-dom с помощью команды npm install
+npm install --save react-router-dom
 
 mkdir ./src/components/
 touch ./src/components/Navbar.tsx
@@ -201,6 +207,11 @@ touch ./src/pages/Main.tsx
 mkdir ./src/routes
 touch ./src/routes/routes.tsx
 
+#Открываем приложение в редакторе кода Visual Studio Code
+code .
+
+#Запускаем приложение
+npm start
 ```
 
 * [App.tsx](#App)
