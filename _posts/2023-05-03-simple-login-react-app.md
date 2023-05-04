@@ -185,9 +185,7 @@ npx create-react-app dms-auth-simple --template typescript
 #Переходим в созданную директорию
 cd dms-auth-simple/
 
-#Устанавливаем библиотеку react-router-dom с помощью команды npm install
-npm install --save react-router-dom
-
+# создаём структуру папок и файлы, необходимые для проекта
 mkdir ./src/components/
 touch ./src/components/Navbar.tsx
 touch ./src/components/PrivateRoute.tsx
@@ -207,12 +205,21 @@ touch ./src/pages/Main.tsx
 mkdir ./src/routes
 touch ./src/routes/routes.tsx
 
+#Устанавливаем библиотеку react-router-dom с помощью команды npm install
+npm install --save react-router-dom
+
 #Открываем приложение в редакторе кода Visual Studio Code
 code .
 
 #Запускаем приложение
 npm start
 ```
+
+Сразу после запуска вы увидите сообщение об ошибке потому, что сейчас в нём есть пустые компоненты. Просто закройте это сообщение в правом верхнем углу и продолжайте.
+
+![assets/images/simple-login-react-app/1.png](/assets/images/simple-login-react-app/1.png)
+
+Для удобства привожу ссылку на те разделы статьи, где рассматривается соответствующий модуль.
 
 * [App.tsx](#App)
 * [Navbar.tsx](#Navbar)
