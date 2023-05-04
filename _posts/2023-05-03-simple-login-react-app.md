@@ -207,7 +207,12 @@ touch ./src/routes/routes.tsx
 
 #Устанавливаем библиотеку react-router-dom с помощью команды npm install
 npm install --save react-router-dom
+```
 
+Затем запускаем проект
+
+{% include codeHeader.html %}
+```bash
 #Открываем приложение в редакторе кода Visual Studio Code
 code .
 
