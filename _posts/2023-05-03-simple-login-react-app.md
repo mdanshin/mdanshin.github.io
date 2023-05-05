@@ -666,9 +666,7 @@ export default Admin
 Буду рад обсудить с вами данную статью в своей Телеграм группе. Присоединяйтесь - [https://t.me/danshin_ms](https://t.me/danshin_ms).
 
 P.S.
-Посмотрите мой проект формы [Login](https://danshin.ms/dms-login-page-autumn/). Ссылка на [GitHub](https://github.com/mdanshin/dms-login-page-autumn).
-
-Она сделана с использованием HTML и CSS. 
+Посмотрите мой проект формы [Login](https://danshin.ms/dms-login-page-autumn/). Ссылка на [GitHub](https://github.com/mdanshin/dms-login-page-autumn). Она сделана с использованием HTML и CSS. 
 
 ![assets/images/simple-login-react-app/2.png](/assets/images/simple-login-react-app/2.png)
 
