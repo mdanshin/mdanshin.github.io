@@ -668,6 +668,6 @@ export default Admin
 P.S.
 Посмотрите мой проект на GitHub по созданию формы Login. [https://github.com/mdanshin/dms-login-page-autumn](https://github.com/mdanshin/dms-login-page-autumn). Она сделана с использованием HTML и CSS. 
 
-![login form](https://github.com/mdanshin/dms-login-page-autumn/blob/main/cover.png)
+![assets/images/simple-login-react-app/2.png](/assets/images/simple-login-react-app/2.png)
 
 В будущем я её переделаю под React и включу в этот проект по авторизации.
