@@ -19,17 +19,13 @@
             if (stored) return stored;
         } catch (e) { }
 
-        var nav = [];
+        // Use the user's default/preferred language (first in the list).
         try {
-            if (Array.isArray(navigator.languages) && navigator.languages.length) nav = nav.concat(navigator.languages);
-            if (navigator.language) nav.push(navigator.language);
+            var primary = null;
+            if (Array.isArray(navigator.languages) && navigator.languages.length) primary = navigator.languages[0];
+            if (!primary && navigator.language) primary = navigator.language;
+            return normalize(primary) || 'en';
         } catch (e2) { }
-
-        for (var i = 0; i < nav.length; i++) {
-            var n = normalize(nav[i]);
-            if (n === 'ru') return 'ru';
-            if (n === 'en') return 'en';
-        }
 
         return 'en';
     }

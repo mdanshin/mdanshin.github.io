@@ -69,3 +69,10 @@ incremental: true
 
 # Exclude metadata and development time dependencies (like Grunt plugins)
 exclude: [README.markdown, package.json, grunt.js, Gruntfile.js, Gruntfile.coffee, node_modules]
+
+# Simple RU->EN translations for category names
+category_translations:
+  "Администрирование": "Administration"
+  "Другое": "Other"
+  "Программирование": "Programming"
+  "Системное администрирование": "System Administration"

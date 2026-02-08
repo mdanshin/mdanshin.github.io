@@ -55,9 +55,12 @@ description: "IT Blog danshin.ms"
                             <span data-lang="en">Category</span>
                             <span class="catlist">
                                 {% for category in latest_post.categories %}
+                                {% assign category_en = site.category_translations[category] | default: category %}
                                 <a class="text-capitalize text-muted smoothscroll"
-                                    href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
-                                    }}</a><span class="sep">, </span>
+                                    href="{{site.baseurl}}/categories.html#{{ category | downcase }}">
+                                    <span data-lang="ru">{{ category }}</span>
+                                    <span data-lang="en">{{ category_en }}</span>
+                                </a><span class="sep">, </span>
                                 {% endfor %}
                             </span>
                         </small>
@@ -97,9 +100,12 @@ description: "IT Blog danshin.ms"
                         <span data-lang="en">Category</span>
                         <span class="catlist">
                             {% for category in second_post.categories %}
+                            {% assign category_en = site.category_translations[category] | default: category %}
                             <a class="text-capitalize text-muted smoothscroll"
-                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
-                                }}</a><span class="sep">, </span>
+                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">
+                                <span data-lang="ru">{{ category }}</span>
+                                <span data-lang="en">{{ category_en }}</span>
+                            </a><span class="sep">, </span>
                             {% endfor %}
                         </span>
                     </small>
@@ -134,9 +140,12 @@ description: "IT Blog danshin.ms"
                         <span data-lang="en">Category</span>
                         <span class="catlist">
                             {% for category in third_post.categories %}
+                            {% assign category_en = site.category_translations[category] | default: category %}
                             <a class="text-capitalize text-muted smoothscroll"
-                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
-                                }}</a><span class="sep">, </span>
+                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">
+                                <span data-lang="ru">{{ category }}</span>
+                                <span data-lang="en">{{ category_en }}</span>
+                            </a><span class="sep">, </span>
                             {% endfor %}
                         </span>
                     </small>
@@ -171,9 +180,12 @@ description: "IT Blog danshin.ms"
                         <span data-lang="en">Category</span>
                         <span class="catlist">
                             {% for category in fourth_post.categories %}
+                            {% assign category_en = site.category_translations[category] | default: category %}
                             <a class="text-capitalize text-muted smoothscroll"
-                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
-                                }}</a><span class="sep">, </span>
+                                href="{{site.baseurl}}/categories.html#{{ category | downcase }}">
+                                <span data-lang="ru">{{ category }}</span>
+                                <span data-lang="en">{{ category_en }}</span>
+                            </a><span class="sep">, </span>
                             {% endfor %}
                         </span>
                     </small>

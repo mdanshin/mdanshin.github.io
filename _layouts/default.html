@@ -14,11 +14,11 @@
                 var lang = (stored === 'ru' || stored === 'en') ? stored : null;
 
                 if (!lang) {
-                    var nav = [];
-                    if (Array.isArray(navigator.languages) && navigator.languages.length) nav = nav.concat(navigator.languages);
-                    if (navigator.language) nav.push(navigator.language);
-                    var isRu = nav.some(function (l) { return String(l).toLowerCase().indexOf('ru') === 0; });
-                    lang = isRu ? 'ru' : 'en';
+                    var primary = null;
+                    if (Array.isArray(navigator.languages) && navigator.languages.length) primary = navigator.languages[0];
+                    if (!primary && navigator.language) primary = navigator.language;
+                    var s = String(primary || '').toLowerCase();
+                    lang = (s.indexOf('ru') === 0) ? 'ru' : 'en';
                 }
 
                 var el = document.documentElement;

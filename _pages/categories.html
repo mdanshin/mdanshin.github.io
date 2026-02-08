@@ -14,7 +14,11 @@ permalink: "/categories.html"
         </h1>
             
         {% for category in site.categories %} 
-        <h4 class="font-weight-bold spanborder text-capitalize" id="{{ category[0] | downcase }}"><span>{{ category[0] }}</span></h4>
+        {% assign category_en = site.category_translations[category[0]] | default: category[0] %}
+        <h4 class="font-weight-bold spanborder text-capitalize" id="{{ category[0] | downcase }}"><span>
+            <span data-lang="ru">{{ category[0] }}</span>
+            <span data-lang="en">{{ category_en }}</span>
+        </span></h4>
             
         {% assign pages_list = category[1] %}
         {% for post in pages_list %}
