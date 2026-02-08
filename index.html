@@ -35,15 +35,24 @@ description: "IT Blog danshin.ms"
                         {% assign latest_ru_excerpt = latest_post.excerpt | strip_html | strip_newlines %}
                         {% assign latest_en_excerpt = latest_post.excerpt | strip_html | strip_newlines %}
 
-                        {% assign latest_ru_split = latest_post.content | split: '<div data-lang="ru" markdown="1">' %}
+                        {% assign latest_ru_split = latest_post.content | split: '<div data-lang="ru"' %}
                         {% if latest_ru_split.size > 1 %}
-                            {% assign latest_ru_only = latest_ru_split[1] | split: '<div data-lang="en" markdown="1">' | first %}
-                            {% assign latest_ru_excerpt = latest_ru_only | strip_html | strip_newlines %}
+                            {% assign latest_ru_tag_parts = latest_ru_split[1] | split: '>' %}
+                            {% if latest_ru_tag_parts.size > 1 %}
+                                {% assign latest_ru_inner_plus = latest_ru_tag_parts | slice: 1, latest_ru_tag_parts.size | join: '>' %}
+                                {% assign latest_ru_inner = latest_ru_inner_plus | split: '</div>' | first %}
+                                {% assign latest_ru_excerpt = latest_ru_inner | strip_html | strip_newlines %}
+                            {% endif %}
                         {% endif %}
 
-                        {% assign latest_en_split = latest_post.content | split: '<div data-lang="en" markdown="1">' %}
+                        {% assign latest_en_split = latest_post.content | split: '<div data-lang="en"' %}
                         {% if latest_en_split.size > 1 %}
-                            {% assign latest_en_excerpt = latest_en_split[1] | strip_html | strip_newlines %}
+                            {% assign latest_en_tag_parts = latest_en_split[1] | split: '>' %}
+                            {% if latest_en_tag_parts.size > 1 %}
+                                {% assign latest_en_inner_plus = latest_en_tag_parts | slice: 1, latest_en_tag_parts.size | join: '>' %}
+                                {% assign latest_en_inner = latest_en_inner_plus | split: '</div>' | first %}
+                                {% assign latest_en_excerpt = latest_en_inner | strip_html | strip_newlines %}
+                            {% endif %}
                         {% endif %}
 
                         <span data-lang="ru">{{ latest_ru_excerpt | truncate: 136 }}</span>
@@ -215,15 +224,24 @@ description: "IT Blog danshin.ms"
                         {% assign sticky_ru_excerpt = post.excerpt | strip_html | strip_newlines %}
                         {% assign sticky_en_excerpt = post.excerpt | strip_html | strip_newlines %}
 
-                        {% assign sticky_ru_split = post.content | split: '<div data-lang="ru" markdown="1">' %}
+                        {% assign sticky_ru_split = post.content | split: '<div data-lang="ru"' %}
                         {% if sticky_ru_split.size > 1 %}
-                            {% assign sticky_ru_only = sticky_ru_split[1] | split: '<div data-lang="en" markdown="1">' | first %}
-                            {% assign sticky_ru_excerpt = sticky_ru_only | strip_html | strip_newlines %}
+                            {% assign sticky_ru_tag_parts = sticky_ru_split[1] | split: '>' %}
+                            {% if sticky_ru_tag_parts.size > 1 %}
+                                {% assign sticky_ru_inner_plus = sticky_ru_tag_parts | slice: 1, sticky_ru_tag_parts.size | join: '>' %}
+                                {% assign sticky_ru_inner = sticky_ru_inner_plus | split: '</div>' | first %}
+                                {% assign sticky_ru_excerpt = sticky_ru_inner | strip_html | strip_newlines %}
+                            {% endif %}
                         {% endif %}
 
-                        {% assign sticky_en_split = post.content | split: '<div data-lang="en" markdown="1">' %}
+                        {% assign sticky_en_split = post.content | split: '<div data-lang="en"' %}
                         {% if sticky_en_split.size > 1 %}
-                            {% assign sticky_en_excerpt = sticky_en_split[1] | strip_html | strip_newlines %}
+                            {% assign sticky_en_tag_parts = sticky_en_split[1] | split: '>' %}
+                            {% if sticky_en_tag_parts.size > 1 %}
+                                {% assign sticky_en_inner_plus = sticky_en_tag_parts | slice: 1, sticky_en_tag_parts.size | join: '>' %}
+                                {% assign sticky_en_inner = sticky_en_inner_plus | split: '</div>' | first %}
+                                {% assign sticky_en_excerpt = sticky_en_inner | strip_html | strip_newlines %}
+                            {% endif %}
                         {% endif %}
 
                         <span data-lang="ru">{{ sticky_ru_excerpt | truncate: 136 }}</span>

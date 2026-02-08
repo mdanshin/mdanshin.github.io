@@ -11,15 +11,29 @@
 		{% assign ru_excerpt = post.excerpt | strip_html | strip_newlines %}
 		{% assign en_excerpt = post.excerpt | strip_html | strip_newlines %}
 
-		{% assign ru_split = post.content | split: '<div data-lang="ru" markdown="1">' %}
+		{%- comment -%}
+		Extract language-specific text from rendered post.content.
+		We intentionally match only `<div data-lang=".."` because kramdown may vary attributes.
+		{%- endcomment -%}
+
+		{% assign ru_split = post.content | split: '<div data-lang="ru"' %}
 		{% if ru_split.size > 1 %}
-			{% assign ru_only = ru_split[1] | split: '<div data-lang="en" markdown="1">' | first %}
-			{% assign ru_excerpt = ru_only | strip_html | strip_newlines %}
+			{% assign ru_tag_parts = ru_split[1] | split: '>' %}
+			{% if ru_tag_parts.size > 1 %}
+				{% assign ru_inner_plus = ru_tag_parts | slice: 1, ru_tag_parts.size | join: '>' %}
+				{% assign ru_inner = ru_inner_plus | split: '</div>' | first %}
+				{% assign ru_excerpt = ru_inner | strip_html | strip_newlines %}
+			{% endif %}
 		{% endif %}
 
-		{% assign en_split = post.content | split: '<div data-lang="en" markdown="1">' %}
+		{% assign en_split = post.content | split: '<div data-lang="en"' %}
 		{% if en_split.size > 1 %}
-			{% assign en_excerpt = en_split[1] | strip_html | strip_newlines %}
+			{% assign en_tag_parts = en_split[1] | split: '>' %}
+			{% if en_tag_parts.size > 1 %}
+				{% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
+				{% assign en_inner = en_inner_plus | split: '</div>' | first %}
+				{% assign en_excerpt = en_inner | strip_html | strip_newlines %}
+			{% endif %}
 		{% endif %}
 
 		<span data-lang="ru">{{ ru_excerpt | truncate: 186 }}</span>
