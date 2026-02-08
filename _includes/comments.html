@@ -4,21 +4,58 @@
     <div id="disqus_thread">
     </div>
     <script type="text/javascript">
-        var disqus_config = function () {
+        function __getSelectedSiteLang() {
             try {
                 var lang = (document.documentElement && document.documentElement.getAttribute('data-lang')) ? document.documentElement.getAttribute('data-lang') : 'en';
-                if (lang !== 'ru' && lang !== 'en') lang = 'en';
+                return (lang === 'ru' || lang === 'en') ? lang : 'en';
+            } catch (e) {
+                return 'en';
+            }
+        }
+
+        function __getPageTitleByLang(lang) {
+            try {
+                var node = document.querySelector('.article-headline [data-lang="' + lang + '"]') ||
+                    document.querySelector('[data-page-title] [data-lang="' + lang + '"]');
+                if (!node) return null;
+                var t = (node.textContent || '').trim();
+                return t || null;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        var disqus_config = function () {
+            try {
+                var lang = __getSelectedSiteLang();
 
                 this.language = lang;
 
-                // Prefer the currently displayed (RU/EN) title.
-                var node = document.querySelector('.article-headline [data-lang="' + lang + '"]') ||
-                    document.querySelector('[data-page-title] [data-lang="' + lang + '"]');
-                if (node) {
-                    var t = (node.textContent || '').trim();
-                    if (t) this.page.title = t;
-                }
+                // Prefer the selected-language title if present.
+                var t = __getPageTitleByLang(lang);
+                if (t) this.page.title = t;
             } catch (e) { }
+        };
+
+        // Allow language switcher to reload Disqus with new language.
+        window.__disqusReset = function (lang) {
+            try {
+                var l = (lang === 'ru' || lang === 'en') ? lang : __getSelectedSiteLang();
+                if (!window.DISQUS || !window.DISQUS.reset) return false;
+
+                window.DISQUS.reset({
+                    reload: true,
+                    config: function () {
+                        this.language = l;
+                        var t = __getPageTitleByLang(l);
+                        if (t) this.page.title = t;
+                    }
+                });
+
+                return true;
+            } catch (e) {
+                return false;
+            }
         };
 
         var disqus_shortname = '{{site.disqus}}'; 

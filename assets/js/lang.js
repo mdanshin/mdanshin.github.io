@@ -117,6 +117,15 @@
         updateSwitchers(l);
         updateDocumentTitle(l);
         applyI18nAttributes(l);
+
+        // Refresh Disqus widgets (recommendations/comments) after manual language change.
+        if (persist) {
+            try {
+                if (typeof window.__disqusReset === 'function') {
+                    window.__disqusReset(l);
+                }
+            } catch (e2) { }
+        }
     }
 
     function bind() {
