@@ -4,6 +4,23 @@
     <div id="disqus_thread">
     </div>
     <script type="text/javascript">
+        var disqus_config = function () {
+            try {
+                var lang = (document.documentElement && document.documentElement.getAttribute('data-lang')) ? document.documentElement.getAttribute('data-lang') : 'en';
+                if (lang !== 'ru' && lang !== 'en') lang = 'en';
+
+                this.language = lang;
+
+                // Prefer the currently displayed (RU/EN) title.
+                var node = document.querySelector('.article-headline [data-lang="' + lang + '"]') ||
+                    document.querySelector('[data-page-title] [data-lang="' + lang + '"]');
+                if (node) {
+                    var t = (node.textContent || '').trim();
+                    if (t) this.page.title = t;
+                }
+            } catch (e) { }
+        };
+
         var disqus_shortname = '{{site.disqus}}'; 
         var disqus_developer = 0;
         (function() {
