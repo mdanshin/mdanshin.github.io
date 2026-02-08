@@ -14,24 +14,130 @@ $(function() {
 });
     
 {% assign counter = 0 %}
-var documents = [{% for page in site.pages %}{% if page.url contains '.xml' or page.url contains 'assets' %}{% else %}{
-    "id": {{ counter }},
-    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
-    "title": "{{ page.title }}",
-    "body": "{{ page.content | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"{% assign counter = counter | plus: 1 %}
-    }, {% endif %}{% endfor %}{% for page in site.without-plugin %}{
-    "id": {{ counter }},
-    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
-    "title": "{{ page.title }}",
-    "body": "{{ page.content | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"{% assign counter = counter | plus: 1 %}
-    }, {% endfor %}{% for page in site.posts %}{
-    "id": {{ counter }},
-    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
-    "title": "{{ page.title }}",
-    "body": "{{ page.date | date: "%Y/%m/%d" }} - {{ page.content | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"{% assign counter = counter | plus: 1 %}
-    }{% if forloop.last %}{% else %}, {% endif %}{% endfor %}];
+var documents_ru = [];
+var documents_en = [];
 
-var idx = lunr(function () {
+{% for page in site.pages %}
+{% if page.url contains '.xml' or page.url contains 'assets' %}
+{% else %}
+{% assign ru_src = page.content %}
+{% assign en_src = page.content %}
+
+{% assign ru_split = page.content | split: '<div data-lang="ru"' %}
+{% if ru_split.size > 1 %}
+    {% assign ru_tag_parts = ru_split[1] | split: '>' %}
+    {% if ru_tag_parts.size > 1 %}
+        {% assign ru_inner_plus = ru_tag_parts | slice: 1, ru_tag_parts.size | join: '>' %}
+        {% assign ru_src = ru_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+{% assign en_split = page.content | split: '<div data-lang="en"' %}
+{% if en_split.size > 1 %}
+    {% assign en_tag_parts = en_split[1] | split: '>' %}
+    {% if en_tag_parts.size > 1 %}
+        {% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
+        {% assign en_src = en_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+documents_ru.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title }}",
+    "body": "{{ ru_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+documents_en.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title_en | default: page.title }}",
+    "body": "{{ en_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+{% assign counter = counter | plus: 1 %}
+{% endif %}
+{% endfor %}
+
+{% for page in site.without-plugin %}
+{% assign ru_src = page.content %}
+{% assign en_src = page.content %}
+
+{% assign ru_split = page.content | split: '<div data-lang="ru"' %}
+{% if ru_split.size > 1 %}
+    {% assign ru_tag_parts = ru_split[1] | split: '>' %}
+    {% if ru_tag_parts.size > 1 %}
+        {% assign ru_inner_plus = ru_tag_parts | slice: 1, ru_tag_parts.size | join: '>' %}
+        {% assign ru_src = ru_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+{% assign en_split = page.content | split: '<div data-lang="en"' %}
+{% if en_split.size > 1 %}
+    {% assign en_tag_parts = en_split[1] | split: '>' %}
+    {% if en_tag_parts.size > 1 %}
+        {% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
+        {% assign en_src = en_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+documents_ru.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title }}",
+    "body": "{{ ru_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+documents_en.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title_en | default: page.title }}",
+    "body": "{{ en_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+{% assign counter = counter | plus: 1 %}
+{% endfor %}
+
+{% for page in site.posts %}
+{% assign ru_src = page.content %}
+{% assign en_src = page.content %}
+
+{% assign ru_split = page.content | split: '<div data-lang="ru"' %}
+{% if ru_split.size > 1 %}
+    {% assign ru_tag_parts = ru_split[1] | split: '>' %}
+    {% if ru_tag_parts.size > 1 %}
+        {% assign ru_inner_plus = ru_tag_parts | slice: 1, ru_tag_parts.size | join: '>' %}
+        {% assign ru_src = ru_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+{% assign en_split = page.content | split: '<div data-lang="en"' %}
+{% if en_split.size > 1 %}
+    {% assign en_tag_parts = en_split[1] | split: '>' %}
+    {% if en_tag_parts.size > 1 %}
+        {% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
+        {% assign en_src = en_inner_plus | split: '</div>' | first %}
+    {% endif %}
+{% endif %}
+
+documents_ru.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title }}",
+    "body": "{{ page.date | date: "%Y/%m/%d" }} - {{ ru_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+documents_en.push({
+    "id": {{ counter }},
+    "url": "{{ site.url }}{{site.baseurl}}{{ page.url }}",
+    "title": "{{ page.title_en | default: page.title }}",
+    "body": "{{ page.date | date: "%Y/%m/%d" }} - {{ en_src | markdownify | replace: '.', '. ' | replace: '</h2>', ': ' | replace: '</h3>', ': ' | replace: '</h4>', ': ' | replace: '</p>', ' ' | strip_html | strip_newlines | replace: '  ', ' ' | replace: '"', ' ' }}"
+});
+
+{% assign counter = counter | plus: 1 %}
+{% endfor %}
+
+var idx_ru = lunr(function () {
     // this.use(lunr.ru);
     // this.use(lunr.multi('en', 'ru'));
     this.use(lunr.multiLanguage('en', 'ru'))
@@ -40,7 +146,18 @@ var idx = lunr(function () {
     this.field('body');
 
 
-    documents.forEach(function (doc) {
+    documents_ru.forEach(function (doc) {
+        this.add(doc)
+    }, this)
+});
+
+var idx_en = lunr(function () {
+    this.use(lunr.multiLanguage('en', 'ru'))
+    this.ref('id')
+    this.field('title', { boost: 10 });
+    this.field('body');
+
+    documents_en.forEach(function (doc) {
         this.add(doc)
     }, this)
 });
@@ -53,6 +170,10 @@ function lunr_search(term) {
     
     document.getElementById('lunrsearchresults').innerHTML = '<div id="resultsmodal" class="modal fade show d-block"  tabindex="-1" role="dialog" aria-labelledby="resultsmodal"> <div class="modal-dialog shadow-lg" role="document"> <div class="modal-content"> <div class="modal-header" id="modtit"> <button type="button" class="close" id="btnx" data-dismiss="modal" aria-label="Close"> &times; </button> </div> <div class="modal-body"> <ul class="mb-0"> </ul>    </div> <div class="modal-footer"><button id="btnx" type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><span data-lang="ru">Закрыть</span><span data-lang="en">Close</span></button></div></div> </div></div>';
     if(term) {
+        var lang = (document.documentElement && document.documentElement.getAttribute('data-lang')) ? document.documentElement.getAttribute('data-lang') : 'en';
+        var idx = (lang === 'ru') ? idx_ru : idx_en;
+        var documents = (lang === 'ru') ? documents_ru : documents_en;
+
         document.getElementById('modtit').innerHTML = "<h5 class='modal-title'><span data-lang='ru'>Результаты поиска по запросу </span><span data-lang='en'>Search results for </span>'" + term + "'</h5>" + document.getElementById('modtit').innerHTML;
         //put results on the screen.
         var results = idx.search(term);
