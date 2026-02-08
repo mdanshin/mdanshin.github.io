@@ -104,6 +104,94 @@
         }
     }
 
+    function buildDocumentsMap(docs) {
+        var map = {};
+        if (!docs || !docs.length) return map;
+        for (var i = 0; i < docs.length; i++) {
+            var d = docs[i];
+            if (!d || !d.url) continue;
+            var u = String(d.url);
+            map[u] = d;
+            if (u.slice(-1) === '/') {
+                map[u.slice(0, -1)] = d;
+            } else {
+                map[u + '/'] = d;
+            }
+        }
+        return map;
+    }
+
+    function stripDatePrefix(text) {
+        if (!text) return '';
+        return String(text).replace(/^\d{4}\/\d{2}\/\d{2}\s*-\s*/g, '');
+    }
+
+    function patchDisqusRecommendations(lang) {
+        if (lang !== 'en') return;
+
+        // Requires documents_en from search-lunr include.
+        if (typeof window.documents_en === 'undefined') return;
+        if (!window.documents_en || !window.documents_en.length) return;
+
+        if (!window.__i18n_documents_en_map) {
+            window.__i18n_documents_en_map = buildDocumentsMap(window.documents_en);
+        }
+        var map = window.__i18n_documents_en_map;
+
+        // Header
+        var h = document.querySelector('.recommendations-unit-title');
+        if (h && h.textContent && h.textContent.indexOf('Также на') !== -1) {
+            var forum = h.querySelector('.recommendations-forum');
+            var name = forum ? (forum.textContent || '').trim() : '';
+            h.innerHTML = 'Also on <strong class="recommendations-forum">' + name + '</strong>';
+        }
+
+        var posts = document.querySelectorAll('[data-role="recommended-post"][data-link]');
+        for (var i = 0; i < posts.length; i++) {
+            var el = posts[i];
+            var link = el.getAttribute('data-link');
+            if (!link) continue;
+            var doc = map[link];
+            if (!doc) continue;
+
+            var title = (doc.title || '').trim();
+            var body = stripDatePrefix((doc.body || '').trim());
+            if (!title && !body) continue;
+
+            var tNode = el.querySelector('[data-role="recommend-thread-title"]');
+            if (tNode && title) {
+                tNode.textContent = title;
+                tNode.setAttribute('data-content', title);
+            }
+            var titleH3 = el.querySelector('.recommend-post-title');
+            if (titleH3 && title) titleH3.setAttribute('title', title);
+            var img = el.querySelector('img');
+            if (img && title) {
+                img.setAttribute('alt', title);
+                img.setAttribute('title', title);
+            }
+
+            var sNode = el.querySelector('[data-role="recommend-description-snippet"]');
+            if (sNode && body) {
+                var snippet = body;
+                if (snippet.length > 260) snippet = snippet.slice(0, 257) + '...';
+                sNode.textContent = snippet;
+            }
+        }
+    }
+
+    function observeDisqusRecommendations() {
+        if (window.__i18n_disqus_rec_observer) return;
+        try {
+            var obs = new MutationObserver(function () {
+                var lang = normalize(document.documentElement.getAttribute('data-lang')) || 'en';
+                patchDisqusRecommendations(lang);
+            });
+            obs.observe(document.documentElement, { childList: true, subtree: true });
+            window.__i18n_disqus_rec_observer = obs;
+        } catch (e) { }
+    }
+
     function setLang(lang, persist) {
         var l = normalize(lang) || 'en';
         var el = document.documentElement;
@@ -117,6 +205,9 @@
         updateSwitchers(l);
         updateDocumentTitle(l);
         applyI18nAttributes(l);
+
+        patchDisqusRecommendations(l);
+        observeDisqusRecommendations();
 
         // Refresh Disqus widgets (recommendations/comments) after manual language change.
         if (persist) {
