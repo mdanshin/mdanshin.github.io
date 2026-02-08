@@ -25,14 +25,35 @@ description: "IT Blog danshin.ms"
                 </a>
                 <div class="card-body px-0 pb-0 d-flex flex-column align-items-start">
                     <h2 class="h4 font-weight-bold">
-                        <a class="text-dark" href="{{site.baseurl}}{{latest_post.url}}">{{ latest_post.title }}</a>
+                        {% assign latest_title_en = latest_post.title_en | default: latest_post.title %}
+                        <a class="text-dark" href="{{site.baseurl}}{{latest_post.url}}">
+                            <span data-lang="ru">{{ latest_post.title }}</span>
+                            <span data-lang="en">{{ latest_title_en }}</span>
+                        </a>
                     </h2>
                     <p class="excerpt">
-                        {{ latest_post.excerpt | strip_html | strip_newlines | truncate: 136 }}
+                        {% assign latest_ru_excerpt = latest_post.excerpt | strip_html | strip_newlines %}
+                        {% assign latest_en_excerpt = latest_post.excerpt | strip_html | strip_newlines %}
+
+                        {% assign latest_ru_split = latest_post.content | split: '<div data-lang="ru" markdown="1">' %}
+                        {% if latest_ru_split.size > 1 %}
+                            {% assign latest_ru_only = latest_ru_split[1] | split: '<div data-lang="en" markdown="1">' | first %}
+                            {% assign latest_ru_excerpt = latest_ru_only | strip_html | strip_newlines %}
+                        {% endif %}
+
+                        {% assign latest_en_split = latest_post.content | split: '<div data-lang="en" markdown="1">' %}
+                        {% if latest_en_split.size > 1 %}
+                            {% assign latest_en_excerpt = latest_en_split[1] | strip_html | strip_newlines %}
+                        {% endif %}
+
+                        <span data-lang="ru">{{ latest_ru_excerpt | truncate: 136 }}</span>
+                        <span data-lang="en">{{ latest_en_excerpt | truncate: 136 }}</span>
                     </p>
                     <div>
                         <small class="d-block text-muted">
-                            Категория <span class="catlist">
+                            <span data-lang="ru">Категория</span>
+                            <span data-lang="en">Category</span>
+                            <span class="catlist">
                                 {% for category in latest_post.categories %}
                                 <a class="text-capitalize text-muted smoothscroll"
                                     href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
@@ -65,10 +86,16 @@ description: "IT Blog danshin.ms"
                 {% endif %}
                 <div>
                     <h2 class="mb-2 h6 font-weight-bold">
-                        <a class="text-dark" href="{{site.baseurl}}{{second_post.url}}">{{ second_post.title }}</a>
+                        {% assign second_title_en = second_post.title_en | default: second_post.title %}
+                        <a class="text-dark" href="{{site.baseurl}}{{second_post.url}}">
+                            <span data-lang="ru">{{ second_post.title }}</span>
+                            <span data-lang="en">{{ second_title_en }}</span>
+                        </a>
                     </h2>
                     <small class="d-block text-muted">
-                        Категория <span class="catlist">
+                        <span data-lang="ru">Категория</span>
+                        <span data-lang="en">Category</span>
+                        <span class="catlist">
                             {% for category in second_post.categories %}
                             <a class="text-capitalize text-muted smoothscroll"
                                 href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
@@ -96,10 +123,16 @@ description: "IT Blog danshin.ms"
                 {% endif %}
                 <div>
                     <h2 class="mb-2 h6 font-weight-bold">
-                        <a class="text-dark" href="{{site.baseurl}}{{third_post.url}}">{{ third_post.title }}</a>
+                        {% assign third_title_en = third_post.title_en | default: third_post.title %}
+                        <a class="text-dark" href="{{site.baseurl}}{{third_post.url}}">
+                            <span data-lang="ru">{{ third_post.title }}</span>
+                            <span data-lang="en">{{ third_title_en }}</span>
+                        </a>
                     </h2>
                     <small class="d-block text-muted">
-                        Категория <span class="catlist">
+                        <span data-lang="ru">Категория</span>
+                        <span data-lang="en">Category</span>
+                        <span class="catlist">
                             {% for category in third_post.categories %}
                             <a class="text-capitalize text-muted smoothscroll"
                                 href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
@@ -127,10 +160,16 @@ description: "IT Blog danshin.ms"
                 {% endif %}
                 <div>
                     <h2 class="mb-2 h6 font-weight-bold">
-                        <a class="text-dark" href="{{site.baseurl}}{{fourth_post.url}}">{{ fourth_post.title }}</a>
+                        {% assign fourth_title_en = fourth_post.title_en | default: fourth_post.title %}
+                        <a class="text-dark" href="{{site.baseurl}}{{fourth_post.url}}">
+                            <span data-lang="ru">{{ fourth_post.title }}</span>
+                            <span data-lang="en">{{ fourth_title_en }}</span>
+                        </a>
                     </h2>
                     <small class="d-block text-muted">
-                        Категория <span class="catlist">
+                        <span data-lang="ru">Категория</span>
+                        <span data-lang="en">Category</span>
+                        <span class="catlist">
                             {% for category in fourth_post.categories %}
                             <a class="text-capitalize text-muted smoothscroll"
                                 href="{{site.baseurl}}/categories.html#{{ category | downcase }}">{{ category
@@ -155,11 +194,33 @@ description: "IT Blog danshin.ms"
         <div class="pl-4 pr-0 h-100 tofront">
             <div class="row justify-content-between">
                 <div class="col-md-6 pt-6 pb-6 pr-lg-4 align-self-center">
-                    <h1 class="mb-3">{{post.title}}</h1>
+                    {% assign sticky_title_en = post.title_en | default: post.title %}
+                    <h1 class="mb-3">
+                        <span data-lang="ru">{{post.title}}</span>
+                        <span data-lang="en">{{sticky_title_en}}</span>
+                    </h1>
                     <p class="mb-3 lead">
-                        {{ post.excerpt | strip_html | strip_newlines | truncate: 136 }}
+                        {% assign sticky_ru_excerpt = post.excerpt | strip_html | strip_newlines %}
+                        {% assign sticky_en_excerpt = post.excerpt | strip_html | strip_newlines %}
+
+                        {% assign sticky_ru_split = post.content | split: '<div data-lang="ru" markdown="1">' %}
+                        {% if sticky_ru_split.size > 1 %}
+                            {% assign sticky_ru_only = sticky_ru_split[1] | split: '<div data-lang="en" markdown="1">' | first %}
+                            {% assign sticky_ru_excerpt = sticky_ru_only | strip_html | strip_newlines %}
+                        {% endif %}
+
+                        {% assign sticky_en_split = post.content | split: '<div data-lang="en" markdown="1">' %}
+                        {% if sticky_en_split.size > 1 %}
+                            {% assign sticky_en_excerpt = sticky_en_split[1] | strip_html | strip_newlines %}
+                        {% endif %}
+
+                        <span data-lang="ru">{{ sticky_ru_excerpt | truncate: 136 }}</span>
+                        <span data-lang="en">{{ sticky_en_excerpt | truncate: 136 }}</span>
                     </p>
-                    <a href="{{site.baseurl}}{{post.url}}" class="btn btn-dark">Читать далее</a>
+                    <a href="{{site.baseurl}}{{post.url}}" class="btn btn-dark">
+                        <span data-lang="ru">Читать далее</span>
+                        <span data-lang="en">Read more</span>
+                    </a>
                 </div>
                 <div class="col-md-6 d-none d-md-block pr-0"
                     style="background-size:cover;background-image:url({{site.baseurl}}/{{ post.image }});">
@@ -178,7 +239,10 @@ description: "IT Blog danshin.ms"
 
         <div class="col-md-8 main-loop">
 
-            <h4 class="font-weight-bold spanborder"><span>Остальные статьи</span></h4>
+            <h4 class="font-weight-bold spanborder"><span>
+                <span data-lang="ru">Остальные статьи</span>
+                <span data-lang="en">More Posts</span>
+            </span></h4>
 
             {% for post in paginator.posts %}
 
@@ -198,7 +262,9 @@ description: "IT Blog danshin.ms"
                     {% if paginator.previous_page %}
                     <li class="page-item"><a class="page-link"
                             href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}">&laquo;
-                            Prev</a></li>
+                            <span data-lang="ru">Назад</span>
+                            <span data-lang="en">Prev</span>
+                        </a></li>
                     {% else %}
                     <li class="page-item disabled"><span class="prev page-link">&laquo;</span></li>
                     {% endif %}
@@ -217,7 +283,9 @@ description: "IT Blog danshin.ms"
 
                     {% if paginator.next_page %}
                     <li class="page-item"><a class="page-link"
-                            href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">Next
+                            href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}">
+                            <span data-lang="ru">Вперёд</span>
+                            <span data-lang="en">Next</span>
                             &raquo;</a></li>
                     {% else %}
                     <li class="page-item disabled"><span class="next page-link">&raquo;</span></li>

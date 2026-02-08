@@ -72,6 +72,12 @@
                     {% include menu-header.html %}
                 </ul>
                 <ul class="navbar-nav ml-auto d-flex align-items-center">
+                    <li class="nav-item mr-2">
+                        <div class="lang-toggle" data-lang-switcher>
+                            <button type="button" class="lang-toggle__btn" data-set-lang="ru" aria-pressed="false" title="Russian">RU</button>
+                            <button type="button" class="lang-toggle__btn" data-set-lang="en" aria-pressed="false" title="English">EN</button>
+                        </div>
+                    </li>
                     {% include search-lunr.html %}
                 </ul>
             </div>

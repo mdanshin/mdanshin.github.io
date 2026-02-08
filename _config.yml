@@ -51,6 +51,12 @@ defaults:
       path: "_pages"
     values:
       layout: page
+
+  # stub pages (old permalinks)
+  - scope:
+      path: "_pages/stub"
+    values:
+      layout: stub
       
 # Syntax
 markdown: kramdown

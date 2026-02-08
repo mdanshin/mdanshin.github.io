@@ -3,7 +3,11 @@ layout: default
 ---
 
 <div class="container">
-<h3 class="font-weight-bold spanborder"><span>{{page.title}}</span></h3>
+{% assign page_title_en = page.title_en | default: page.title %}
+<h3 class="font-weight-bold spanborder" data-page-title>
+    <span data-lang="ru">{{page.title}}</span>
+    <span data-lang="en">{{page_title_en}}</span>
+</h3>
 <div class="page-content">
 {{ content }}
 <!-- Comments -->

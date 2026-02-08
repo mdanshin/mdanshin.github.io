@@ -1,0 +1,26 @@
+---
+layout: default
+---
+
+<div class="container">
+    {% assign title_en = page.title_en | default: "Blog has moved" %}
+    <h3 class="font-weight-bold spanborder" data-page-title>
+        <span data-lang="ru">{{ page.title }}</span>
+        <span data-lang="en">{{ title_en }}</span>
+    </h3>
+
+    {% assign old_url = "https://mdanshin.blogspot.com" | append: page.url %}
+    <div class="page-content">
+        <div data-lang="ru">
+            <p>Эта страница больше не доступна по этому адресу, потому что блог переехал на новый хостинг.</p>
+            <p>Вы все еще можете прочитать статью по этой ссылке: <a href="{{ old_url }}">{{ old_url }}</a>.</p>
+            <h4>Но лучше зайдите на главную страницу <a href="https://danshin.ms">https://danshin.ms</a> и воспользуйтесь поиском.</h4>
+        </div>
+
+        <div data-lang="en">
+            <p>This page is no longer available at this address because the blog has moved to a new hosting.</p>
+            <p>You can still read the article at this link: <a href="{{ old_url }}">{{ old_url }}</a>.</p>
+            <h4>Or go to the home page <a href="https://danshin.ms">https://danshin.ms</a> and use the search.</h4>
+        </div>
+    </div>
+</div>

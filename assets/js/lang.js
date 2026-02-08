@@ -46,7 +46,17 @@
     }
 
     function updateDocumentTitle(lang) {
-        var node = document.querySelector('.article-headline [data-lang="' + lang + '"]');
+        var selectors = [
+            '.article-headline [data-lang="' + lang + '"]',
+            '[data-page-title] [data-lang="' + lang + '"]'
+        ];
+
+        var node = null;
+        for (var i = 0; i < selectors.length; i++) {
+            node = document.querySelector(selectors[i]);
+            if (node) break;
+        }
+
         if (!node) return;
         var text = (node.textContent || '').trim();
         if (!text) return;
@@ -56,6 +66,45 @@
             document.title = text + ' | ' + parts.slice(1).join(' | ');
         } else {
             document.title = text;
+        }
+    }
+
+    function applyI18nAttributes(lang) {
+        // Placeholder
+        var nodes = document.querySelectorAll('[data-i18n-placeholder-ru][data-i18n-placeholder-en]');
+        for (var i = 0; i < nodes.length; i++) {
+            var el = nodes[i];
+            var val = (lang === 'ru') ? el.getAttribute('data-i18n-placeholder-ru') : el.getAttribute('data-i18n-placeholder-en');
+            if (val != null) el.setAttribute('placeholder', val);
+        }
+
+        // Value (for input/button)
+        nodes = document.querySelectorAll('[data-i18n-value-ru][data-i18n-value-en]');
+        for (var j = 0; j < nodes.length; j++) {
+            var el2 = nodes[j];
+            var val2 = (lang === 'ru') ? el2.getAttribute('data-i18n-value-ru') : el2.getAttribute('data-i18n-value-en');
+            if (val2 == null) continue;
+            if (typeof el2.value !== 'undefined') {
+                el2.value = val2;
+            } else {
+                el2.setAttribute('value', val2);
+            }
+        }
+
+        // Title
+        nodes = document.querySelectorAll('[data-i18n-title-ru][data-i18n-title-en]');
+        for (var k = 0; k < nodes.length; k++) {
+            var el3 = nodes[k];
+            var val3 = (lang === 'ru') ? el3.getAttribute('data-i18n-title-ru') : el3.getAttribute('data-i18n-title-en');
+            if (val3 != null) el3.setAttribute('title', val3);
+        }
+
+        // Aria-label
+        nodes = document.querySelectorAll('[data-i18n-aria-label-ru][data-i18n-aria-label-en]');
+        for (var m = 0; m < nodes.length; m++) {
+            var el4 = nodes[m];
+            var val4 = (lang === 'ru') ? el4.getAttribute('data-i18n-aria-label-ru') : el4.getAttribute('data-i18n-aria-label-en');
+            if (val4 != null) el4.setAttribute('aria-label', val4);
         }
     }
 
@@ -71,6 +120,7 @@
 
         updateSwitchers(l);
         updateDocumentTitle(l);
+        applyI18nAttributes(l);
     }
 
     function bind() {
