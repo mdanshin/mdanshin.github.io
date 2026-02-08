@@ -1,12 +1,14 @@
 ---
 layout: post
 title:  "Преобразование LDAP objectSid из base64 в SSDL"
+title_en: "Convert LDAP objectSid from Base64 to SID String"
 categories: [ Программирование ]
 tags: [ LDAP, SID, objectSid, base64, bash, javascript ]
 image: assets/images/LDAP-objectSid-base64/0.png
 author: Mikhail
 ---
 
+<div data-lang="ru" markdown="1">
 ***В этой статье я описываю способ преобразования LDAP objectSid из base64 в привычный формат.***
 
 * Вот так выглядит SID пользователя в Active Directory 
@@ -157,3 +159,103 @@ echo ${SID}
 [Ссылка на Gist на Github](https://gist.github.com/mdanshin/676a080c343477f6d6cbe8770043a674)
 
 Возможно, что рассмотренные примеры можно реализовать как-то иначе. Но в таком виде код лучше читается, что, в свою очередь, упрощает понимания алгоритма. Если вы знаете другие способы преобразования objectSid из base64 в SSDL (Security Descriptor Definition Language) формат, то напишите об этом в комментариях.
+
+</div>
+
+<div data-lang="en" markdown="1">
+***This post describes a way to convert an LDAP `objectSid` value from Base64 to the familiar SID string format.***
+
+* This is what a user SID looks like in Active Directory:
+  #### `S-1-5-21-2562418665-3218585558-1813906818-1576`.
+* This is its binary (hex) representation:
+  #### `010500000000000515000000e967bb98d6b7d7bf82051e6c28060000`.
+* And in LDAP it can be returned as Base64:
+  #### `AQUAAAAAAAUVAAAA6We7mNa317+CBR5sKAYAAA==`.
+
+> Many other LDAP attributes are stored as Base64 too, but they often decode directly into readable text. `objectSid` is different: it's binary data that needs parsing.
+
+I was used to working with SIDs via PowerShell, ADUC, or ADSIEdit. You can see them in object properties. But when I needed to get a user's SID from a Linux system, I used `ldapsearch` and was surprised to see a Base64 string instead of the familiar `S-1-...` format.
+
+Converting Base64 to bytes is easy, but the output is still binary and doesn't look like a SID. So you need to parse the bytes into the SID structure.
+
+In .NET there is the [SecurityIdentifier class](https://docs.microsoft.com/en-us/dotnet/api/system.security.principal.securityidentifier) with `ToString()` which returns the SID string. But in my case I couldn't use it: I needed this in a non-Windows environment and in JavaScript.
+
+After some digging, I found an algorithm in a [bash script](https://serverfault.com/a/852338). Below is a compact version (with minimal comments), and at the end there is a JavaScript (Node.js) implementation.
+
+The high-level idea is:
+1) decode Base64 to bytes
+2) arrange bytes according to the SID structure (some fields are little-endian)
+3) convert hex to decimal and build the `S-...` string
+
+## Bash example
+
+```bash
+#!/bin/bash
+
+OBJECT_ID="AQUAAAAAAAUVAAAA6We7mNa317+CBR5sKAYAAA=="
+
+# Decode Base64, then dump bytes as hex pairs into array G
+G=($(echo -n "$OBJECT_ID" | base64 -d -i | hexdump -v -e '1/1 " %02X"'))
+
+# Build the SID hex structure (little-endian sub-authorities)
+LESA1=${G[2]}${G[3]}${G[4]}${G[5]}${G[6]}${G[7]}
+
+BESA2=${G[8]}${G[9]}${G[10]}${G[11]}
+BESA3=${G[12]}${G[13]}${G[14]}${G[15]}
+BESA4=${G[16]}${G[17]}${G[18]}${G[19]}
+BESA5=${G[20]}${G[21]}${G[22]}${G[23]}
+BERID=${G[24]}${G[25]}${G[26]}${G[27]}${G[28]}
+
+LESA2=${BESA2:6:2}${BESA2:4:2}${BESA2:2:2}${BESA2:0:2}
+LESA3=${BESA3:6:2}${BESA3:4:2}${BESA3:2:2}${BESA3:0:2}
+LESA4=${BESA4:6:2}${BESA4:4:2}${BESA4:2:2}${BESA4:0:2}
+LESA5=${BESA5:6:2}${BESA5:4:2}${BESA5:2:2}${BESA5:0:2}
+LERID=${BERID:6:2}${BERID:4:2}${BERID:2:2}${BERID:0:2}
+
+LE_SID_HEX=${LESA1}-${LESA2}-${LESA3}-${LESA4}-${LESA5}-${LERID}
+
+# Convert HEX blocks to decimal values and build the SID string
+SID="S-1"
+IFS='-' read -ra ADDR <<< "${LE_SID_HEX}"
+for OBJECT in "${ADDR[@]}"; do
+  SID=${SID}-$((16#${OBJECT}))
+done
+
+echo ${SID}
+```
+
+## JavaScript (Node.js) example
+
+```javascript
+function sidToString(base64) {
+  // base64 -> bytes -> hex string
+  const buffer = Buffer.from(base64, 'base64');
+  const hex = buffer.toString('hex');
+
+  // split into byte pairs
+  const G = hex.match(/.{1,2}/g);
+
+  const BESA2 = `${G[8]}${G[9]}${G[10]}${G[11]}`;
+  const BESA3 = `${G[12]}${G[13]}${G[14]}${G[15]}`;
+  const BESA4 = `${G[16]}${G[17]}${G[18]}${G[19]}`;
+  const BESA5 = `${G[20]}${G[21]}${G[22]}${G[23]}`;
+  const BERID  = `${G[24]}${G[25]}${G[26]}${G[27]}`;
+  const LESA1  = `${G[2]}${G[3]}${G[4]}${G[5]}${G[6]}${G[7]}`;
+
+  const LESA2 = `${BESA2.substr(6,2)}${BESA2.substr(4,2)}${BESA2.substr(2,2)}${BESA2.substr(0,2)}`;
+  const LESA3 = `${BESA3.substr(6,2)}${BESA3.substr(4,2)}${BESA3.substr(2,2)}${BESA3.substr(0,2)}`;
+  const LESA4 = `${BESA4.substr(6,2)}${BESA4.substr(4,2)}${BESA4.substr(2,2)}${BESA4.substr(0,2)}`;
+  const LESA5 = `${BESA5.substr(6,2)}${BESA5.substr(4,2)}${BESA5.substr(2,2)}${BESA5.substr(0,2)}`;
+  const LERID = `${BERID.substr(6,2)}${BERID.substr(4,2)}${BERID.substr(2,2)}${BERID.substr(0,2)}`;
+
+  const LE_SID_HEX = `${LESA1}-${LESA2}-${LESA3}-${LESA4}-${LESA5}-${LERID}`;
+  const ADDR = LE_SID_HEX.split('-');
+
+  return "S-1-" + ADDR.map(x => parseInt(x, 16)).join('-');
+}
+```
+
+[Gist link on GitHub](https://gist.github.com/mdanshin/676a080c343477f6d6cbe8770043a674)
+
+There are probably other ways to implement this conversion, but I find this form readable and therefore easier to understand. If you know other ways to convert `objectSid` from Base64 to a SID string (SDDL/SDDL-related formats), please share them in the comments.
+</div>

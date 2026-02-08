@@ -1,11 +1,14 @@
 ---
 layout: post
 title:  "Фоторафии в Exchnage. Откуда Outlook берёт фото пользователей?"
+title_en: "Photos in Exchange: Where Does Outlook Get User Pictures?"
 categories: [ Администрирование ]
 tags: [ Exchange, featured ]
 image: assets/images/Exchange-Photos/0.jpg
 author: Mikhail
 ---
+
+<div data-lang="ru" markdown="1">
 ***Во многих компаниях, фотографии пользователей распространяются централизовано. Когда новый сотрудник фотографируется на пропуск, его фотография загружается в систему и распространяется через Active Directory по другим ресурсам. Я всегда считал, что Outlook смотрит в AD и подгружает фотографию оттуда. Но оказалось, что это не совсем так.***
 
 Как известно, в Actve Directory есть два поля, для хранения фотографий. Это `thumbnailPhoto` и `jpegPhoto`. Первое предназначено для хранения небольших фотографий 96x96 и ограничено размером 100 KB. Второе предназначено для фотографий большего размера. Outlook использует поле `thumbnailPhoto`. Более внятного описания из официальной документации я не нашёл. Если кто-то может поделиться ссылкой на подробное описание этих полей, то прошу оставить её в комментариях к этому посту.
@@ -62,3 +65,70 @@ Get-OwaVirtualDirectory | Set-OwaVirtualDirectory -SetPhotoEnabled $False
 ```powershell
 Get-OWAMailboxPolicy | Set-OWAMailboxPolicy -SetPhotoEnabled $False 
 ```
+</div>
+
+<div data-lang="en" markdown="1">
+***In many companies, employee photos are managed centrally. When a new employee gets a badge photo, it gets uploaded to the system and then distributed through Active Directory and other services. I always assumed Outlook reads the photo from AD — but it turns out it's not that simple.***
+
+As you probably know, Active Directory has two attributes for storing photos: `thumbnailPhoto` and `jpegPhoto`. The first is for small photos (96x96) and is limited to 100 KB. The second is for larger photos. Outlook uses `thumbnailPhoto`.
+
+I couldn't find a clear explanation in the official documentation. If you have a good link that describes these attributes in detail, please share it in the comments.
+
+There are many ways to populate these attributes. For example:
+
+```powershell
+$photo = [byte[]](Get-Content "C:\Users\mdanshin\mdanshin_AD.jpg" -Encoding byte)
+Set-ADUser mdanshin -Replace @{thumbnailPhoto=$photo}
+```
+
+This setup worked fine when we used Outlook 2010 and Exchange 2010. But after moving to Exchange 2016, one interesting detail surfaced: users can now change their photos themselves. This feature appeared in Exchange 2013. You can do it via Outlook Web App (OWA), as shown below:
+
+![Exchange-Photos/1.png](/assets/images/Exchange-Photos/1.png)
+
+When a user uploads a photo this way, the `thumbnailPhoto` attribute is overwritten.
+
+Companies may not like it when users start changing their photos or uploading cat pictures and other avatars. It seems easy: just rewrite `thumbnailPhoto` back to the corporate photo and automate it. But after changing `thumbnailPhoto`, the photo in Outlook did not change. And caching wasn't the issue — Outlook kept showing the user-uploaded photo. That means Outlook was getting the photo from somewhere else.
+
+It turns out Exchange 2013 and later store user photos on the mailbox server (the “home server” where the mailbox resides). They are stored in `C:\Program Files\Microsoft\Exchange Server\V15\ClientAccess\photos\DomainName-GUID`. Inside there are folders for 96x96 and 648x648 sizes. One of them contains the photo uploaded by the user via OWA.
+
+There are two ways to view the user photo.
+
+The first is the `Get-UserPhoto` cmdlet: save the photo to a variable and then write it to a file:
+
+```powershell
+$photo = Get-UserPhoto -id mdanshin | select PictureData 
+$photo.PictureData | Set-Content "mdanshin.jpg" -Encoding byte 
+```
+
+The second is to request it via EWS:
+`https://EWS_URL/ews/Exchange.asmx/s/GetUserPhoto?email=USER_EMAIL&size=HR96x96`
+
+For example:
+
+https://owa.domain.ru/ews/Exchange.asmx/s/GetUserPhoto?email=mdanshin@domain.ru&size=HR648x648
+
+Both methods return the photo stored on the Exchange server, not the value from `thumbnailPhoto`. You can easily verify this: change the photo via OWA, then change `thumbnailPhoto` to a different picture (for example, the old corporate one) — Outlook will still show the OWA-uploaded photo.
+
+Now, how do you replace a user photo with the corporate one? Simply deleting the photo file does not help — it reappears shortly after. It's not entirely clear where it comes from after deletion; that's something to investigate.
+
+Here is one way I found to replace the photo:
+
+```powershell
+Remove-UserPhoto -Identity mdanshin
+Set-UserPhoto -Identity mdanshin -PictureData ([System.IO.File])::ReadAllBytes("mdanshin_AD.jpg")
+```
+
+![Exchange-Photos/2.png](/assets/images/Exchange-Photos/2.png)
+
+There are also instructions online on how to prevent users from changing their photos:
+
+```powershell
+Get-OwaVirtualDirectory | Set-OwaVirtualDirectory -SetPhotoEnabled $False 
+```
+
+But don't forget about policies — you need to update them as well:
+
+```powershell
+Get-OWAMailboxPolicy | Set-OWAMailboxPolicy -SetPhotoEnabled $False 
+```
+</div>

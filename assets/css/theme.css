@@ -787,7 +787,7 @@ a.a2a_i, i.a2a_i, .a2a_menu a.a2a_i:visited, .a2a_menu a.a2a_more {
     color:#999 !important;
 }
 div.a2a_full_footer {display:none;}
-@media (min-width: 1920px) {
+ @media (min-width: 1920px) {
 	html {font-size:17px;}
 	.container, .container-lg {    
 	 width: 1522px;
@@ -803,4 +803,40 @@ div.a2a_full_footer {display:none;}
 		 height:280px !Important;
 	 }
  }
+
+/* Language toggle (RU/EN) */
+html[data-lang="ru"] [data-lang]:not([data-lang="ru"]) {
+	display: none !important;
+}
+html[data-lang="en"] [data-lang]:not([data-lang="en"]) {
+	display: none !important;
+}
+
+.lang-toggle {
+	display: inline-flex;
+	border: 1px solid rgba(0, 0, 0, 0.12);
+	border-radius: 999px;
+	overflow: hidden;
+	background: #fff;
+}
+
+.lang-toggle__btn {
+	appearance: none;
+	background: transparent;
+	border: 0;
+	padding: 0.2rem 0.55rem;
+	font-size: 0.85rem;
+	line-height: 1.4;
+	color: #6c757d;
+}
+
+.lang-toggle__btn.is-active {
+	background: #03a87c;
+	color: #fff;
+}
+
+.lang-toggle__btn:focus {
+	outline: 2px solid rgba(3, 168, 124, 0.35);
+	outline-offset: -2px;
+}
  

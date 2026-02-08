@@ -1,12 +1,14 @@
 ---
 layout: post
 title:  "Использование вычисляемых свойств Powershell"
+title_en: "Using PowerShell Calculated Properties"
 categories: [ Администрирование ]
 tags: [ Powershell ]
 image: assets/images/Powershell-Calculated-Properties/0.jpg
 author: Mikhail
 ---
 
+<div data-lang="ru" markdown="1">
 ***Возникла необходимость свести в одной таблице данные, которые получаются двумя разными командлетами. В частности получить таблицу расположения VM по датасторам в VMware. Проблема в том, что нет готового командлета, который бы выдал такую информацию, а вывод Get-VM не содержит нужных данных. Командлет сообщает только "DatastoreIdList", а это означает, что нужно ещё одно сопоставление. В этой статье я покажу как выполнить это действие в одном скрипте. В процессе получения информации о виртуальной машине,  мы воспользуемся возможностью вычисляемых свойств и на лету получим имя датасторы по её ID и подставим это значение в выводимую таблицу.***
 
 # Задача
@@ -161,3 +163,165 @@ Export-Csv report.csv -NoTypeInformation -UseCulture
 
 # Заключение
 Вычисляемые свойства Powershell удобно использовать когда все необходимые данные не удаётся получить одним командлетом и приходится их получать разными командлетами и возможно даже из разных мест - Active Directory, Exchange, VMware и т.д.. 
+
+</div>
+
+<div data-lang="en" markdown="1">
+***I needed to combine data from two different cmdlets into a single table — specifically, to get a report that shows which VMware datastores each VM is located on. The problem is that there is no ready-made cmdlet that outputs this directly, and `Get-VM` does not contain the datastore name. It only returns `DatastoreIdList`, which means we need a mapping step. In this post I show how to do it in one script using PowerShell calculated properties to resolve the datastore name from its ID on the fly and include it in the output table.***
+
+# Task
+
+Let's say we want a table that shows which datastore a VM is on.
+
+|Name|Datastore|
+|:---|:--------|
+|mdanshin_VM_01|DATASTORE-101|
+|mdanshin_VM_02|DATASTORE-101|
+|mdanshin_VM_03|DATASTORE-102|
+|mdanshin_VM_04|DATASTORE-102|
+
+Here is what `Get-VM | FL` returns:
+
+```
+Name                    : mdanshin_VM_01
+PowerState              : PoweredOn
+Notes                   :
+Guest                   : mdanshin_VM_01:Microsoft Windows 10 (64-bit)
+NumCpu                  : 4
+CoresPerSocket          : 2
+MemoryMB                : 16384
+MemoryGB                : 16
+VMHostId                : HostSystem-host-13180
+VMHost                  : esxi-05
+VApp                    :
+FolderId                : Folder-group-v3
+Folder                  : vm
+ResourcePoolId          : ResourcePool-resgroup-1245
+ResourcePool            : MDanshin
+HARestartPriority       : ClusterRestartPriority
+HAIsolationResponse     : AsSpecifiedByCluster
+DrsAutomationLevel      : AsSpecifiedByCluster
+VMSwapfilePolicy        : Inherit
+VMResourceConfiguration : CpuShares:Normal/4000 MemShares:Normal/163840
+Version                 : v13
+HardwareVersion         : vmx-13
+PersistentId            : 501dfeee-d9a0-9722-3db3-6e4b8b4f49d9
+GuestId                 : windows9_64Guest
+UsedSpaceGB             : 178.39978302549570798873901367
+ProvisionedSpaceGB      : 256.48669762350618839263916015
+DatastoreIdList         : {Datastore-datastore-35571}
+CreateDate              :
+ExtensionData           : VMware.Vim.VirtualMachine
+CustomFields            : {}
+Id                      : VirtualMachine-vm-14454
+Uid                     : /VIServer=mdanshin@vcenter:443/VirtualMachine=VirtualMachine-vm-14454/
+```
+
+As you can see, the output does not include the datastore name. But there is `DatastoreIdList` — it contains the datastore ID where the VM lives. If we take that ID and run `Get-Datastore -Id Datastore-datastore-35571`, we get the datastore name. But that's a second cmdlet, and the question is how to combine them.
+
+The good news is: with a simple trick, we can compute the value on the fly and include it in our output. This trick is called *calculated properties*.
+
+## Using PowerShell calculated properties
+
+To understand how calculated properties work, let's look at a simple example (if you already know it, skip to the next section).
+
+```powershell
+Get-ChildItem -File | 
+select name, 
+@{
+    Name = "Type"; 
+    expression = {
+        switch ($_.extension) {
+            '.txt'  {'Text File'}
+            '.log'  {'Log File'}
+            default {'Unknown'}
+        } 
+    }
+}
+```
+
+`Get-ChildItem -File` returns a list of files. Imagine we also want a human-friendly file type, not just the extension. There is no `Type` field in `Get-ChildItem`, but we can *create* it and compute its value using existing properties.
+
+If we run:
+
+```powershell
+Get-ChildItem -File | select Name, Type
+```
+
+`Type` would be empty, because the input objects do not have such a property. To create it, we provide a hashtable instead of a plain property name:
+
+```powershell
+@{
+    Name = "Type" 
+    Expression = {
+        switch ($_.extension) {
+            '.txt'  {'Text File'}
+            '.log'  {'Log File'}
+            default {'Unknown'}
+        }
+    }
+}
+```
+
+`Name` defines the output column name. `Expression` is executed for each input object. In this example, a `switch` maps extensions to friendly names.
+
+# Solution
+
+Now let's apply this to our VM/datastore task. This time we don't map to predefined strings — we query the datastore name by ID. We create a new calculated field `Datastore`: we take `DatastoreIdList` from `Get-VM`, call `Get-Datastore` inside `Expression`, and output the result.
+
+```powershell
+Get-VM | 
+Select Name,
+@{
+  Name = "Datastore"
+  Expression = { Get-Datastore -Id $_.DatastoreIdList } 
+}
+```
+
+So `Expression` executes `Get-Datastore` with `-Id $_.DatastoreIdList` (where `DatastoreIdList` comes from the `Get-VM` output).
+
+> Note the `@{}` syntax: it's a hashtable (key/value). Here `Name` is the key and "Datastore" is the value. You can read more about hashtables in my article [PowerShell arrays and hashtables basics](https://danshin.ms/powershell-arrays-and-hashtables/). Also, common shorthand keys are `N` and `E` instead of `Name` and `Expression` (for example: `@{N="Datastore";E={Get-Datastore -Id $_.DatastoreIdList}}`).
+
+# Additional information
+
+We could stop here, but there is one more trick that improves the output. A VM can have multiple disks located on multiple datastores. In this case, the `Datastore` field may contain a list in curly braces. If you're exporting to CSV, you likely don't want the braces. One way is to join the values with commas.
+
+`Join-String` is not suitable here because it returns a PSObject and `Expression` expects a string value. So we can use `[string]::Join()` which takes a separator and a list to join:
+
+```powershell
+Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) }
+```
+
+Full script:
+
+```powershell
+Get-VM | 
+Select Name,
+@{
+  Name = "Datastore"
+  Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) }
+}
+```
+
+Now the `Datastore` field contains comma-separated values without braces. Export to CSV with `Export-Csv`:
+
+```powershell
+Export-Csv report.csv -NoTypeInformation -UseCulture
+```
+
+In my case I also limited the output to a specific resource pool:
+
+```powershell
+Get-ResourcePool -Name TEST | 
+Get-VM | 
+Select Name,
+@{
+    Name = "Datastore"
+    Expression = { [string]::Join( ',' , (Get-Datastore -Id $_.DatastoreIdList) ) } } |
+Export-Csv report.csv -NoTypeInformation -UseCulture
+```
+
+# Conclusion
+
+PowerShell calculated properties are very handy when you can't get all required data from a single cmdlet and have to combine outputs from different cmdlets — possibly even from different systems like Active Directory, Exchange, VMware, etc.
+</div>

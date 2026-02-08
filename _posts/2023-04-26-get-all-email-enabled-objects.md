@@ -1,17 +1,20 @@
 ---
 layout: post
 title:  "Получение всех email-enabled объектов из Exchange со всеми адресами"
+title_en: "Export All Email-Enabled Objects from Exchange with All Addresses"
 categories: [ Администрирование ]
 tags: [ Powershell ]
 image: assets/images/get-all-email-enabled-objects/0.jpg
 author: Mikhail
 ---
 
+
+<div data-lang="ru" markdown="1">
 ***Возникла необходимость получить список всех email-enabled объектов из Exchange. При этом вывести не только PrimarySmtpAddress, но и дополнительные SMTP адреса.***
 
 ![assets/images/get-all-email-enabled-objects/1.jpg](/assets/images/get-all-email-enabled-objects/1.jpg)
 
-Для получения всех объектов воспользуемся командлетом `Get-Recipient` и не забываем указать -ResultSize unlimited, для получения всех результатов. 
+Для получения всех объектов воспользуемся командлетом `Get-Recipient` и не забываем указать -ResultSize unlimited, для получения всех результатов.
 
 ```powershell
 Get-Recipient -ResultSize unlimited
@@ -82,3 +85,74 @@ Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
 ```
 
 Это позволит выполнять скрипт в обычной сессии Powershell, а не только в Exchange Management Shell.
+</div>
+
+<div data-lang="en" markdown="1">
+***I needed to export a list of all email-enabled objects from Exchange and include not only `PrimarySmtpAddress`, but also additional SMTP addresses.***
+
+![assets/images/get-all-email-enabled-objects/1.jpg](/assets/images/get-all-email-enabled-objects/1.jpg)
+
+First, get all recipients with `Get-Recipient` and don't forget to set `-ResultSize unlimited` to return everything.
+
+```powershell
+Get-Recipient -ResultSize unlimited
+```
+
+Then use `Select-Object` to keep only the properties we need. We'll put the primary address into `PrimarySmtpAddress` and additional addresses into `EmailAddresses`.
+
+> We build `EmailAddresses` using a calculated property. See my post about it: [Using PowerShell calculated properties](https://danshin.ms/Powershell-Calculated-Properties/).
+
+```powershell
+Select-Object Name, RecipientType, PrimarySmtpAddress,
+    @{Name="EmailAddresses";Expression={
+        $_.EmailAddresses |  # Extract email addresses
+        Where-Object {$_.PrefixString -ceq "smtp"} |  # Keep only addresses with the "smtp" prefix
+        ForEach-Object {$_.SmtpAddress}  # Extract the SMTP address value
+    }}
+```
+
+Next, process each recipient and join all values in `EmailAddresses` into a single comma-separated string:
+
+```powershell
+ForEach-Object {
+    $_.EmailAddresses = ($_.EmailAddresses -join ", ")
+    return $_
+}
+```
+
+Finally, export everything to CSV:
+
+```powershell
+Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
+```
+
+Full script:
+
+```powershell
+Get-Recipient -ResultSize unlimited |
+Select-Object Name, RecipientType, PrimarySmtpAddress,
+    @{Name="EmailAddresses";Expression={
+        $_.EmailAddresses |
+        Where-Object {$_.PrefixString -ceq "smtp"} |
+        ForEach-Object {$_.SmtpAddress}
+    }} |
+ForEach-Object {
+    $_.EmailAddresses = ($_.EmailAddresses -join ", ")
+    return $_
+} |
+Export-Csv "email_enabled_objects.csv" -NoTypeInformation -Encoding UTF8
+```
+
+As a result, you'll get the desired CSV table.
+
+![assets/images/get-all-email-enabled-objects/1.jpg](/assets/images/get-all-email-enabled-objects/1.jpg)
+
+P.S.
+If you are using Exchange 2013 or 2016, add this line at the top of the script:
+
+```powershell
+Add-PSSnapin Microsoft.Exchange.Management.PowerShell.SnapIn
+```
+
+This allows you to run the script in a regular PowerShell session, not only in Exchange Management Shell.
+</div>

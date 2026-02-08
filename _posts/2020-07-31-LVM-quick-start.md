@@ -1,11 +1,14 @@
 ---
 layout: post
 title:  "LVM - коротко о главном"
+title_en: "LVM: Quick Start"
 categories: [ Администрирование ]
 tags: [ Linux, LVM, CentOS ]
 image: assets/images/LVM-quick-start/0.jpg
 author: Mikhail
 ---
+
+<div data-lang="ru" markdown="1">
 ***Из этой статьи вы узнаете о том, как создавать тома LVM и как с ними работать. В ней дано краткое описание того, что такое LVM и рассмотрены основные приёмы работы на практическом примере. По ходу статьи мы в ручную, с нуля, разметим диск виртуальной машины для установки операционной системы CentOS 8.***
 
 >В конце статьи вы найдёте видео, в котором показаны все действия, которые я описываю в статье, а так же финальный шаг - установка ОС.
@@ -192,3 +195,193 @@ lvcreate -l 100%FREE -n root vg0
 В дальнейших статьях я опишу как делать снапшоты и многое другое, что позволяет нам делать LVM.
 
 На этом у меня всё, ставьте лайки, подписывайтесь на канал, жмите колокольчик! :)
+
+</div>
+
+<div data-lang="en" markdown="1">
+***In this article you'll learn how to create LVM volumes and work with them. It includes a brief introduction to what LVM is and covers the core concepts with a practical example. Along the way, we will manually partition a disk from scratch to prepare it for installing CentOS 8.***
+
+> At the end of the article you'll find a video that shows all steps described here, including the final step — OS installation.
+
+### What is LVM?
+
+LVM (Logical Volume Manager) is a subsystem that lets you treat multiple areas of one or more disks as a single logical storage pool. LVM is based on Linux Device Mapper, a kernel subsystem for creating virtual block devices.
+
+In practice, LVM helps you abstract away physical devices and old-school disk partitions and build a convenient logical volume structure that lets you:
+
+* group disks
+* resize volumes
+* move data
+* create snapshots
+* mirror
+* encrypt
+
+...and more — often without stopping the system.
+
+> If after reading this intro you want to go deeper into LVM, the [Red Hat LVM Administration Guide](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/logical_volume_manager_administration/index) is a great resource. Most of my LVM knowledge comes from it, and this post contains excerpts and practical notes.
+
+To illustrate the LVM stack, here is a simple diagram:
+
+![LVM-quick-start/1.png](/assets/images/LVM-quick-start/1.png)
+
+Don't worry if it looks unclear — after the walkthrough it should make sense.
+
+> I assume you've partitioned disks before (e.g., with `fdisk` or `parted`) and you understand concepts like mount points, boot partitions, etc.
+
+During OS installation, you can let the installer partition disks automatically. But for learning purposes, we'll do it manually on an empty disk.
+
+For the example I use a VM in VMware Workstation Player and CentOS 8, but you can do the same on most Linux distributions, with any virtualization system, or on physical hardware.
+
+Create a VM and boot from the installation ISO. Early in the installer, open a shell. Typically (and in CentOS) you can do it with `Ctrl+Alt+F2`.
+
+> WARNING: the steps below are destructive for data. Be careful.
+
+Use these commands to see available block devices:
+
+```bash
+ls -l /dev/sd*
+```
+
+and:
+
+```bash
+ls -l /dev/disk/by-id/
+```
+
+The output is shown in the screenshot and may differ in your environment.
+
+![LVM-quick-start/2.png](/assets/images/LVM-quick-start/2.png)
+
+To install Linux on an LVM setup, we typically need at least 3 volumes:
+
+1. Boot
+2. Root
+3. Swap
+
+There are reasons why using an LVM volume as a boot partition is not ideal. While it can work, we won't do it here. We'll split the disk into a regular partition for boot and an LVM partition for everything else.
+
+The screenshot below shows the target layout we will create using `parted` during installation.
+
+![LVM-quick-start/8.png](/assets/images/LVM-quick-start/8.png)
+
+Inside the LVM partition we will create two logical volumes: `root` and `swap`.
+
+Boot from the ISO, open the console, run `parted`, then type `p` and press Enter to confirm you're working with the correct device.
+
+![LVM-quick-start/9.png](/assets/images/LVM-quick-start/9.png)
+
+Then enter the following command sequence:
+
+    mklabel
+    msdos
+    mkpart
+    p
+    xfs
+    1049kB
+    1075MB
+    mkpart
+    p
+    ext4
+    1075MB
+    -1
+    set 1 boot on
+    set 1 lba off
+    set 2 lvm on
+    set 2 lba off
+    p
+
+As a result you get two partitions like in the screenshot:
+
+![LVM-quick-start/10.png](/assets/images/LVM-quick-start/10.png)
+
+Exit `parted` with `quit` or `q`.
+
+Now look at `ls -l /dev/sd*`: you should see `sda1` and `sda2` — boot and LVM partitions respectively.
+
+![LVM-quick-start/11.png](/assets/images/LVM-quick-start/11.png)
+
+To build an LVM structure we create a **Physical Volume**, then a **Volume Group**, and then **Logical Volumes**. Let's do it.
+
+### Physical Volume (PV)
+
+A physical volume is a disk partition or a whole disk marked for LVM use.
+
+If you use an entire disk device as a PV, it must not have a partition table.
+
+In our case, the LVM partition is `/dev/sda2` and we will use all of its space. Create a PV:
+
+```bash
+pvcreate /dev/sda2
+```
+
+To view the created PV, use `pvdisplay`.
+
+![LVM-quick-start/12.png](/assets/images/LVM-quick-start/12.png)
+
+### Volume Group (VG)
+
+Physical volumes are combined into a volume group - a single storage pool from which logical volumes will be allocated.
+
+Within a VG, space is split into fixed-size blocks called extents. The extent size is the minimal allocation unit for logical volumes. By default, the extent size is 4 MB.
+
+Create a VG with:
+
+```bash
+vgcreate vg0 /dev/sda2
+```
+
+Where `vg0` is the VG name.
+
+To view it, use `vgdisplay`.
+
+![LVM-quick-start/13.png](/assets/images/LVM-quick-start/13.png)
+
+### Logical Volume (LV)
+
+There are three logical volume types: linear, striped, and mirrored.
+
+#### Linear LV
+Combines multiple PVs sequentially. For example, with two 60 GB disks you can create a 120 GB LV.
+
+#### Striped LV
+Data is distributed across PVs in stripes, which can improve sequential I/O performance by enabling parallel reads/writes.
+
+#### Mirrored LV
+Data is duplicated across devices. Writes go to multiple copies, which helps recovery if one device fails.
+
+We need two logical volumes: `root` and `swap`.
+
+Run these commands:
+
+```bash
+lvcreate -L1G -n swap vg0
+```
+
+Where `-L1G` is size, `-n` is LV name, and `vg0` is the volume group.
+
+```bash
+lvcreate -l 100%FREE -n root vg0
+```
+
+Where `-l 100%FREE` means: use all remaining free space.
+
+This creates linear LVs. `lvdisplay` shows their parameters.
+
+![LVM-quick-start/14.png](/assets/images/LVM-quick-start/14.png)
+
+At this point we created everything needed for OS installation: a boot partition, an LVM partition, and inside LVM — `swap` and `root` logical volumes in a single volume group.
+
+### Finish OS installation
+
+To return to the installer, press `Ctrl+Alt+F6` (console numbers may differ; try other Fx keys starting from F1).
+
+The remaining steps are hard to describe in text, so I recorded a video showing the whole process including the final installation step.
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/5TVakMra3qQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+In my post [Linux filesystem operations](https://danshin.ms/Linux-filesystem-operations) you can find more info on adding disks, creating LVM volumes without partitions, and other scenarios.
+
+In future posts I'll describe snapshots and more features that LVM provides.
+
+That's it — like, subscribe, hit the bell. :)
+</div>

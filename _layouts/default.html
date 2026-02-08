@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" data-lang="ru">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <script>
+        (function () {
+            try {
+                var key = 'site_lang';
+                var stored = localStorage.getItem(key);
+                var lang = (stored === 'ru' || stored === 'en') ? stored : null;
+
+                if (!lang) {
+                    var nav = [];
+                    if (Array.isArray(navigator.languages) && navigator.languages.length) nav = nav.concat(navigator.languages);
+                    if (navigator.language) nav.push(navigator.language);
+                    var isRu = nav.some(function (l) { return String(l).toLowerCase().indexOf('ru') === 0; });
+                    lang = isRu ? 'ru' : 'en';
+                }
+
+                var el = document.documentElement;
+                el.setAttribute('data-lang', lang);
+                el.setAttribute('lang', lang);
+            } catch (e) { }
+        })();
+    </script>
+
     <title>{{page.title}} | {{site.name}}</title>
 
     {% seo %}
@@ -76,6 +99,7 @@
         crossorigin="anonymous"></script>
 
     <script src="{{site.baseurl}}/assets/js/theme.js"></script>
+    <script src="{{site.baseurl}}/assets/js/lang.js"></script>
 
     <!-- Footer -->
     <footer class="bg-white border-top p-3 text-muted small">

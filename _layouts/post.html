@@ -17,8 +17,12 @@ layout: default
 							{% endfor %}
 						</span>
 					</p>
-					<h1 class="display-4 mb-4 article-headline">{{ page.title }}</h1>
-					<div class="d-flex align-items-center">
+					{% assign title_en = page.title_en | default: page.title %}
+					<h1 class="display-4 mb-4 article-headline">
+						<span data-lang="ru">{{ page.title }}</span>
+						<span data-lang="en">{{ title_en }}</span>
+					</h1>
+					<div class="d-flex align-items-center justify-content-between flex-wrap">
 						<!--
 						{% if author.avatar %}
                         <img class="rounded-circle" src="{{site.baseurl}}/{{author.avatar}}" alt="{{author.name}}" width="70"/>
@@ -29,6 +33,10 @@ layout: default
 						-->
 						<span class="text-muted d-block mt-1">{{ page.date | date: '%b %d, %Y' }} · {% include
 							meta-read-time.html %}</span>
+						<div class="lang-toggle mt-2 mt-md-0" data-lang-switcher>
+							<button type="button" class="lang-toggle__btn" data-set-lang="ru" aria-pressed="false" title="Russian">RU</button>
+							<button type="button" class="lang-toggle__btn" data-set-lang="en" aria-pressed="false" title="English">EN</button>
+						</div>
 					</div>
 				</div>
 				{% if page.image %}
@@ -54,7 +62,8 @@ layout: default
 		<div class="col-lg-2 pr-4 mb-4 col-md-12">
 			<div class="sticky-top sticky-top-offset text-center">
 				<div class="text-muted">
-					Поделиться
+					<span data-lang="ru">Поделиться</span>
+					<span data-lang="en">Share</span>
 				</div>
 				<div class="share d-inline-block">
 					<!-- AddToAny BEGIN -->
@@ -95,8 +104,12 @@ layout: default
 					<div class="col-md-6 mb-2 mb-md-0">
 						<img src="../assets/images/Telegram_logo.svg.png" style="width: 50px; padding-right: 5px;"
 							align="left" />
-						<h5 class="font-weight-bold">Заходите в группу Telegram</h5>
-						Если есть вопросы или хотите пообщаться, то заходите в мою группу Telegram.
+						<h5 class="font-weight-bold">
+							<span data-lang="ru">Заходите в группу Telegram</span>
+							<span data-lang="en">Join the Telegram group</span>
+						</h5>
+						<span data-lang="ru">Если есть вопросы или хотите пообщаться, то заходите в мою группу Telegram.</span>
+						<span data-lang="en">If you have questions or want to chat, join my Telegram group.</span>
 					</div>
 					<div class="col-md-6">
 						<div class="row">
@@ -171,21 +184,28 @@ layout: default
 
 
 <!-- Aletbar Prev/Next -->
-<div class="alertbar">
+			<div class="alertbar">
 	<div class="container">
 		<div class="row prevnextlinks small font-weight-bold">
 			{% if page.previous.url %}
+			{% assign prev_title_en = page.previous.title_en | default: page.previous.title %}
 			<div class="col-md-6 rightborder pl-0">
 				<a class="text-dark" href="{{ site.baseurl }}{{ page.previous.url }}">{% if page.previous.image %} <img
 						height="30px" class="mr-1" src="{{site.baseurl}}/{{page.previous.image}}"> {% endif %}
-					{{page.previous.title}}</a>
+					<span data-lang="ru">{{page.previous.title}}</span>
+					<span data-lang="en">{{ prev_title_en }}</span>
+				</a>
 			</div>
 			{% endif %}
 			{% if page.next.url %}
+			{% assign next_title_en = page.next.title_en | default: page.next.title %}
 			<div class="col-md-6 text-right pr-0">
-				<a class="text-dark" href="{{ site.baseurl }}{{ page.next.url }}"> {{page.next.title}} {% if
-					page.next.image %} <img height="30px" class="ml-1" src="{{site.baseurl}}/{{page.next.image}}"> {%
-					endif %}</a>
+				<a class="text-dark" href="{{ site.baseurl }}{{ page.next.url }}"> 
+					<span data-lang="ru">{{page.next.title}}</span>
+					<span data-lang="en">{{ next_title_en }}</span>
+					{% if page.next.image %} <img height="30px" class="ml-1" src="{{site.baseurl}}/{{page.next.image}}"> {%
+					endif %}
+				</a>
 			</div>
 			{% endif %}
 		</div>
