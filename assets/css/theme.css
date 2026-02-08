@@ -839,4 +839,10 @@ html[data-lang="en"] [data-lang]:not([data-lang="en"]) {
 	outline: 2px solid rgba(3, 168, 124, 0.35);
 	outline-offset: -2px;
 }
+
+/* Hide Disqus "recommended" widget if enabled */
+#disqus_recommendations,
+.disqus-recommendations {
+	display: none !important;
+}
  
