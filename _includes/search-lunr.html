@@ -23,6 +23,22 @@ var documents_en = [];
 {% assign ru_src = page.content %}
 {% assign en_src = page.content %}
 
+{% if page.layout == 'stub' or page.path contains '_pages/stub/' %}
+    {% assign old_url = "https://mdanshin.blogspot.com" | append: page.url %}
+    {% capture ru_stub %}
+Эта страница больше не доступна по этому адресу, потому что блог переехал на новый хостинг.
+Вы все еще можете прочитать статью по этой ссылке: {{ old_url }}.
+Но лучше зайдите на главную страницу https://danshin.ms и воспользуйтесь поиском.
+    {% endcapture %}
+    {% capture en_stub %}
+This page is no longer available at this address because the blog has moved to a new hosting.
+You can still read the article at this link: {{ old_url }}.
+Or go to the home page https://danshin.ms and use the search.
+    {% endcapture %}
+    {% assign ru_src = ru_stub %}
+    {% assign en_src = en_stub %}
+{% else %}
+
 {% assign ru_split = page.content | split: '<div data-lang="ru"' %}
 {% if ru_split.size > 1 %}
     {% assign ru_tag_parts = ru_split[1] | split: '>' %}
@@ -39,6 +55,28 @@ var documents_en = [];
         {% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
         {% assign en_src = en_inner_plus | split: '</div>' | first %}
     {% endif %}
+{% endif %}
+
+{%- comment -%}Fallback: extract text from <span data-lang=".."> blocks (used in some pages){%- endcomment -%}
+{% if ru_split.size == 1 and page.content contains '<span data-lang="ru">' %}
+    {% assign ru_parts = page.content | split: '<span data-lang="ru">' %}
+    {% capture ru_acc %}{% for part in ru_parts offset:1 %}{{ part | split: '</span>' | first }} {% endfor %}{% endcapture %}
+    {% assign ru_src = ru_acc %}
+{% endif %}
+
+{% if en_split.size == 1 and page.content contains '<span data-lang="en">' %}
+    {% assign en_parts = page.content | split: '<span data-lang="en">' %}
+    {% capture en_acc %}{% for part in en_parts offset:1 %}{{ part | split: '</span>' | first }} {% endfor %}{% endcapture %}
+    {% assign en_src = en_acc %}
+{% endif %}
+
+{%- comment -%}If a page has no EN markup, don't index RU-only body into EN search{%- endcomment -%}
+{% if en_split.size == 1 %}
+    {% unless page.content contains '<span data-lang="en">' or page.content contains '<div data-lang="en"' or page.title_en %}
+        {% assign en_src = '' %}
+    {% endunless %}
+{% endif %}
+
 {% endif %}
 
 documents_ru.push({
@@ -63,6 +101,22 @@ documents_en.push({
 {% assign ru_src = page.content %}
 {% assign en_src = page.content %}
 
+{% if page.layout == 'stub' or page.path contains '_pages/stub/' %}
+    {% assign old_url = "https://mdanshin.blogspot.com" | append: page.url %}
+    {% capture ru_stub %}
+Эта страница больше не доступна по этому адресу, потому что блог переехал на новый хостинг.
+Вы все еще можете прочитать статью по этой ссылке: {{ old_url }}.
+Но лучше зайдите на главную страницу https://danshin.ms и воспользуйтесь поиском.
+    {% endcapture %}
+    {% capture en_stub %}
+This page is no longer available at this address because the blog has moved to a new hosting.
+You can still read the article at this link: {{ old_url }}.
+Or go to the home page https://danshin.ms and use the search.
+    {% endcapture %}
+    {% assign ru_src = ru_stub %}
+    {% assign en_src = en_stub %}
+{% else %}
+
 {% assign ru_split = page.content | split: '<div data-lang="ru"' %}
 {% if ru_split.size > 1 %}
     {% assign ru_tag_parts = ru_split[1] | split: '>' %}
@@ -79,6 +133,26 @@ documents_en.push({
         {% assign en_inner_plus = en_tag_parts | slice: 1, en_tag_parts.size | join: '>' %}
         {% assign en_src = en_inner_plus | split: '</div>' | first %}
     {% endif %}
+{% endif %}
+
+{% if ru_split.size == 1 and page.content contains '<span data-lang="ru">' %}
+    {% assign ru_parts = page.content | split: '<span data-lang="ru">' %}
+    {% capture ru_acc %}{% for part in ru_parts offset:1 %}{{ part | split: '</span>' | first }} {% endfor %}{% endcapture %}
+    {% assign ru_src = ru_acc %}
+{% endif %}
+
+{% if en_split.size == 1 and page.content contains '<span data-lang="en">' %}
+    {% assign en_parts = page.content | split: '<span data-lang="en">' %}
+    {% capture en_acc %}{% for part in en_parts offset:1 %}{{ part | split: '</span>' | first }} {% endfor %}{% endcapture %}
+    {% assign en_src = en_acc %}
+{% endif %}
+
+{% if en_split.size == 1 %}
+    {% unless page.content contains '<span data-lang="en">' or page.content contains '<div data-lang="en"' or page.title_en %}
+        {% assign en_src = '' %}
+    {% endunless %}
+{% endif %}
+
 {% endif %}
 
 documents_ru.push({
