@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-lang="ru">
+<html lang="en" data-lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -28,7 +28,7 @@
         })();
     </script>
 
-    <title>{{page.title}} | {{site.name}}</title>
+    <title>{{ page.title_en | default: page.title }} | {{site.name}}</title>
 
     {% seo %}
 

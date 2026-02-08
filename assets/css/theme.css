@@ -840,9 +840,4 @@ html[data-lang="en"] [data-lang]:not([data-lang="en"]) {
 	outline-offset: -2px;
 }
 
-/* Hide Disqus "recommended" widget if enabled */
-#disqus_recommendations,
-.disqus-recommendations {
-	display: none !important;
-}
  
