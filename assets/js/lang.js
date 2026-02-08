@@ -240,6 +240,21 @@
         } catch (e) { }
     }
 
+    function startDisqusRecommendationLoop(lang) {
+        try {
+            if (window.__i18n_disqus_rec_timer) {
+                clearInterval(window.__i18n_disqus_rec_timer);
+                window.__i18n_disqus_rec_timer = null;
+            }
+
+            if (lang !== 'en') return;
+
+            window.__i18n_disqus_rec_timer = setInterval(function () {
+                patchDisqusRecommendations('en');
+            }, 750);
+        } catch (e) { }
+    }
+
     function buildEnImageUrl(url) {
         if (!url) return null;
         var u = String(url);
@@ -354,6 +369,7 @@
         patchDisqusRecommendations(l);
         observeDisqusRecommendations();
         scheduleDisqusRecommendationPatch(l);
+        startDisqusRecommendationLoop(l);
 
         applyImageVariants(l);
 
