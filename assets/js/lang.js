@@ -110,13 +110,38 @@
         for (var i = 0; i < docs.length; i++) {
             var d = docs[i];
             if (!d || !d.url) continue;
+
             var u = String(d.url);
             map[u] = d;
-            if (u.slice(-1) === '/') {
-                map[u.slice(0, -1)] = d;
-            } else {
-                map[u + '/'] = d;
+
+            var path = null;
+            try {
+                if (u.indexOf('http://') === 0 || u.indexOf('https://') === 0) {
+                    path = new URL(u).pathname;
+                } else {
+                    path = (u.charAt(0) === '/') ? u : ('/' + u);
+                }
+            } catch (e) {
+                path = (u.charAt(0) === '/') ? u : ('/' + u);
             }
+
+            if (path) {
+                map[path] = d;
+                try {
+                    map[(window.location ? window.location.origin : '') + path] = d;
+                } catch (e2) { }
+            }
+
+            // with/without trailing slash
+            function addAlt(key) {
+                if (!key) return;
+                if (key.slice(-1) === '/') map[key.slice(0, -1)] = d;
+                else map[key + '/'] = d;
+            }
+
+            addAlt(u);
+            addAlt(path);
+            try { addAlt((window.location ? window.location.origin : '') + path); } catch (e3) { }
         }
         return map;
     }
@@ -152,6 +177,12 @@
             var link = el.getAttribute('data-link');
             if (!link) continue;
             var doc = map[link];
+            if (!doc) {
+                try {
+                    var p = new URL(link).pathname;
+                    doc = map[p] || map[(window.location ? window.location.origin : '') + p];
+                } catch (e4) { }
+            }
             if (!doc) continue;
 
             var title = (doc.title || '').trim();
@@ -192,6 +223,103 @@
         } catch (e) { }
     }
 
+    function buildEnImageUrl(url) {
+        if (!url) return null;
+        var u = String(url);
+        if (u.indexOf('_en.') !== -1) return null;
+        var m = u.match(/^(.*)\.(png|jpe?g|gif|webp)(\?.*)?$/i);
+        if (!m) return null;
+        return m[1] + '_en.' + m[2] + (m[3] || '');
+    }
+
+    function applyImageVariants(lang) {
+        // IMG src swap
+        try {
+            var imgs = document.querySelectorAll('img');
+            for (var i = 0; i < imgs.length; i++) {
+                var img = imgs[i];
+                if (!img || !img.getAttribute) continue;
+                if (!img.hasAttribute('data-i18n-src-ru')) {
+                    img.setAttribute('data-i18n-src-ru', img.getAttribute('src') || '');
+                }
+
+                var ruSrc = img.getAttribute('data-i18n-src-ru') || (img.getAttribute('src') || '');
+                if (lang === 'ru') {
+                    if (ruSrc && img.getAttribute('src') !== ruSrc) img.setAttribute('src', ruSrc);
+                    continue;
+                }
+
+                // EN
+                var cached = img.getAttribute('data-i18n-src-en');
+                if (cached) {
+                    if (img.getAttribute('src') !== cached) img.setAttribute('src', cached);
+                    continue;
+                }
+
+                var candidate = buildEnImageUrl(ruSrc);
+                if (!candidate) continue;
+
+                (function (el, cand) {
+                    try {
+                        var probe = new Image();
+                        probe.onload = function () {
+                            el.setAttribute('data-i18n-src-en', cand);
+                            if ((normalize(document.documentElement.getAttribute('data-lang')) || 'en') === 'en') {
+                                el.setAttribute('src', cand);
+                            }
+                        };
+                        probe.onerror = function () { };
+                        probe.src = cand;
+                    } catch (e) { }
+                })(img, candidate);
+            }
+        } catch (e1) { }
+
+        // Background-image swap for known blocks
+        try {
+            var els = document.querySelectorAll('.topfirstimage');
+            for (var j = 0; j < els.length; j++) {
+                var el2 = els[j];
+                if (!el2 || !el2.style) continue;
+                var bg = el2.style.backgroundImage || '';
+                if (!el2.hasAttribute('data-i18n-bg-ru')) {
+                    el2.setAttribute('data-i18n-bg-ru', bg);
+                }
+                var ruBg = el2.getAttribute('data-i18n-bg-ru') || bg;
+                if (lang === 'ru') {
+                    if (ruBg !== bg) el2.style.backgroundImage = ruBg;
+                    continue;
+                }
+
+                var cachedBg = el2.getAttribute('data-i18n-bg-en');
+                if (cachedBg) {
+                    if (bg !== cachedBg) el2.style.backgroundImage = cachedBg;
+                    continue;
+                }
+
+                var urlm = ruBg.match(/url\((['"]?)(.*?)\1\)/i);
+                if (!urlm || !urlm[2]) continue;
+                var candidateBgUrl = buildEnImageUrl(urlm[2]);
+                if (!candidateBgUrl) continue;
+                var candidateBg = 'url("' + candidateBgUrl + '")';
+
+                (function (node, candUrl, candBg) {
+                    try {
+                        var probe2 = new Image();
+                        probe2.onload = function () {
+                            node.setAttribute('data-i18n-bg-en', candBg);
+                            if ((normalize(document.documentElement.getAttribute('data-lang')) || 'en') === 'en') {
+                                node.style.backgroundImage = candBg;
+                            }
+                        };
+                        probe2.onerror = function () { };
+                        probe2.src = candUrl;
+                    } catch (e) { }
+                })(el2, candidateBgUrl, candidateBg);
+            }
+        } catch (e2) { }
+    }
+
     function setLang(lang, persist) {
         var l = normalize(lang) || 'en';
         var el = document.documentElement;
@@ -208,6 +336,8 @@
 
         patchDisqusRecommendations(l);
         observeDisqusRecommendations();
+
+        applyImageVariants(l);
 
         // Refresh Disqus widgets (recommendations/comments) after manual language change.
         if (persist) {

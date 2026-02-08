@@ -236,6 +236,12 @@ var idx_en = lunr(function () {
     }, this)
 });
 
+// Expose for language switcher patches
+window.documents_ru = documents_ru;
+window.documents_en = documents_en;
+window.idx_ru = idx_ru;
+window.idx_en = idx_en;
+
 
     
 function lunr_search(term) {
