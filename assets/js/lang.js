@@ -171,11 +171,12 @@
             h.innerHTML = 'Also on <strong class="recommendations-forum">' + name + '</strong>';
         }
 
-        var posts = document.querySelectorAll('[data-role="recommended-post"][data-link]');
+        var posts = document.querySelectorAll('[data-link].recommend-post, [data-role="recommended-post"][data-link]');
         for (var i = 0; i < posts.length; i++) {
             var el = posts[i];
             var link = el.getAttribute('data-link');
             if (!link) continue;
+
             var doc = map[link];
             if (!doc) {
                 try {
@@ -189,10 +190,11 @@
             var body = stripDatePrefix((doc.body || '').trim());
             if (!title && !body) continue;
 
-            var tNode = el.querySelector('[data-role="recommend-thread-title"]');
+            // Title
+            var tNode = el.querySelector('[data-role="recommend-thread-title"], .recommend-post-title .title');
             if (tNode && title) {
                 tNode.textContent = title;
-                tNode.setAttribute('data-content', title);
+                try { tNode.setAttribute('data-content', title); } catch (e5) { }
             }
             var titleH3 = el.querySelector('.recommend-post-title');
             if (titleH3 && title) titleH3.setAttribute('title', title);
@@ -202,13 +204,26 @@
                 img.setAttribute('title', title);
             }
 
-            var sNode = el.querySelector('[data-role="recommend-description-snippet"]');
+            // Snippet
+            var sNode = el.querySelector('[data-role="recommend-description-snippet"], .recommend-content .line-truncate');
             if (sNode && body) {
                 var snippet = body;
                 if (snippet.length > 260) snippet = snippet.slice(0, 257) + '...';
                 sNode.textContent = snippet;
             }
         }
+    }
+
+    function scheduleDisqusRecommendationPatch(lang) {
+        // Disqus may overwrite content after initial render; patch a few times.
+        try {
+            var attempts = 0;
+            var timer = setInterval(function () {
+                attempts++;
+                patchDisqusRecommendations(lang);
+                if (attempts >= 12) clearInterval(timer);
+            }, 250);
+        } catch (e) { }
     }
 
     function observeDisqusRecommendations() {
@@ -218,7 +233,9 @@
                 var lang = normalize(document.documentElement.getAttribute('data-lang')) || 'en';
                 patchDisqusRecommendations(lang);
             });
-            obs.observe(document.documentElement, { childList: true, subtree: true });
+
+            var target = document.querySelector('.recommendations-wrapper') || document.documentElement;
+            obs.observe(target, { childList: true, subtree: true });
             window.__i18n_disqus_rec_observer = obs;
         } catch (e) { }
     }
@@ -336,6 +353,7 @@
 
         patchDisqusRecommendations(l);
         observeDisqusRecommendations();
+        scheduleDisqusRecommendationPatch(l);
 
         applyImageVariants(l);
 
