@@ -12,7 +12,7 @@ author: Mikhail
 
 Практическое руководство для Debian/Ubuntu и RHEL-подобных систем
 
-> Версия статьи: 1.0, 7 августа 2026 года. Решение основано на реально работающей конфигурации CentOS Stream 9 и повторно сверено с её фактическим состоянием. Все адреса, ключи, токены, идентификаторы чатов и другие секреты исключены.
+> Версия статьи: 1.0, 7 августа 2026 года. Все адреса, ключи, токены, идентификаторы чатов и другие секреты исключены.
 
 ## Что мы строим
 
@@ -379,6 +379,12 @@ sudo firewall-cmd --list-all
 
 Основной файл `/etc/ssh/sshd_config` можно редактировать напрямую, но так сложнее отличать собственные настройки от параметров, установленных пакетом. Вместо этого используем **`drop-in`** — отдельный небольшой конфигурационный файл в каталоге `/etc/ssh/sshd_config.d/`. OpenSSH читает такие файлы вместе с основным конфигом, поэтому настройки усиления можно проверить, заменить или удалить независимо от остальной конфигурации.
 
+> **Мои материалы по SSH**
+>
+> - [«SSH - коротко о главном»](https://danshin.ms/ssh-base/) — как SSH устанавливает защищённое соединение и зачем проверять ключ сервера при первом входе.
+> - [«Как настроить SSH аутентификацию при помощи открытого ключа»](https://danshin.ms/set-up-ssh-with-public-key/) — создание пары ключей, настройка `authorized_keys` и отключение паролей.
+> - [«Как не прерывать работу SSH-сессии при обрыве соединения?»](https://danshin.ms/tmux/) — как сохранить запущенные команды в `tmux`, если связь с сервером пропала.
+
 Имя `60-hardening.conf` задаёт понятное назначение файла и его место в порядке чтения конфигурации. Сначала создаём каталог `drop-in`, если его ещё нет, затем открываем новый файл в безопасном редакторе `sudoedit`:
 
 ```bash
@@ -392,18 +398,27 @@ sudoedit /etc/ssh/sshd_config.d/60-hardening.conf
 Содержимое:
 
 ```sshconfig
+# Слушаем выбранный нестандартный TCP-порт; он должен быть заранее открыт в межсетевом экране.
 Port 2207
+# Запрещаем прямой вход под root; административные действия выполняются через sudo.
 PermitRootLogin no
+# Разрешаем аутентификацию по открытым ключам.
 PubkeyAuthentication yes
+# Отключаем вход по паролю после успешной проверки ключевого входа.
 PasswordAuthentication no
+# Отключаем интерактивные запросы, через которые сервер может снова запросить пароль.
 KbdInteractiveAuthentication no
+# Ограничиваем число попыток аутентификации в одном соединении.
 MaxAuthTries 3
+# Отключаем перенаправление X11, если графические приложения через SSH не используются.
 X11Forwarding no
+# Если от клиента 300 секунд нет данных, отправляем запрос через зашифрованный канал.
 ClientAliveInterval 300
+# Закрываем соединение, если клиент не ответил на два таких запроса.
 ClientAliveCountMax 2
+# Сохраняем обработку сессий через PAM для ограничений и уведомлений о входе.
 UsePAM yes
 ```
-
 Сначала `sshd` разбирает всю конфигурацию без запуска, затем выводит реально применённые значения с учётом основного файла и `drop-in`. Продолженный конвейер фильтрует этот вывод как одну команду.
 Проверьте синтаксис и эффективные значения:
 
@@ -450,40 +465,63 @@ ssh -o BatchMode=yes -o IdentitiesOnly=yes \
 Создайте `/etc/fail2ban/jail.d/sshd.local`:
 
 ```ini
+# Задаём параметры, которые наследуют все jail в этом файле.
 [DEFAULT]
+# Читаем события из systemd journal вместо отдельного файла журнала.
 backend = systemd
+# Блокируем обычного нарушителя на один час.
 bantime = 1h
+# Считаем ошибки, произошедшие в течение десяти минут.
 findtime = 10m
+# По умолчанию блокируем адрес после пяти подходящих событий.
 maxretry = 5
+# Увеличиваем срок последующих блокировок для повторных нарушителей.
 bantime.increment = true
+# При каждом повторе умножаем предыдущий срок блокировки на два.
 bantime.factor = 2
+# Ограничиваем автоматически увеличенный срок одной неделей.
 bantime.maxtime = 1w
+# Никогда не блокируем IPv4-подсеть loopback 127.0.0.0/8 и IPv6-адрес ::1.
 ignoreip = 127.0.0.1/8 ::1
+# Передаём обычную блокировку в firewalld через rich rule.
 banaction = firewallcmd-rich-rules
+# Тем же способом блокируем адрес сразу на всех портах, когда jail этого требует.
 banaction_allports = firewallcmd-rich-rules
 
+# Настраиваем отдельный jail для ошибок входа в sshd.
 [sshd]
+# Включаем этот jail.
 enabled = true
+# Применяем блокировку sshd к фактическому числовому порту 2207, а не к стандартному порту 22.
 port = 2207
+# Блокируем адрес после трёх неудачных попыток входа.
 maxretry = 3
 
+# Настраиваем длительную блокировку адресов, уже попадавших под другие jail.
 [recidive]
+# Включаем этот jail.
 enabled = true
+# Читаем события из systemd journal вместо отдельного файла журнала.
 backend = systemd
+# Блокируем повторного нарушителя на одну неделю.
 bantime = 1w
+# Ищем повторные блокировки за последние сутки.
 findtime = 1d
+# По умолчанию блокируем адрес после пяти подходящих событий.
 maxretry = 5
+# Передаём обычную блокировку в firewalld через rich rule.
 banaction = firewallcmd-rich-rules
+# Тем же способом блокируем адрес сразу на всех портах, когда jail этого требует.
 banaction_allports = firewallcmd-rich-rules
 ```
-
 На RHEL с `fail2ban-firewalld` обычно уже создаётся `/etc/fail2ban/jail.d/00-firewalld.conf`. Если нет, добавьте в `[DEFAULT]`:
 
 ```ini
+# Передаём обычную блокировку в firewalld через rich rule.
 banaction = firewallcmd-rich-rules
+# Тем же способом блокируем адрес сразу на всех портах, когда jail этого требует.
 banaction_allports = firewallcmd-rich-rules
 ```
-
 Сначала `Fail2ban` полностью разбирает конфигурацию, затем служба включается и перезапускается для применения `jail`. Первый шаг должен завершиться без ошибок; иначе сервис не перезапускайте.
 Перед перезапуском:
 
@@ -659,7 +697,10 @@ sudo cscli decisions delete --ip 192.0.2.123
 
 Секреты Telegram выносим в отдельный файл окружения, доступный только `root`, чтобы скрипты могли читать их, не встраивая токен в код или аргументы процессов. После сохранения проверяем владельца, режим `0600` и имена переменных, не выводя значения на экран.
 
-В другой статье автора в этом же блоге — [«Базовые сведения о Telegram Bot API»](https://danshin.ms/Telegram-Bot-From-Scratch/) — разобраны BotFather, токен, идентификатор чата и базовые методы API.
+> **Мои материалы по Telegram Bot API**
+>
+> - [«Базовые сведения о Telegram Bot API»](https://danshin.ms/Telegram-Bot-From-Scratch/) — создание бота через BotFather, получение токена и идентификатора чата, первые запросы к API.
+> - [«Взаимодействие с Telegram Bot API через Postman»](https://danshin.ms/postman/) — ручная проверка `sendMessage` и разбор JSON-ответа без написания скрипта.
 
 Создайте бота через официального `@BotFather`, начните диалог с ним и получите идентификатор чата. Не вставляйте токен прямо в команду оболочки: он попадёт в историю.
 
@@ -829,8 +870,6 @@ sudo chmod 0750 /usr/local/libexec/server-security-monitor/common.sh
 # Проверяем синтаксис shell-скрипта без его выполнения.
 sudo bash -n /usr/local/libexec/server-security-monitor/common.sh
 ```
-
-В другой статье автора в этом же блоге — [«Взаимодействие с Telegram Bot API через Postman»](https://danshin.ms/postman/) — показано, как вручную проверить `sendMessage` и увидеть JSON-ответ API.
 
 Этот короткий исполняемый файл подключает библиотеку и отправляет сообщение с именем хоста. Он нужен для проверки всего пути — чтения закрытой конфигурации, HTTPS-запроса и проверки ответа API.
 Создайте тестовый отправщик `/usr/local/libexec/server-security-monitor/send-test.sh`:
@@ -1128,70 +1167,104 @@ exit 0
 `/etc/systemd/system/aide-check.service`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём службе понятное имя в выводе systemctl.
 Description=AIDE file integrity check
+# Задаём порядок: проверка запускается после local-fs.target и network-online.target.
 After=local-fs.target network-online.target
+# Просим systemd активировать network-online.target вместе с юнитом; сбой цели сам по себе не запрещает запуск.
 Wants=network-online.target
 
+# Задаём, как systemd запускает одноразовую проверку.
 [Service]
+# Выполняем одну команду и считаем службу завершённой после её окончания.
 Type=oneshot
+# Запускаем подготовленный скрипт проверки AIDE.
 ExecStart=/usr/local/libexec/server-security-monitor/aide-check.sh
+# Снижаем приоритет процесса относительно обычных задач сервера.
 Nice=10
+# Разрешаем интенсивный ввод-вывод только когда диск не занят более важной работой.
 IOSchedulingClass=idle
+# Создаём новые файлы доступными только владельцу.
 UMask=0077
+# Прерываем зависшую проверку AIDE через двадцать минут.
 TimeoutStartSec=20min
 ```
-
 Сохраните файл таймера рядом с файлом службы. Он планирует ежедневный запуск около 04:00, добавляет до 15 минут случайной задержки и выполняет пропущенную задачу после следующей загрузки.
 `/etc/systemd/system/aide-check.timer`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём таймеру понятное имя в выводе systemctl.
 Description=Daily AIDE integrity check
 
+# Задаём расписание запуска связанной службы.
 [Timer]
+# Планируем проверку AIDE каждый день на 04:00.
 OnCalendar=*-*-* 04:00:00
+# Добавляем случайную задержку до пятнадцати минут, чтобы задачи не стартовали одновременно.
 RandomizedDelaySec=900
+# После включения сервера выполняем пропущенный за время простоя запуск.
 Persistent=true
 
+# Указываем, к какой цели подключается таймер при systemctl enable.
 [Install]
+# Включаем таймер вместе с общей целью таймеров systemd.
 WantedBy=timers.target
 ```
-
 Эта служба типа `oneshot` запускает обёртку `rkhunter` с теми же ограничениями, но даёт сканеру до 30 минут. Сохраните её в указанном пути под `root:root`.
 `/etc/systemd/system/rkhunter-check.service`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём службе понятное имя в выводе systemctl.
 Description=rkhunter rootkit scan
+# Задаём порядок: проверка запускается после local-fs.target и network-online.target.
 After=local-fs.target network-online.target
+# Просим systemd активировать network-online.target вместе с юнитом; сбой цели сам по себе не запрещает запуск.
 Wants=network-online.target
 
+# Задаём, как systemd запускает одноразовую проверку.
 [Service]
+# Выполняем одну команду и считаем службу завершённой после её окончания.
 Type=oneshot
+# Запускаем подготовленный скрипт проверки rkhunter.
 ExecStart=/usr/local/libexec/server-security-monitor/rkhunter-check.sh
+# Снижаем приоритет процесса относительно обычных задач сервера.
 Nice=10
+# Разрешаем интенсивный ввод-вывод только когда диск не занят более важной работой.
 IOSchedulingClass=idle
+# Создаём новые файлы доступными только владельцу.
 UMask=0077
+# Прерываем зависшую проверку rkhunter через тридцать минут.
 TimeoutStartSec=30min
 ```
-
 Таймер запускает `rkhunter` около 04:30 со случайной задержкой и догоняет пропущенное расписание. Разнесённое время снижает вероятность одновременной нагрузки двух сканеров.
 `/etc/systemd/system/rkhunter-check.timer`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём таймеру понятное имя в выводе systemctl.
 Description=Daily rkhunter scan
 
+# Задаём расписание запуска связанной службы.
 [Timer]
+# Планируем проверку rkhunter каждый день на 04:30.
 OnCalendar=*-*-* 04:30:00
+# Добавляем случайную задержку до пятнадцати минут, чтобы задачи не стартовали одновременно.
 RandomizedDelaySec=900
+# После включения сервера выполняем пропущенный за время простоя запуск.
 Persistent=true
 
+# Указываем, к какой цели подключается таймер при systemctl enable.
 [Install]
+# Включаем таймер вместе с общей целью таймеров systemd.
 WantedBy=timers.target
 ```
-
 Команды закрепляют безопасные владельцев и режимы, проверяют Bash и службы `systemd`, перечитывают конфигурацию диспетчера и включают оба таймера. Продолженные списки файлов остаются едиными командами и комментируются только перед первой строкой.
 Установите права и активируйте:
 
@@ -1344,9 +1417,9 @@ sudo cp -a /etc/pam.d/sudo "/etc/pam.d/sudo.bak.$(date +%s)"
 Добавьте в конец `/etc/pam.d/sshd`:
 
 ```pam
+# При открытии PAM-сессии запускаем уведомление; optional не блокирует вход при ошибке скрипта.
 session optional pam_exec.so /usr/local/libexec/server-security-monitor/login-alert.sh
 ```
-
 Опционально добавьте ту же строку в `/etc/pam.d/sudo`. Уведомления о каждом `sudo` могут быть шумными; на сервере с интенсивной автоматизацией лучше уведомлять только о SSH.
 
 Ключевое слово должно быть `optional`, а не `required`: недоступность Telegram не должна лишать доступа к серверу.
@@ -1487,36 +1560,53 @@ ${reboot_state}
 Служба `/etc/systemd/system/security-digest.service`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём службе или таймеру понятное имя в выводе systemctl.
 Description=Daily security digest to Telegram
+# Задаём порядок: отчёт запускается после network-online.target, CrowdSec и Fail2ban; это не гарантирует их успешность.
 After=network-online.target crowdsec.service fail2ban.service
+# Просим systemd активировать network-online.target вместе с юнитом; сбой цели сам по себе не запрещает запуск.
 Wants=network-online.target
 
+# Задаём, как systemd запускает одноразовую проверку.
 [Service]
+# Выполняем одну команду и считаем службу завершённой после её окончания.
 Type=oneshot
+# Запускаем подготовленный скрипт ежедневного отчёта.
 ExecStart=/usr/local/libexec/server-security-monitor/security-digest.sh
+# Снижаем приоритет процесса относительно обычных задач сервера.
 Nice=10
+# Разрешаем интенсивный ввод-вывод только когда диск не занят более важной работой.
 IOSchedulingClass=idle
+# Создаём новые файлы доступными только владельцу.
 UMask=0077
+# Прерываем зависшее формирование отчёта через две минуты.
 TimeoutStartSec=2min
 ```
-
 Таймер планирует дайджест примерно на 09:00, добавляет случайную задержку и догоняет пропущенный запуск. После включения он должен появиться в `systemctl list-timers`.
 Таймер `/etc/systemd/system/security-digest.timer`:
 
 ```ini
+# Описываем назначение юнита и порядок его запуска.
 [Unit]
+# Даём службе или таймеру понятное имя в выводе systemctl.
 Description=Daily security digest to Telegram
 
+# Задаём расписание запуска связанной службы.
 [Timer]
+# Планируем ежедневный отчёт на 09:00.
 OnCalendar=*-*-* 09:00:00
+# Добавляем случайную задержку до пятнадцати минут, чтобы задачи не стартовали одновременно.
 RandomizedDelaySec=900
+# После включения сервера выполняем пропущенный за время простоя запуск.
 Persistent=true
 
+# Указываем, к какой цели подключается таймер при systemctl enable.
 [Install]
+# Включаем таймер вместе с общей целью таймеров systemd.
 WantedBy=timers.target
 ```
-
 Сначала назначьте скрипту исполняемые права и проверьте службу, затем перечитайте конфигурацию `systemd`, включите таймер и вручную запустите сервис. Итоговый статус должен быть успешным, а расписание — видимым в списке таймеров.
 Активируйте и проверьте реальным запуском:
 
@@ -1566,13 +1656,17 @@ sudo unattended-upgrade --dry-run --debug
 В `/etc/dnf/automatic.conf`:
 
 ```ini
+# Настраиваем действия dnf-automatic с обновлениями.
 [commands]
+# Выбираем только обновления, помеченные как исправления безопасности.
 upgrade_type = security
+# Разрешаем автоматически скачивать выбранные пакеты.
 download_updates = yes
+# Разрешаем автоматически устанавливать скачанные обновления.
 apply_updates = yes
+# Не перезагружаем сервер автоматически после установки.
 reboot = never
 ```
-
 Включите штатный таймер DNF и убедитесь, что `systemd` показывает его расписание. Это подтверждает автоматический запуск, но необходимость перезагрузки по-прежнему контролирует дайджест.
 
 ```bash
@@ -1592,18 +1686,27 @@ sudo systemctl list-timers --all | grep dnf-automatic
 `/etc/logrotate.d/server-security-monitor`:
 
 ```text
+# Применяем одну политику к журналам AIDE и rkhunter.
 /var/log/server-security-monitor/aide/*.log /var/log/server-security-monitor/rkhunter/*.log {
+    # Ротируем журналы ежедневно.
     daily
+    # Храним тридцать предыдущих файлов журналов.
     rotate 30
+    # Сжимаем старые журналы для экономии места.
     compress
+    # Откладываем сжатие самого свежего архивного журнала до следующего цикла.
     delaycompress
+    # Не считаем ошибкой отсутствие подходящего журнала.
     missingok
+    # Не создаём архив для пустого журнала.
     notifempty
+    # Выполняем ротацию от root с группой root.
     su root root
+    # Создаём новый журнал доступным только root.
     create 0600 root root
+# Завершаем политику для перечисленных журналов.
 }
 ```
-
 Обе команды безопасны для работающего сервера: первая разбирает правило без изменения файлов, вторая показывает фактические режимы и владельцев отчётов. Ожидаются только файлы `0600 root:root`.
 Проверка без ротации:
 
@@ -1996,7 +2099,7 @@ dpkg -S "$(command -v crowdsec-firewall-bouncer)" 2>/dev/null || true
 
 A practical guide for Debian/Ubuntu and RHEL-like systems
 
-> Article version: 1.0, 7 August 2026. The solution is based on a real working CentOS Stream 9 configuration and has been re-checked against its actual state. All addresses, keys, tokens, chat identifiers and other secrets have been removed.
+> Article version: 1.0, 7 August 2026. All addresses, keys, tokens, chat identifiers and other secrets have been removed.
 
 ## What we are building
 
@@ -2363,6 +2466,12 @@ Remove the standard `ssh` service only after you have verified the new port.
 
 The main file `/etc/ssh/sshd_config` can be edited directly, but that makes it harder to tell your own settings from the parameters installed by the package. Instead we use a **`drop-in`** — a separate small configuration file in the `/etc/ssh/sshd_config.d/` directory. OpenSSH reads such files together with the main config, so the hardening settings can be checked, replaced or removed independently of the rest of the configuration.
 
+> **My SSH articles**
+>
+> - [SSH: The Basics](https://danshin.ms/ssh-base/) — how SSH establishes a protected connection and why the server key should be checked on the first login.
+> - [How to Set Up SSH Public Key Authentication](https://danshin.ms/set-up-ssh-with-public-key/) — creating a key pair, configuring `authorized_keys`, and disabling password login.
+> - [How to Keep an SSH Session Running After a Disconnect](https://danshin.ms/tmux/) — how to keep commands running in `tmux` when the connection to the server drops.
+
 The name `60-hardening.conf` states the purpose of the file clearly and defines its place in the order in which the configuration is read. First we create the `drop-in` directory if it does not exist yet, then we open the new file in the safe `sudoedit` editor:
 
 ```bash
@@ -2376,18 +2485,27 @@ In the opened `drop-in` save the parameters below without any shell syntax: thes
 Contents:
 
 ```sshconfig
+# Listen on the selected non-standard TCP port; open it in the firewall first.
 Port 2207
+# Disallow direct root login; perform administrative work through sudo.
 PermitRootLogin no
+# Allow public key authentication.
 PubkeyAuthentication yes
+# Disable password login after key-based login has been tested successfully.
 PasswordAuthentication no
+# Disable interactive prompts that could ask for a password again.
 KbdInteractiveAuthentication no
+# Limit the number of authentication attempts in one connection.
 MaxAuthTries 3
+# Disable X11 forwarding when graphical applications are not run through SSH.
 X11Forwarding no
+# If no client data arrives for 300 seconds, send a request through the encrypted channel.
 ClientAliveInterval 300
+# Close the connection if the client does not answer two such requests.
 ClientAliveCountMax 2
+# Keep PAM session handling for restrictions and login notifications.
 UsePAM yes
 ```
-
 First `sshd` parses the whole configuration without starting, then it prints the values that are really applied, taking the main file and the `drop-in` into account. The continued pipeline filters this output as a single command.
 Check the syntax and the effective values:
 
@@ -2434,40 +2552,63 @@ Save this `Fail2ban` `drop-in` on the server: the `[DEFAULT]` section defines th
 Create `/etc/fail2ban/jail.d/sshd.local`:
 
 ```ini
+# Set the parameters inherited by every jail in this file.
 [DEFAULT]
+# Read events from the systemd journal instead of a separate log file.
 backend = systemd
+# Ban an ordinary offender for one hour.
 bantime = 1h
+# Count failures that occur within ten minutes.
 findtime = 10m
+# By default, ban an address after five matching events.
 maxretry = 5
+# Increase later ban durations for repeat offenders.
 bantime.increment = true
+# Double the previous ban duration after each repeat offence.
 bantime.factor = 2
+# Cap the automatically increased duration at one week.
 bantime.maxtime = 1w
+# Never ban the IPv4 loopback subnet 127.0.0.0/8 or the IPv6 loopback address ::1.
 ignoreip = 127.0.0.1/8 ::1
+# Apply an ordinary ban through a firewalld rich rule.
 banaction = firewallcmd-rich-rules
+# Use the same mechanism to ban an address on every port when a jail requires it.
 banaction_allports = firewallcmd-rich-rules
 
+# Configure a separate jail for sshd authentication failures.
 [sshd]
+# Enable this jail.
 enabled = true
+# Apply sshd bans to the actual numeric port 2207 rather than the standard port 22.
 port = 2207
+# Ban an address after three failed login attempts.
 maxretry = 3
 
+# Configure a longer ban for addresses already caught by other jails.
 [recidive]
+# Enable this jail.
 enabled = true
+# Read events from the systemd journal instead of a separate log file.
 backend = systemd
+# Ban a repeat offender for one week.
 bantime = 1w
+# Look for repeated bans during the previous day.
 findtime = 1d
+# By default, ban an address after five matching events.
 maxretry = 5
+# Apply an ordinary ban through a firewalld rich rule.
 banaction = firewallcmd-rich-rules
+# Use the same mechanism to ban an address on every port when a jail requires it.
 banaction_allports = firewallcmd-rich-rules
 ```
-
 On RHEL with `fail2ban-firewalld` the file `/etc/fail2ban/jail.d/00-firewalld.conf` is usually created already. If it is not, add to `[DEFAULT]`:
 
 ```ini
+# Apply an ordinary ban through a firewalld rich rule.
 banaction = firewallcmd-rich-rules
+# Use the same mechanism to ban an address on every port when a jail requires it.
 banaction_allports = firewallcmd-rich-rules
 ```
-
 First `Fail2ban` fully parses the configuration, then the service is enabled and restarted in order to apply the `jail`. The first step must finish without errors; otherwise do not restart the service.
 Before the restart:
 
@@ -2643,7 +2784,10 @@ Never publish the `bouncer` API key from `/etc/crowdsec/bouncers/*.yaml`.
 
 We move the Telegram secrets into a separate environment file available only to `root`, so that the scripts can read them without embedding the token in the code or in process arguments. After saving it we check the owner, the `0600` mode and the variable names without printing the values on the screen.
 
-Another article by the author in this same blog — [Telegram Bot API Basics](https://danshin.ms/Telegram-Bot-From-Scratch/) — covers BotFather, the token, the chat identifier and the basic API methods.
+> **My Telegram Bot API articles**
+>
+> - [Telegram Bot API Basics](https://danshin.ms/Telegram-Bot-From-Scratch/) — creating a bot with BotFather, obtaining the token and chat ID, and making the first API requests.
+> - [Working with Telegram Bot API via Postman](https://danshin.ms/postman/) — checking `sendMessage` manually and inspecting the JSON response without writing a script.
 
 Create a bot through the official `@BotFather`, start a dialogue with it and obtain the chat identifier. Do not paste the token directly into a shell command: it will end up in the history.
 
@@ -2813,8 +2957,6 @@ sudo chmod 0750 /usr/local/libexec/server-security-monitor/common.sh
 # Check the syntax of the shell script without executing it.
 sudo bash -n /usr/local/libexec/server-security-monitor/common.sh
 ```
-
-Another article by the author in this same blog — [Working with Telegram Bot API via Postman](https://danshin.ms/postman/) — shows how to check `sendMessage` by hand and see the JSON response of the API.
 
 This short executable file includes the library and sends a message with the host name. It is needed in order to check the whole path: reading the private configuration, the HTTPS request and the verification of the API response.
 Create the test sender `/usr/local/libexec/server-security-monitor/send-test.sh`:
@@ -3112,70 +3254,104 @@ Save the service file below as `/etc/systemd/system/aide-check.service`. It runs
 `/etc/systemd/system/aide-check.service`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the service a readable name in systemctl output.
 Description=AIDE file integrity check
+# Define the order: start the check after local-fs.target and network-online.target.
 After=local-fs.target network-online.target
+# Ask systemd to activate network-online.target with the unit; failure of that target alone does not prevent this unit from running.
 Wants=network-online.target
 
+# Define how systemd starts the one-shot check.
 [Service]
+# Run one command and consider the service complete when it exits.
 Type=oneshot
+# Run the prepared AIDE check script.
 ExecStart=/usr/local/libexec/server-security-monitor/aide-check.sh
+# Lower the process priority relative to normal server work.
 Nice=10
+# Allow intensive I/O only when the disk is not serving more important work.
 IOSchedulingClass=idle
+# Create new files so that only their owner can access them.
 UMask=0077
+# Stop a hung AIDE check after twenty minutes.
 TimeoutStartSec=20min
 ```
-
 Save the timer file next to the service file. It schedules a daily run at about 04:00, adds up to 15 minutes of random delay and performs a missed task after the next boot.
 `/etc/systemd/system/aide-check.timer`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the timer a readable name in systemctl output.
 Description=Daily AIDE integrity check
 
+# Define the schedule for the associated service.
 [Timer]
+# Schedule the AIDE check for 04:00 every day.
 OnCalendar=*-*-* 04:00:00
+# Add a random delay of up to fifteen minutes so tasks do not start together.
 RandomizedDelaySec=900
+# After the server starts, run an occurrence missed while it was offline.
 Persistent=true
 
+# Specify the target that receives this timer during systemctl enable.
 [Install]
+# Enable the timer with systemd's general timer target.
 WantedBy=timers.target
 ```
-
 This service of the `oneshot` type runs the `rkhunter` wrapper with the same limits, but gives the scanner up to 30 minutes. Save it at the specified path as `root:root`.
 `/etc/systemd/system/rkhunter-check.service`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the service a readable name in systemctl output.
 Description=rkhunter rootkit scan
+# Define the order: start the check after local-fs.target and network-online.target.
 After=local-fs.target network-online.target
+# Ask systemd to activate network-online.target with the unit; failure of that target alone does not prevent this unit from running.
 Wants=network-online.target
 
+# Define how systemd starts the one-shot check.
 [Service]
+# Run one command and consider the service complete when it exits.
 Type=oneshot
+# Run the prepared rkhunter check script.
 ExecStart=/usr/local/libexec/server-security-monitor/rkhunter-check.sh
+# Lower the process priority relative to normal server work.
 Nice=10
+# Allow intensive I/O only when the disk is not serving more important work.
 IOSchedulingClass=idle
+# Create new files so that only their owner can access them.
 UMask=0077
+# Stop a hung rkhunter check after thirty minutes.
 TimeoutStartSec=30min
 ```
-
 The timer starts `rkhunter` at about 04:30 with a random delay and catches up a missed schedule. Spreading the times apart reduces the chance of two scanners loading the machine at once.
 `/etc/systemd/system/rkhunter-check.timer`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the timer a readable name in systemctl output.
 Description=Daily rkhunter scan
 
+# Define the schedule for the associated service.
 [Timer]
+# Schedule the rkhunter check for 04:30 every day.
 OnCalendar=*-*-* 04:30:00
+# Add a random delay of up to fifteen minutes so tasks do not start together.
 RandomizedDelaySec=900
+# After the server starts, run an occurrence missed while it was offline.
 Persistent=true
 
+# Specify the target that receives this timer during systemctl enable.
 [Install]
+# Enable the timer with systemd's general timer target.
 WantedBy=timers.target
 ```
-
 The commands enforce safe owners and modes, check Bash and the `systemd` services, reload the manager configuration and enable both timers. The continued file lists stay single commands and are commented only before their first line.
 Set the permissions and activate:
 
@@ -3328,9 +3504,9 @@ This line is saved in the PAM config itself, it is not executed in the shell. `s
 Add to the end of `/etc/pam.d/sshd`:
 
 ```pam
+# Run the alert when a PAM session opens; optional keeps a script failure from blocking login.
 session optional pam_exec.so /usr/local/libexec/server-security-monitor/login-alert.sh
 ```
-
 Optionally add the same line to `/etc/pam.d/sudo`. Notifications about every `sudo` can be noisy; on a server with heavy automation it is better to notify only about SSH.
 
 The keyword must be `optional`, not `required`: Telegram being unavailable must not take away access to the server.
@@ -3471,36 +3647,53 @@ This service of the `oneshot` type runs the digest collection once the network a
 The service `/etc/systemd/system/security-digest.service`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the service or timer a readable name in systemctl output.
 Description=Daily security digest to Telegram
+# Define the order: start the digest after network-online.target, CrowdSec, and Fail2ban; this does not guarantee that they succeeded.
 After=network-online.target crowdsec.service fail2ban.service
+# Ask systemd to activate network-online.target with the unit; failure of that target alone does not prevent this unit from running.
 Wants=network-online.target
 
+# Define how systemd starts the one-shot check.
 [Service]
+# Run one command and consider the service complete when it exits.
 Type=oneshot
+# Run the prepared daily digest script.
 ExecStart=/usr/local/libexec/server-security-monitor/security-digest.sh
+# Lower the process priority relative to normal server work.
 Nice=10
+# Allow intensive I/O only when the disk is not serving more important work.
 IOSchedulingClass=idle
+# Create new files so that only their owner can access them.
 UMask=0077
+# Stop a hung digest after two minutes.
 TimeoutStartSec=2min
 ```
-
 The timer schedules the digest at about 09:00, adds a random delay and catches up a missed run. Once it is enabled it must appear in `systemctl list-timers`.
 The timer `/etc/systemd/system/security-digest.timer`:
 
 ```ini
+# Describe the unit and its startup ordering.
 [Unit]
+# Give the service or timer a readable name in systemctl output.
 Description=Daily security digest to Telegram
 
+# Define the schedule for the associated service.
 [Timer]
+# Schedule the daily digest for 09:00.
 OnCalendar=*-*-* 09:00:00
+# Add a random delay of up to fifteen minutes so tasks do not start together.
 RandomizedDelaySec=900
+# After the server starts, run an occurrence missed while it was offline.
 Persistent=true
 
+# Specify the target that receives this timer during systemctl enable.
 [Install]
+# Enable the timer with systemd's general timer target.
 WantedBy=timers.target
 ```
-
 First give the script execute permissions and check the service, then reload the `systemd` configuration, enable the timer and start the service by hand. The resulting status must be successful and the schedule must be visible in the list of timers.
 Activate and verify with a real run:
 
@@ -3550,13 +3743,17 @@ In the `[commands]` section leave the installation of security updates only and 
 In `/etc/dnf/automatic.conf`:
 
 ```ini
+# Configure what dnf-automatic does with updates.
 [commands]
+# Select only updates marked as security fixes.
 upgrade_type = security
+# Allow the selected packages to be downloaded automatically.
 download_updates = yes
+# Allow downloaded updates to be installed automatically.
 apply_updates = yes
+# Never reboot the server automatically after installation.
 reboot = never
 ```
-
 Enable the standard DNF timer and make sure that `systemd` shows its schedule. This confirms the automatic start, but the need for a reboot is still controlled by the digest.
 
 ```bash
@@ -3576,18 +3773,27 @@ Save the rule in the specified file: the patterns cover the reports of both scan
 `/etc/logrotate.d/server-security-monitor`:
 
 ```text
+# Apply one policy to the AIDE and rkhunter logs.
 /var/log/server-security-monitor/aide/*.log /var/log/server-security-monitor/rkhunter/*.log {
+    # Rotate the logs daily.
     daily
+    # Keep thirty previous log files.
     rotate 30
+    # Compress old logs to save disk space.
     compress
+    # Delay compression of the newest rotated log until the next cycle.
     delaycompress
+    # Do not treat a missing matching log as an error.
     missingok
+    # Do not create an archive for an empty log.
     notifempty
+    # Rotate the logs as root with the root group.
     su root root
+    # Create the new log so only root can access it.
     create 0600 root root
+# Finish the policy for the listed logs.
 }
 ```
-
 Both commands are safe on a running server: the first parses the rule without changing any files, the second shows the actual modes and owners of the reports. Only `0600 root:root` files are expected.
 A check without rotation:
 
@@ -3974,5 +4180,4 @@ The main thing is not simply to install the components, but to check regularly t
 - The `rkhunter` project: <https://rkhunter.sourceforge.net/>
 - `systemd` timers: <https://www.freedesktop.org/software/systemd/man/latest/systemd.timer.html>
 - Telegram Bot API: <https://core.telegram.org/bots/api>
-
 </div>
