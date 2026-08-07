@@ -12,8 +12,6 @@ author: Mikhail
 
 Практическое руководство для Debian/Ubuntu и RHEL-подобных систем
 
-> Версия статьи: 1.0, 7 августа 2026 года. Все адреса, ключи, токены, идентификаторы чатов и другие секреты исключены.
-
 ## Что мы строим
 
 В этом руководстве мы собираем эшелонированную систему защиты Linux-сервера. Её компоненты решают разные задачи: ограничивают сетевой доступ, защищают SSH, обнаруживают и блокируют атаки, контролируют изменения важных файлов и сообщают администратору о событиях, требующих внимания. Сервер продолжает работать автономно: Telegram используется для уведомлений, а полные отчёты остаются на самом сервере.
@@ -2098,8 +2096,6 @@ dpkg -S "$(command -v crowdsec-firewall-bouncer)" 2>/dev/null || true
 <div data-lang="en" markdown="1">
 
 A practical guide for Debian/Ubuntu and RHEL-like systems
-
-> Article version: 1.0, 7 August 2026. All addresses, keys, tokens, chat identifiers and other secrets have been removed.
 
 ## What we are building
 
